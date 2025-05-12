@@ -3,7 +3,7 @@ const connection = require('../config/db');
 exports.criarAtividade = (req, res) => {
     const { idUsuario, nome, imagem, litrosMinuto, isTempoUso, manterTempoUso } = req.body;
 
-    const query = 'INSERT INTO Atividades (idUsuario, nome, imagem, listrosMinuto, isTempoUso, manterTempoUso) VALUES (?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO Atividades (id_usuario, nome, imagem, listros_minuto, is_tempo_uso, manter_tempo_uso) VALUES (?, ?, ?, ?, ?, ?)';
     const params = [idUsuario, nome, imagem, litrosMinuto, isTempoUso, manterTempoUso];
 
     connection.query(query, params, (err, results) => {
@@ -46,7 +46,7 @@ exports.listarAtividadesPorUsuario = (req, res) => {
             return res.status(500).json({ success: false, message: 'Erro ao selecionar atividades.' });
         }
 
-        res.json({ success: true, data: results });
+        res.json({ success: true, message: 'Atividades selecionadas com sucesso!', data: results });
     });
 }
 

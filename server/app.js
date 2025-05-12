@@ -9,5 +9,5 @@ const porta = 3000;
 app.listen(porta, () => console.log(`Servidor rodando na porta ${porta}`));
 
 // const rotas = ['atividades', 'consumosAgua', 'consumosEnergia', 'custos', 'eletrodomesticos', 'metas', 'notificacoes', 'residencias', 'tarifas', 'usuarios'];
-const rotas = ['atividades', 'usuarios'];
+const rotas = ['atividades', 'eletrodomesticos', 'usuarios'];
 rotas.forEach((rota) => app.use(require(`./routes/${rota}Routes`)));
