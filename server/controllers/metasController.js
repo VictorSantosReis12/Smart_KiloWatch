@@ -38,139 +38,98 @@ exports.selecionarMetaPorId = (req, res) => {
     });
 }
 
-exports.listarCustosPorUsuario = (req, res) => {
-    const query = 'SELECT * FROM Custos WHERE id_custo = ?';
+exports.listarMetasPorUsuario = (req, res) => {
+    const query = 'SELECT * FROM Metas WHERE id_meta = ?';
     const params = [req.params.idUsuario];
     connection.query(query, params, (err, results) => {
         if (err) {
-            return res.status(500).json({ success: false, message: 'Erro ao selecionar custos.' });
+            return res.status(500).json({ success: false, message: 'Erro ao selecionar metas.' });
         }
 
-        res.json({ success: true, message: 'Custos selecionados com sucesso!', data: results });
+        res.json({ success: true, message: 'Metas selecionadas com sucesso!', data: results });
     });
 }
 
-exports.selecionarCustoPorData = (req, res) => {
-    const query = 'SELECT * FROM Custos WHERE data_registro = ?';
-    const params = [req.body.dataRegistro];
+exports.atualizarMeta = (req, res) => {
+    const { idUsuario, metaEnergia, metaAgua, dataRegistro } = req.body;
+    const idMeta = req.params.idMeta;
+    const params = [idUsuario, metaEnergia, metaAgua, dataRegistro, idMeta];
 
-    connection.query(query, params, (err, results) => {
-        if (err) {
-            return res.status(500).json({ success: false, message: 'Erro ao selecionar o custo.'});
-        }
-
-        res.json({ success: true, message: 'Custo selecionado com sucesso!', data: results[0] });
-    });
-}
-
-exports.atualizarCusto = (req, res) => {
-    const { idUsuario, valorEnergiaSemImpostos, valorEnergiaComImpostos, valorAguaSemImpostos, valorAguaComImpostos, dataRegistro } = req.body;
-    const idCusto = req.params.idCusto;
-    const params = [idUsuario, valorEnergiaSemImpostos, valorEnergiaComImpostos, valorAguaSemImpostos, valorAguaComImpostos, dataRegistro, idCusto];
-
-    const query = 'UPDATE Custos SET id_usuario = ?, valor_energia_sem_impostos = ?, valor_energia_com_impostos = ?, valor_agua_sem_impostos = ?, valor_agua_com_impostos = ?, data_registro = ? WHERE id_custo = ?';
+    const query = 'UPDATE Metas SET id_usuario = ?, meta_energia = ?, meta_agua = ?, data_registro = ? WHERE id_meta = ?';
     
     connection.query(query, params, (err, results) => {
         if (err || results.length == 0) {
-            return res.status(500).json({ success: false, message: 'Erro ao atualizar o custo.'});
+            return res.status(500).json({ success: false, message: 'Erro ao atualizar a meta.'});
         }
 
-        res.json({ success: true, message: 'Custo atualizado com sucesso!'});
+        res.json({ success: true, message: 'Meta atualizada com sucesso!'});
     });
 }
 
-exports.setUsuarioCusto = (req, res) => {
+exports.setUsuarioMeta = (req, res) => {
     const idUsuario = req.body.idUsuario;
-    const idCusto = req.params.idCusto;
-    const query = 'UPDATE Custos SET id_usuario = ? WHERE id_custo = ?';
-    const params = [idUsuario, idCusto];
+    const idMeta = req.params.idMeta;
+    const query = 'UPDATE Metas SET id_usuario = ? WHERE id_meta = ?';
+    const params = [idUsuario, idMeta];
 
     connection.query(query, params, (err, results) => {
         if (err || results.length == 0) {
-            return res.status(500).json({ success: false, message: 'Erro ao atualizar o usuário do custo.'});
+            return res.status(500).json({ success: false, message: 'Erro ao atualizar o usuário da meta.'});
         }
-        res.json({ success: true, message: 'Usuário do custo atualizado com sucesso!'});
+        res.json({ success: true, message: 'Usuário da meta atualizado com sucesso!'});
     });
 }
 
-exports.setEnergiaSemImpostoCusto = (req, res) => {
-    const valorEnergiaSemImpostos = req.body.valorEnergiaSemImpostos;
-    const idCusto = req.params.idCusto;
-    const query = 'UPDATE Custos SET valor_energia_sem_impostos = ? WHERE id_custo = ?';
-    const params = [valorEnergiaSemImpostos, idCusto];
+exports.setEnergiaMeta = (req, res) => {
+    const metaEnergia = req.body.metaEnergia;
+    const idMeta = req.params.idMeta;
+    const query = 'UPDATE Metas SET meta_energia = ? WHERE id_meta = ?';
+    const params = [metaEnergia, idMeta];
 
     connection.query(query, params, (err, results) => {
         if (err || results.length == 0) {
-            return res.status(500).json({ success: false, message: 'Erro ao atualizar o valor de energia sem impostos do custo.'});
+            return res.status(500).json({ success: false, message: 'Erro ao atualizar o valor de energia da meta.'});
         }
-        res.json({ success: true, message: 'Valor de energia sem impostos do custo atualizado com sucesso!'});
+        res.json({ success: true, message: 'Valor de energia da meta atualizado com sucesso!'});
     });
 }
 
-exports.setEnergiaComImpostoCusto = (req, res) => {
-    const valorEnergiaComImpostos = req.body.valorEnergiaComImpostos;
-    const idCusto = req.params.idCusto;
-    const query = 'UPDATE Custos SET valor_energia_com_impostos = ? WHERE id_custo = ?';
-    const params = [valorEnergiaComImpostos, idCusto];
+exports.setAguaMeta = (req, res) => {
+    const metaAgua = req.body.metaAgua;
+    const idMeta = req.params.idMeta;
+    const query = 'UPDATE Metas SET meta_agua = ? WHERE id_meta = ?';
+    const params = [metaAgua, idMeta];
 
     connection.query(query, params, (err, results) => {
         if (err || results.length == 0) {
-            return res.status(500).json({ success: false, message: 'Erro ao atualizar o valor de energia com impostos do custo.'});
+            return res.status(500).json({ success: false, message: 'Erro ao atualizar o valor de água da meta.'});
         }
-        res.json({ success: true, message: 'Valor de energia com impostos do custo atualizado com sucesso!'});
+        res.json({ success: true, message: 'Valor de água da meta atualizado com sucesso!'});
     });
 }
 
-exports.setAguaSemImpostoCusto = (req, res) => {
-    const valorAguaSemImpostos = req.body.valorAguaSemImpostos;
-    const idCusto = req.params.idCusto;
-    const query = 'UPDATE Custos SET valor_agua_sem_impostos = ? WHERE id_custo = ?';
-    const params = [valorAguaSemImpostos, idCusto];
-
-    connection.query(query, params, (err, results) => {
-        if (err || results.length == 0) {
-            return res.status(500).json({ success: false, message: 'Erro ao atualizar o valor de agua sem impostos do custo.'});
-        }
-        res.json({ success: true, message: 'Valor de agua sem impostos do custo atualizado com sucesso!'});
-    });
-}
-
-exports.setAguaComImpostoCusto = (req, res) => {
-    const valorAguaComImpostos = req.body.valorAguaComImpostos;
-    const idCusto = req.params.idCusto;
-    const query = 'UPDATE Custos SET valor_agua_com_impostos = ? WHERE id_custo = ?';
-    const params = [valorAguaComImpostos, idCusto];
-
-    connection.query(query, params, (err, results) => {
-        if (err || results.length == 0) {
-            return res.status(500).json({ success: false, message: 'Erro ao atualizar o valor de agua com impostos do custo.'});
-        }
-        res.json({ success: true, message: 'Valor de agua com impostos do custo atualizado com sucesso!'});
-    });
-}
-
-exports.setDataCusto = (req, res) => {
+exports.setDataMeta = (req, res) => {
     const dataRegistro = req.body.dataRegistro;
-    const idCusto = req.params.idCusto;
-    const query = 'UPDATE Custos SET data_registro = ? WHERE id_custo = ?';
-    const params = [dataRegistro, idCusto];
+    const idMeta = req.params.idMeta;
+    const query = 'UPDATE Metas SET data_registro = ? WHERE id_meta = ?';
+    const params = [dataRegistro, idMeta];
 
     connection.query(query, params, (err, results) => {
         if (err || results.length == 0) {
-            return res.status(500).json({ success: false, message: 'Erro ao atualizar a data de registro do custo.'});
+            return res.status(500).json({ success: false, message: 'Erro ao atualizar a data de registro da meta.'});
         }
-        res.json({ success: true, message: 'Data de registro do custo atualizado com sucesso!'});
+        res.json({ success: true, message: 'Data de registro da meta atualizado com sucesso!'});
     });
 }
 
-exports.deletarCusto = (req, res) => {
-    const query = 'DELETE FROM Custos WHERE id_custo = ?';
-    const params = [req.params.idCusto];
+exports.deletarMeta = (req, res) => {
+    const query = 'DELETE FROM Metas WHERE id_meta = ?';
+    const params = [req.params.idMeta];
 
     connection.query(query, params, (err, results) => {
         if (err) {
-            return res.status(500).json({ success: false, message: 'Erro ao deletar o custo.'});
+            return res.status(500).json({ success: false, message: 'Erro ao deletar a meta.'});
         }
-        res.json({ success: true, message: 'Custo deletado com sucesso!'});
+        res.json({ success: true, message: 'Meta deletada com sucesso!'});
     });
 }
