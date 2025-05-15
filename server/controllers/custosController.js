@@ -39,7 +39,7 @@ exports.selecionarCustoPorId = (req, res) => {
 }
 
 exports.listarCustosPorUsuario = (req, res) => {
-    const query = 'SELECT * FROM Custos WHERE id_custo = ?';
+    const query = 'SELECT * FROM Custos WHERE id_usuario = ?';
     const params = [req.params.idUsuario];
     connection.query(query, params, (err, results) => {
         if (err) {

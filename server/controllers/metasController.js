@@ -39,7 +39,7 @@ exports.selecionarMetaPorId = (req, res) => {
 }
 
 exports.listarMetasPorUsuario = (req, res) => {
-    const query = 'SELECT * FROM Metas WHERE id_meta = ?';
+    const query = 'SELECT * FROM Metas WHERE id_usuario = ?';
     const params = [req.params.idUsuario];
     connection.query(query, params, (err, results) => {
         if (err) {
