@@ -52,8 +52,8 @@ exports.listarNotificacoesPorUsuario = (req, res) => {
 
 exports.atualizarNotificacao = (req, res) => {
     const { idUsuario, texto, imagem, dataRegistro } = req.body;
-    const idMeta = req.params.idNotificacao;
-    const params = [idUsuario, texto, imagem, dataRegistro, idMeta];
+    const idNotificacao = req.params.idNotificacao;
+    const params = [idUsuario, texto, imagem, dataRegistro, idNotificacao];
 
     const query = 'UPDATE Notificacoes SET id_usuario = ?, texto = ?, imagem = ?, data_registro = ? WHERE id_notificacao = ?';
     
@@ -68,7 +68,7 @@ exports.atualizarNotificacao = (req, res) => {
 
 exports.setUsuarioNotificacao = (req, res) => {
     const idUsuario = req.body.idUsuario;
-    const idMeta = req.params.idNotificacao;
+    const idNotificacao = req.params.idNotificacao;
     const query = 'UPDATE Notificacoes SET id_usuario = ? WHERE id_notificacao = ?';
     const params = [idUsuario, idNotificacao];
 
