@@ -44,8 +44,12 @@ exports.selecionarUsuarioPorId = (req, res) => {
             return res.status(500).json({ success: false, message: 'Erro ao selecionar o usuário.'});
         }
 
-        delete results[0].senha;
-        results[0].ativar_notificacao = results[0].ativar_notificacao === 1;
+        if (results.length > 0) {
+            results.forEach((usuario) => {
+                delete usuario.senha
+                usuario.ativar_notificacao = usuario.ativar_notificacao === 1
+            });
+        }
 
         res.json({ success: true, message: 'Usuário selecionado com sucesso!', data: results[0] });
     });
@@ -53,7 +57,7 @@ exports.selecionarUsuarioPorId = (req, res) => {
 
 exports.listarUsuariosPorNome = (req, res) => {
     const query = 'SELECT * FROM Usuarios WHERE nome LIKE ?';
-    const params = [`%${req.body.nome}%`];
+    const params = [`%${req.query.nome}%`];
     connection.query(query, params, (err, results) => {
         if (err) {
             return res.status(500).json({ success: false, message: 'Erro ao selecionar usuários.' });
@@ -71,14 +75,18 @@ exports.listarUsuariosPorNome = (req, res) => {
 
 exports.selecionarUsuarioPorEmail = (req, res) => {
     const query = 'SELECT * FROM Usuarios WHERE email = ?';
-    const params = [req.params.email];
+    const params = [req.query.email];
     connection.query(query, params, (err, results) => {
         if (err) {
             return res.status(500).json({ success: false, message: 'Erro ao selecionar usuários.' });
         }
 
-        delete results[0].senha;
-        results[0].ativar_notificacao = results[0].ativar_notificacao === 1;
+        if (results.length > 0) {
+            results.forEach((usuario) => {
+                delete usuario.senha
+                usuario.ativar_notificacao = usuario.ativar_notificacao === 1
+            });
+        }
 
         res.json({ success: true, data: results.length > 0 ? results[0] : null });
     });

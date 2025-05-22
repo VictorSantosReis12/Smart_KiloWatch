@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-exports.criarNotificacao = async (req, res) => {
+exports.enviarEmail = async (req, res) => {
     const { nome, email, mensagem } = req.body;
 
     const transporter = nodemailer.createTransport({

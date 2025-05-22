@@ -1,0 +1,1107 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API do Smart KiloWatch",
+        "version": "1.0.0",
+        "description": "Documentação da API para funcionalidades do Smart KiloWatch."
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000",
+            "description": "Servidor local"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Usuários",
+            "description": "Operações relacionadas ao cadastro, autenticação e gerenciamento de usuários."
+        },
+        {
+            "name": "Eletrodomésticos",
+            "description": "Gerenciamento dos eletrodomésticos registrados pelos usuários, incluindo cadastro, edição e exclusão."
+        },
+        {
+            "name": "Atividades",
+            "description": "Registro e controle das atividades que envolvem consumo de água nas residências."
+        },
+        {
+            "name": "Consumos de Energia",
+            "description": "Monitoramento e registro do consumo de energia elétrica por eletrodomésticos."
+        },
+        {
+            "name": "Consumos de Água",
+            "description": "Monitoramento e registro do consumo de água por atividades."
+        },
+        {
+            "name": "Metas",
+            "description": "Definição e acompanhamento de metas de economia de energia e água pelos usuários."
+        },
+        {
+            "name": "Custos",
+            "description": "Cálculo e exibição dos custos relacionados ao consumo de água e energia."
+        },
+        {
+            "name": "Notificações",
+            "description": "Envio de alertas e lembretes sobre consumo, metas e outras atividades relevantes."
+        },
+        {
+            "name": "Nodemailer",
+            "description": "Serviço de envio de e-mails ao suporte."
+        },
+        {
+            "name": "Residências",
+            "description": "Gerenciamento das informações das residências cadastradas pelos usuários."
+        },
+        {
+            "name": "Tarifas",
+            "description": "Configuração e controle das tarifas de energia e água utilizadas nos cálculos de consumo."
+        }
+    ],
+    "paths": {
+        "/usuario": {
+            "post": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Cadastro de usuário",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nome": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "senha": {
+                                        "type": "string"
+                                    },
+                                    "ativarNotificacao": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": [
+                                    "nome",
+                                    "email",
+                                    "senha",
+                                    "ativarNotificacao"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuário cadastrado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao cadastrar usuário."
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Lista todos os usuários",
+                "responses": {
+                    "200": {
+                        "description": "Usuários selecionados com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao selecionar os usuários."
+                    }
+                }
+            }
+        },
+        "/usuario/selecionarPorId/{id}": {
+            "get": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Seleciona um usuário por ID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuário selecionado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao selecionar o usuário."
+                    }
+                }
+            }
+        },
+        "/usuario/listarPorNome": {
+            "get": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Lista usuários por nome",
+                "parameters": [
+                    {
+                        "name": "nome",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuário selecionado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao selecionar o usuário."
+                    }
+                }
+            }
+        },
+        "/usuario/listarPorEmail": {
+            "get": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Lista usuários por email",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuário selecionado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao selecionar o usuário."
+                    }
+                }
+            }
+        },
+        "/usuario/login": {
+            "post": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Login de usuário",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "senha": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "email",
+                                    "senha"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login bem-sucedido!"
+                    },
+                    "401": {
+                        "description": "Senha incorreta."
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado."
+                    },
+                    "500": {
+                        "description": "Erro ao buscar usuário."
+                    }
+                }
+            }
+        },
+        "/usuario/{id}": {
+            "put": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Atualiza um usuário",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "nome": {
+                                        "type": "string"
+                                    },
+                                    "senhaAtual": {
+                                        "type": "string"
+                                    },
+                                    "senhaNova": {
+                                        "type": "string"
+                                    },
+                                    "ativarNotificacao": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": [
+                                    "email",
+                                    "nome",
+                                    "senhaAtual",
+                                    "senhaNova",
+                                    "ativarNotificacao"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuário atualizado com sucesso!"
+                    },
+                    "401": {
+                        "description": "Senha incorreta."
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado."
+                    },
+                    "500": {
+                        "description": "Erro ao atualizar o usuário."
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Deleta um usuário",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuário deletado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao deletar o usuário."
+                    }
+                }
+            }
+        },
+        "/usuario/setNome/{id}": {
+            "put": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Altera o nome do usuário",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nome": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "nome"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nome do usuário alterado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao alterar o nome do usuário."
+                    }
+                }
+            }
+        },
+        "/usuario/setEmail/{id}": {
+            "put": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Altera o email do usuário",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "email"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Email do usuário alterado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao alterar o email do usuário."
+                    }
+                }
+            }
+        },
+        "/usuario/setSenha/{id}": {
+            "put": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Altera a senha do usuário",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "senhaAtual": {
+                                        "type": "string"
+                                    },
+                                    "senhaNova": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "senhaAtual",
+                                    "senhaNova"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Senha do usuário alterada com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao alterar a senha do usuário."
+                    }
+                }
+            }
+        },
+        "/usuario/setNotificacao/{id}": {
+            "put": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Altera a notificação do usuário",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "ativarNotificacao": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": [
+                                    "ativarNotificacao"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Notificação do usuário alterada com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao alterar a notificação do usuário."
+                    }
+                }
+            }
+        },
+        "/eletrodomestico": {
+            "post": {
+                "tags": [
+                    "Eletrodomésticos"
+                ],
+                "summary": "Cadastro de eletrodoméstico",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "idUsuario": {
+                                        "type": "integer"
+                                    },
+                                    "tipo": {
+                                        "type": "string"
+                                    },
+                                    "marca": {
+                                        "type": "string"
+                                    },
+                                    "modelo": {
+                                        "type": "string"
+                                    },
+                                    "imagem": {
+                                        "type": "string"
+                                    },
+                                    "consumoKwhMes": {
+                                        "type": "number",
+                                        "format": "double",
+                                        "maximum": 999.999,
+                                        "minimum": 0.000
+                                    },
+                                    "consumoKwhDia": {
+                                        "type": "number",
+                                        "format": "double",
+                                        "maximum": 999.999,
+                                        "minimum": 0.000
+                                    },
+                                    "manterTempo": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": [
+                                    "idUsuario",
+                                    "tipo",
+                                    "marca",
+                                    "modelo",
+                                    "imagem",
+                                    "consumoKwhMes",
+                                    "consumoKwhDia",
+                                    "manterTempo"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Eletrodoméstico cadastrado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao cadastrar eletrodoméstico."
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Eletrodomésticos"
+                ],
+                "summary": "Lista todos os eletrodomésticos",
+                "responses": {
+                    "200": {
+                        "description": "Eletrodomésticos selecionados com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao selecionar os eletrodomésticos."
+                    }
+                }
+            }
+        },
+        "/eletrodomestico/selecionarPorId/{id}": {
+            "get": {
+                "tags": [
+                    "Eletrodomésticos"
+                ],
+                "summary": "Seleciona um eletrodoméstico por ID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Eletrodoméstico selecionado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao selecionar o eletrodoméstico."
+                    }
+                }
+            }
+        },
+        "/eletrodomestico/listarPorUsuario/{idUsuario}": {
+            "get": {
+                "tags": [
+                    "Eletrodomésticos"
+                ],
+                "summary": "Lista eletrodomésticos por usuário",
+                "parameters": [
+                    {
+                        "name": "idUsuario",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Eletrodomésticos selecionados com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao selecionar os eletrodomésticos."
+                    }
+                }
+            }
+        },
+        "/eletrodomestico/{id}": {
+            "put": {
+                "tags": [
+                    "Eletrodomésticos"
+                ],
+                "summary": "Atualiza um eletrodoméstico",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "idUsuario": {
+                                        "type": "integer"
+                                    },
+                                    "tipo": {
+                                        "type": "string"
+                                    },
+                                    "marca": {
+                                        "type": "string"
+                                    },
+                                    "modelo": {
+                                        "type": "string"
+                                    },
+                                    "imagem": {
+                                        "type": "string"
+                                    },
+                                    "consumoKwhMes": {
+                                        "type": "number",
+                                        "format": "double",
+                                        "maximum": 999.999,
+                                        "minimum": 0.000
+                                    },
+                                    "consumoKwhDia": {
+                                        "type": "number",
+                                        "format": "double",
+                                        "maximum": 999.999,
+                                        "minimum": 0.000
+                                    },
+                                    "manterTempo": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": [
+                                    "idUsuario",
+                                    "tipo",
+                                    "marca",
+                                    "modelo",
+                                    "consumoKwhMes",
+                                    "consumoKwhDia",
+                                    "manterTempo"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Eletrodoméstico atualizado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao atualizar o eletrodoméstico."
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Eletrodomésticos"
+                ],
+                "summary": "Deleta um eletrodoméstico",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Eletrodoméstico deletado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao deletar o eletrodoméstico."
+                    }
+                }
+            }
+        },
+        "/eletrodomestico/setUsuario/{id}": {
+            "put": {
+                "tags": [
+                    "Eletrodomésticos"
+                ],
+                "summary": "Altera o usuário do eletrodoméstico",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "idUsuario": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "required": [
+                                    "idUsuario"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuário do eletrodoméstico alterado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao alterar o usuário do eletrodoméstico."
+                    }
+                }
+            }
+        },
+        "/eletrodomestico/setTipo/{id}": {
+            "put": {
+                "tags": [
+                    "Eletrodomésticos"
+                ],
+                "summary": "Altera o tipo do eletrodoméstico",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "tipo": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "tipo"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Tipo do eletrodoméstico alterado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao alterar o tipo do eletrodoméstico."
+                    }
+                }
+            }
+        },
+        "/eletrodomestico/setMarca/{id}": {
+            "put": {
+                "tags": [
+                    "Eletrodomésticos"
+                ],
+                "summary": "Altera a marca do eletrodoméstico",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "marca": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "marca"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Marca do eletrodoméstico alterado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao alterar a marca do eletrodoméstico."
+                    }
+                }
+            }
+        },
+        "/eletrodomestico/setModelo/{id}": {
+            "put": {
+                "tags": [
+                    "Eletrodomésticos"
+                ],
+                "summary": "Altera o modelo do eletrodoméstico",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "modelo": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "modelo"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Modelo do eletrodoméstico alterado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao alterar o modelo do eletrodoméstico."
+                    }
+                }
+            }
+        },
+        "/eletrodomestico/setImagem/{id}": {
+            "put": {
+                "tags": [
+                    "Eletrodomésticos"
+                ],
+                "summary": "Altera a imagem do eletrodoméstico",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "imagem": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "imagem"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Imagem do eletrodoméstico alterado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao alterar a imagem do eletrodoméstico."
+                    }
+                }
+            }
+        },
+        "/eletrodomestico/setConsumoMensal/{id}": {
+            "put": {
+                "tags": [
+                    "Eletrodomésticos"
+                ],
+                "summary": "Altera o consumo mensal do eletrodoméstico",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "consumoMensal": {
+                                        "type": "number",
+                                        "format": "double",
+                                        "maximum": 999.999,
+                                        "minimum": 0.000
+                                    }
+                                },
+                                "required": [
+                                    "consumoMensal"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Consumo mensal do eletrodoméstico alterado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao alterar o consumo mensal do eletrodoméstico."
+                    }
+                }
+            }
+        },
+        "/eletrodomestico/setConsumoDiario/{id}": {
+            "put": {
+                "tags": [
+                    "Eletrodomésticos"
+                ],
+                "summary": "Altera o consumo diário do eletrodoméstico",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "consumoDiario": {
+                                        "type": "number",
+                                        "format": "double",
+                                        "maximum": 999.999,
+                                        "minimum": 0.000
+                                    }
+                                },
+                                "required": [
+                                    "consumoDiario"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Consumo diário do eletrodoméstico alterado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao alterar o consumo diário do eletrodoméstico."
+                    }
+                }
+            }
+        },
+        "/eletrodomestico/setManterTempo/{id}": {
+            "put": {
+                "tags": [
+                    "Eletrodomésticos"
+                ],
+                "summary": "Altera o manter tempo do eletrodoméstico",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "manterTempo": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": [
+                                    "manterTempo"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Manter tempo do eletrodoméstico alterado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao alterar o manter tempo do eletrodoméstico."
+                    }
+                }
+            }
+        }
+    }
+}

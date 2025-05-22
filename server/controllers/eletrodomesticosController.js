@@ -27,7 +27,7 @@ exports.listarEletrodomesticos = (req, res) => {
 
 exports.selecionarEletrodomesticoPorId = (req, res) => {
     const query = 'SELECT * FROM Eletrodomesticos WHERE id_eletrodomestico = ?';
-    const params = [req.params.idAtividade];
+    const params = [req.params.idEletrodomestico];
 
     connection.query(query, params, (err, results) => {
         if (err) {
@@ -69,11 +69,11 @@ exports.atualizarEletrodomestico = (req, res) => {
 exports.setUsuarioEletrodomestico = (req, res) => {
     const idUsuario = req.body.idUsuario;
     const idEletrodomestico = req.params.idEletrodomestico;
-    const query = 'UPDATE Eletrodomestico SET id_usuario = ? WHERE id_eletrodomestico = ?';
+    const query = 'UPDATE Eletrodomesticos SET id_usuario = ? WHERE id_eletrodomestico = ?';
     const params = [idUsuario, idEletrodomestico];
 
     connection.query(query, params, (err, results) => {
-        if (err || results.length == 0) {
+        if (err || results.affectedRows === 0) {
             return res.status(500).json({ success: false, message: 'Erro ao atualizar o usuário do eletrodoméstico.'});
         }
         res.json({ success: true, message: 'Usuário do eletrodoméstico atualizado com sucesso!'});
@@ -179,7 +179,7 @@ exports.setManterTempoEletrodomestico = (req, res) => {
 }
 
 exports.deletarEletrodomestico = (req, res) => {
-    const query = 'DELETE FROM Eletrodomestico WHERE id_eletrodomestico = ?';
+    const query = 'DELETE FROM Eletrodomesticos WHERE id_eletrodomestico = ?';
     const params = [req.params.idEletrodomestico];
 
     connection.query(query, params, (err, results) => {
