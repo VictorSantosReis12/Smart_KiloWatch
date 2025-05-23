@@ -1,11 +1,15 @@
-import { useState } from "react"
+// React Native
+import React, { useState } from 'react'
 import { Image, View, Text, StyleSheet } from "react-native"
+
+// Componentes
 import { Button } from "@/components/button"
+
+// Tamanhos
 import { Dimensions } from "react-native"
 const { width } = Dimensions.get("window")
 
-import { router } from "expo-router"
-
+// Fontes
 import { useFonts } from 'expo-font'
 import {
     Inder_400Regular
@@ -13,11 +17,12 @@ import {
 import {
     KronaOne_400Regular
 } from "@expo-google-fonts/krona-one"
-
-import { colors } from "@/styles/colors"
 import { fontFamily } from "@/styles/FontFamily"
 
-export default function Index() {
+// Cores
+import { colors } from "@/styles/colors"
+
+export default function TelaInicialScreen({ navigation }: any) {
     const [fontsLoaded] = useFonts({
         Inder_400Regular,
         KronaOne_400Regular
@@ -36,7 +41,10 @@ export default function Index() {
 
             />
 
-            <Button title="Cadastrar-se" />
+            <Button
+                title="Cadastrar-se"
+                onPress={() => navigation.navigate("Cadastro")}
+            />
 
             <View style={styles.div_or}>
                 <View style={styles.line} />
@@ -44,7 +52,11 @@ export default function Index() {
                 <View style={styles.line} />
             </View>
 
-            <Button title="Entrar" style={styles.login}/>
+            <Button
+                title="Entrar"
+                style={styles.login}
+                onPress={() => navigation.navigate("Login")}
+            />
         </View>
     )
 }
