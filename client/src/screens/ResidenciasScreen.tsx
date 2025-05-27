@@ -1,7 +1,6 @@
 // React Native
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Image, View, Text, StyleSheet } from "react-native"
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 // Componentes
 import { Button } from "@/components/button"
@@ -22,7 +21,6 @@ import { fontFamily } from "@/styles/FontFamily"
 
 // Cores
 import { colors } from "@/styles/colors"
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry'
 
 export default function TelaInicialScreen({ navigation }: any) {
     const [fontsLoaded] = useFonts({
@@ -30,25 +28,7 @@ export default function TelaInicialScreen({ navigation }: any) {
         KronaOne_400Regular
     })
 
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const checkLogin = async () => {
-            try {
-                const value = await AsyncStorage.getItem("permanecerConectado");
-                if (value === "true") {
-                    navigation.navigate("Login");
-                }
-            } catch (e) {
-                console.error("Erro ao ler AsyncStorage:", e);
-            } finally {
-                setLoading(false);
-            }
-        }
-        checkLogin();
-    }, []);
-
-    if (!fontsLoaded || loading) {
+    if (!fontsLoaded) {
         return null
     }
 
@@ -56,13 +36,13 @@ export default function TelaInicialScreen({ navigation }: any) {
         <View style={styles.container}>
             <Image
 
-            style={styles.logo}
-            source={require("@/assets/logo-titulo.png")}
+                style={styles.logo}
+                source={require("@/assets/logo-titulo.png")}
 
             />
 
             <Button
-                title="Cadastrar-se"
+                title="Residencias"
                 onPress={() => navigation.navigate("Cadastro")}
             />
 

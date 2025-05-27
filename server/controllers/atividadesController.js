@@ -3,7 +3,7 @@ const connection = require('../config/db');
 exports.criarAtividade = (req, res) => {
     const { idUsuario, nome, imagem, litrosMinuto, isTempoUso, manterTempoUso } = req.body;
 
-    const query = 'INSERT INTO Atividades (id_usuario, nome, imagem, listros_minuto, is_tempo_uso, manter_tempo_uso) VALUES (?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO Atividades (id_usuario, nome, imagem, litros_minuto, is_tempo_uso, manter_tempo_uso) VALUES (?, ?, ?, ?, ?, ?)';
     const params = [idUsuario, nome, imagem, litrosMinuto, isTempoUso, manterTempoUso];
 
     connection.query(query, params, (err, results) => {

@@ -45,7 +45,7 @@ CREATE TABLE Atividades (
 CREATE TABLE ConsumoEnergia (
     id_consumo_energia INT PRIMARY KEY AUTO_INCREMENT,
     id_eletrodomestico INT NOT NULL,
-    tempo FLOAT NOT NULL,
+    tempo INT NOT NULL,
     data_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_eletrodomestico) REFERENCES eletrodomesticos(id_eletrodomestico)
 );
@@ -53,7 +53,7 @@ CREATE TABLE ConsumoEnergia (
 CREATE TABLE ConsumoAgua (
     id_consumo_agua INT PRIMARY KEY AUTO_INCREMENT,
     id_atividade INT NOT NULL,
-    tempo_uso FLOAT NOT NULL,
+    tempo_uso INT NOT NULL,
     data_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_atividade) REFERENCES atividades(id_atividade)
 );

@@ -1,8 +1,7 @@
 // React Native
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { TouchableOpacity, Alert, Image, View, Text, StyleSheet } from "react-native"
 import { Ionicons } from '@expo/vector-icons'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 // Componentes
 import { Button } from "@/components/button"
@@ -26,56 +25,27 @@ import { fontFamily } from "@/styles/FontFamily"
 import { colors } from "@/styles/colors"
 
 // API
-import { login } from "../services/api"
+import { cadastrarUsuario } from "../services/api"
 
-export default function LoginScreen({ navigation }: any) {
+export default function CadastroSenhaScreen({ route, navigation }: any) {
+    const { nome, email } = route.params;
     const [fontsLoaded] = useFonts({
         Inder_400Regular,
         KronaOne_400Regular
     })
 
-    const [senhaVisivel, setSenhaVisivel] = useState(false);
-    const [senha, setSenha] = useState('');
-    const [email, setEmail] = useState('');
-    const [checked, setChecked] = useState(false);
-    const [loadingAutoLogin, setLoadingAutoLogin] = useState(true);
-
-    useEffect(() => {
-        async function verificarLoginAutomatico() {
-            try {
-                const permanecer = await AsyncStorage.getItem("permanecerConectado");
-                if (permanecer === "true") {
-                    const emailArmazenado = await AsyncStorage.getItem("email");
-                    const senhaArmazenada = await AsyncStorage.getItem("senha");
-                    if (emailArmazenado && senhaArmazenada) {
-                        setEmail(emailArmazenado);
-                        setSenha(senhaArmazenada);
-                        setChecked(true);
-                        // Chama login automático
-                        const result = await login(emailArmazenado, senhaArmazenada);
-                        if (result.success) {
-                            navigation.navigate("Residencias");
-                        } else {
-                            Alert.alert("Erro", "Login automático falhou: " + result.message);
-                        }
-                    }
-                }
-            } catch (error) {
-                console.log("Erro ao tentar login automático:", error);
-            } finally {
-                setLoadingAutoLogin(false);
-            }
-        }
-
-        verificarLoginAutomatico();
-    }, []);
-
-    if (!fontsLoaded || loadingAutoLogin) {
-        return null; // Ou um loading spinner, se preferir
+    if (!fontsLoaded) {
+        return null
     }
 
-    async function logar() {
-        if (!email || !senha) {
+    const [senhaVisivel, setSenhaVisivel] = useState(false);
+    const [confirmarSenhaVisivel, setConfirmarSenhaVisivel] = useState(false);
+    const [senha, setSenha] = useState('');
+    const [confirmarSenha, setConfirmarSenha] = useState('');
+    const [checked, setChecked] = useState(false);
+
+    async function cadastrar() {
+        if (!senha || !confirmarSenha) {
             Alert.alert(
                 "Atenção!",
                 "Por favor, preencha todos os campos.",
@@ -85,20 +55,22 @@ export default function LoginScreen({ navigation }: any) {
                 { cancelable: true }
             );
             return;
+        } else if (senha !== confirmarSenha) {
+            Alert.alert(
+                "Atenção!",
+                "As senhas não coincidem.",
+                [
+                    { text: "OK" }
+                ],
+                { cancelable: true }
+            );
+            return;
         }
 
-        console.log("Tentando logar com:", { email, senha, checked });
-        const result = await login(email, senha);
-        console.log("Resultado do login:", result);
+        const result = await cadastrarUsuario(nome, email, senha, checked);
 
         if (result.success) {
-            console.log(checked)
-            if (checked) {
-                AsyncStorage.setItem("email", email);
-                AsyncStorage.setItem("senha", senha);
-            }
-            AsyncStorage.setItem("permanecerConectado", checked.toString());
-            navigation.navigate("Residencias")
+            navigation.navigate("Login")
         } else {
             Alert.alert("Erro", result.message)
         }
@@ -111,20 +83,12 @@ export default function LoginScreen({ navigation }: any) {
                 size={39}
                 color="white"
                 style={{ position: "absolute", top: 51, left: 20 }}
-                onPress={() => navigation.navigate("TelaInicial")}
+                onPress={() => navigation.goBack()}
             />
 
             <Image
                 style={styles.logo}
                 source={require("@/assets/logo-titulo.png")}
-            />
-
-            <Input
-                placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
-                style={styles.input}
-                placeholderTextColor={colors.gray}
             />
 
             <View>
@@ -146,6 +110,25 @@ export default function LoginScreen({ navigation }: any) {
                 />
             </View>
 
+            <View>
+                <Input
+                    placeholder="Confirmar Senha"
+                    value={confirmarSenha}
+                    onChangeText={setConfirmarSenha}
+                    style={styles.input}
+                    placeholderTextColor={colors.gray}
+                    secureTextEntry={!confirmarSenhaVisivel}
+                />
+
+                <Ionicons
+                    name={confirmarSenhaVisivel ? "eye-off" : "eye"}
+                    size={29}
+                    color={colors.white}
+                    style={{ position: "absolute", right: 12, top: 12, zIndex: 10 }}
+                    onPress={() => setConfirmarSenhaVisivel(!confirmarSenhaVisivel)}
+                />
+            </View>
+
             <TouchableOpacity
                 style={styles.caixa}
                 onPress={() => setChecked(!checked)}
@@ -156,13 +139,13 @@ export default function LoginScreen({ navigation }: any) {
                 ) : (
                     <Ionicons name="square-outline" size={35} color={colors.white} />
                 )}
-                <Text style={styles.label}>Lembrar de mim</Text>
+                <Text style={styles.label}>Receber notificações</Text>
             </TouchableOpacity>
 
             <Button
-                title="Entrar"
+                title="Cadastrar-se"
                 style={styles.botao}
-                onPress={() => logar()}
+                onPress={() => cadastrar()}
             />
         </View>
     )

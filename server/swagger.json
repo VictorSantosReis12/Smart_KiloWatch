@@ -98,6 +98,9 @@
                     "200": {
                         "description": "Usuário cadastrado com sucesso!"
                     },
+                    "400": {
+                        "description": "E-mail inválido!"
+                    },
                     "500": {
                         "description": "Erro ao cadastrar usuário."
                     }
@@ -1099,6 +1102,535 @@
                     },
                     "500": {
                         "description": "Erro ao alterar o manter tempo do eletrodoméstico."
+                    }
+                }
+            }
+        },
+        "/atividade": {
+            "post": {
+                "tags": [
+                    "Atividades"
+                ],
+                "summary": "Cadastro de atividade",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "idUsuario": {
+                                        "type": "integer"
+                                    },
+                                    "nome": {
+                                        "type": "string"
+                                    },
+                                    "imagem": {
+                                        "type": "string"
+                                    },
+                                    "litrosMinuto": {
+                                        "type": "integer"
+                                    },
+                                    "isTempoUso": {
+                                        "type": "boolean"
+                                    },
+                                    "manterTempoUso": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": [
+                                    "idUsuario",
+                                    "nome",
+                                    "imagem",
+                                    "litrosMinuto",
+                                    "isTempoUso",
+                                    "manterTempo"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Eletrodoméstico cadastrado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao cadastrar eletrodoméstico."
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Atividades"
+                ],
+                "summary": "Lista todas as atividades",
+                "responses": {
+                    "200": {
+                        "description": "Atividades selecionadas com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao selecionar as atividades."
+                    }
+                }
+            }
+        },
+        "/atividade/selecionarPorId/{id}": {
+            "get": {
+                "tags": [
+                    "Atividades"
+                ],
+                "summary": "Seleciona uma atividade por ID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Atividade selecionada com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao selecionar a atividade."
+                    }
+                }
+            }
+        },
+        "/atividade/listarPorUsuario/{idUsuario}": {
+            "get": {
+                "tags": [
+                    "Atividades"
+                ],
+                "summary": "Lista atividades por usuário",
+                "parameters": [
+                    {
+                        "name": "idUsuario",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Atividades selecionadas com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao selecionar as atividades."
+                    }
+                }
+            }
+        },
+        "/atividade/{id}": {
+            "put": {
+                "tags": [
+                    "Atividades"
+                ],
+                "summary": "Atualiza uma atividade",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "idUsuario": {
+                                        "type": "integer"
+                                    },
+                                    "nome": {
+                                        "type": "string"
+                                    },
+                                    "imagem": {
+                                        "type": "string"
+                                    },
+                                    "litrosMinuto": {
+                                        "type": "integer"
+                                    },
+                                    "isTempoUso": {
+                                        "type": "boolean"
+                                    },
+                                    "manterTempoUso": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": [
+                                    "idUsuario",
+                                    "nome",
+                                    "imagem",
+                                    "litrosMinuto",
+                                    "isTempoUso",
+                                    "manterTempo"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Atividade atualizada com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao atualizar a atividade."
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Atividades"
+                ],
+                "summary": "Deleta uma atividade",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Atividade deletada com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao deletar a atividade."
+                    }
+                }
+            }
+        },
+        "/atividade/setUsuario/{id}": {
+            "put": {
+                "tags": [
+                    "Atividades"
+                ],
+                "summary": "Altera o usuário da atividade",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "idUsuario": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "required": [
+                                    "idUsuario"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuário da atividade alterado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao alterar o usuário da atividade."
+                    }
+                }
+            }
+        },
+        "/atividade/setNome/{id}": {
+            "put": {
+                "tags": [
+                    "Atividades"
+                ],
+                "summary": "Altera o nome da atividade",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nome": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "nome"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nome da atividade alterado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao alterar o nome da atividade."
+                    }
+                }
+            }
+        },
+        "/atividade/setImagem/{id}": {
+            "put": {
+                "tags": [
+                    "Atividades"
+                ],
+                "summary": "Altera a imagem da atividade",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "imagem": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "imagem"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Imagem da atividade alterada com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao alterar a imagem da atividade."
+                    }
+                }
+            }
+        },
+        "/atividade/setLitrosMinuto/{id}": {
+            "put": {
+                "tags": [
+                    "Atividades"
+                ],
+                "summary": "Altera os litros por minuto da atividade",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "litrosMinuto": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "required": [
+                                    "litrosMinuto"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Litros por minuto da atividade alterados com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao alterar os litros por minuto da atividade."
+                    }
+                }
+            }
+        },
+        "/atividade/setIsTempoUso/{id}": {
+            "put": {
+                "tags": [
+                    "Atividades"
+                ],
+                "summary": "Altera se é tempo ou uso da atividade",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "isTempoUso": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": [
+                                    "isTempoUso"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Se é tempo ou uso da atividade alterado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao alterar se é tempo ou uso da atividade."
+                    }
+                }
+            }
+        },
+        "/atividade/setManterTempoUso/{id}": {
+            "put": {
+                "tags": [
+                    "Atividades"
+                ],
+                "summary": "Altera o manter tempo ou uso da atividade",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "manterTempoUso": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": [
+                                    "manterTempoUso"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Manter tempo ou uso da atividade alterado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao alterar o manter tempo ou uso da atividade."
+                    }
+                }
+            }
+        },
+        "/consumoEnergia": {
+            "post": {
+                "tags": [
+                    "Consumos de Energia"
+                ],
+                "summary": "Cadastro de consumo de energia",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "idEletrodomestico": {
+                                        "type": "integer"
+                                    },
+                                    "tempo": {
+                                        "type": "integer"
+                                    },
+                                    "dataRegistro": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    }
+                                },
+                                "required": [
+                                    "idEletrodomestico",
+                                    "tempo",
+                                    "dataRegistro"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Consumo de energia cadastrado com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao cadastrar consumo de energia."
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Consumos de Energia"
+                ],
+                "summary": "Lista todos os consumos de energia",
+                "responses": {
+                    "200": {
+                        "description": "Consumos de energia selecionados com sucesso!"
+                    },
+                    "500": {
+                        "description": "Erro ao selecionar os consumos de energia."
                     }
                 }
             }

@@ -1,9 +1,14 @@
 const connection = require('../config/db');
 const bcrypt = require('bcrypt');
+const validator = require('validator');
 
 exports.criarUsuario = (req, res) => {
     const { nome, email, senha, ativarNotificacao } = req.body;
     const saltRounds = 10;
+
+    if (!validator.isEmail(email)) {
+        return res.status(400).json({ error: 'E-mail inválido!' });
+    }
 
     bcrypt.hash(senha, saltRounds, (err, senhaCriptografada) => {
         if (err) {
@@ -26,12 +31,12 @@ exports.listarUsuarios = (req, res) => {
     const query = 'SELECT id_usuario, nome, email, ativar_notificacao FROM Usuarios';
     connection.query(query, (err, results) => {
         if (err) {
-            return res.status(500).json({ success: false, message: 'Erro ao selecionar os usuários.'});
+            return res.status(500).json({ success: false, message: 'Erro ao selecionar os usuários.' });
         }
 
         results.forEach((usuario) => usuario.ativar_notificacao = usuario.ativar_notificacao === 1);
-        
-        res.json({ success: true, message: 'Usuários selecionados com sucesso!', data: results});
+
+        res.json({ success: true, message: 'Usuários selecionados com sucesso!', data: results });
     });
 }
 
@@ -41,7 +46,7 @@ exports.selecionarUsuarioPorId = (req, res) => {
 
     connection.query(query, params, (err, results) => {
         if (err) {
-            return res.status(500).json({ success: false, message: 'Erro ao selecionar o usuário.'});
+            return res.status(500).json({ success: false, message: 'Erro ao selecionar o usuário.' });
         }
 
         if (results.length > 0) {
@@ -118,7 +123,7 @@ exports.login = (req, res) => {
 
             delete usuario.senha;
             usuario.ativar_notificacao = usuario.ativar_notificacao === 1;
-            
+
             res.status(200).json({ success: true, data: usuario });
         })
     })
@@ -129,7 +134,7 @@ exports.atualizarUsuario = (req, res) => {
     const { idUsuario } = req.params;
 
     const selectQuery = 'SELECT senha FROM Usuarios WHERE id_usuario = ?';
-    
+
     connection.query(selectQuery, [idUsuario], (err, results) => {
         if (err) {
             return res.status(500).json({ success: false, message: 'Erro ao buscar usuário.' });
@@ -179,9 +184,9 @@ exports.setNomeUsuario = (req, res) => {
 
     connection.query(query, params, (err, results) => {
         if (err || results.length == 0) {
-            return res.status(500).json({ success: false, message: 'Erro ao atualizar o nome do usuário.'});
+            return res.status(500).json({ success: false, message: 'Erro ao atualizar o nome do usuário.' });
         }
-        res.json({ success: true, message: 'Nome do usuário atualizado com sucesso!'});
+        res.json({ success: true, message: 'Nome do usuário atualizado com sucesso!' });
     });
 }
 
@@ -193,9 +198,9 @@ exports.setEmailUsuario = (req, res) => {
 
     connection.query(query, params, (err, results) => {
         if (err || results.length == 0) {
-            return res.status(500).json({ success: false, message: 'Erro ao atualizar o email do usuário.'});
+            return res.status(500).json({ success: false, message: 'Erro ao atualizar o email do usuário.' });
         }
-        res.json({ success: true, message: 'Email do usuário atualizado com sucesso!'});
+        res.json({ success: true, message: 'Email do usuário atualizado com sucesso!' });
     });
 }
 
@@ -203,7 +208,7 @@ exports.setSenhaUsuario = (req, res) => {
     const { senhaAtual, senhaNova } = req.body;
     const idUsuario = req.params.idUsuario;
     const selectQuery = 'SELECT senha FROM Usuarios WHERE id_usuario = ?';
-    
+
     connection.query(selectQuery, [idUsuario], (err, results) => {
         if (err) {
             return res.status(500).json({ success: false, message: 'Erro ao buscar usuário.' });
@@ -253,9 +258,9 @@ exports.setNotificacaoUsuario = (req, res) => {
 
     connection.query(query, params, (err, results) => {
         if (err || results.length == 0) {
-            return res.status(500).json({ success: false, message: 'Erro ao atualizar o ativar notificações do usuário.'});
+            return res.status(500).json({ success: false, message: 'Erro ao atualizar o ativar notificações do usuário.' });
         }
-        res.json({ success: true, message: 'Ativar notificações do usuário atualizado com sucesso!'});
+        res.json({ success: true, message: 'Ativar notificações do usuário atualizado com sucesso!' });
     });
 }
 
@@ -265,8 +270,8 @@ exports.deletarUsuario = (req, res) => {
 
     connection.query(query, params, (err, results) => {
         if (err) {
-            return res.status(500).json({ success: false, message: 'Erro ao deletar o usuário.'});
+            return res.status(500).json({ success: false, message: 'Erro ao deletar o usuário.' });
         }
-        res.json({ success: true, message: 'Usuário deletado com sucesso!'});
+        res.json({ success: true, message: 'Usuário deletado com sucesso!' });
     });
 }
