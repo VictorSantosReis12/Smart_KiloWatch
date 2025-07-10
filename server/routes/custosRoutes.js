@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const custosController = require('../controllers/custosController');
+const { verifyToken } = require('../middlewares/AuthMiddleware');
+const protegerRotas = require('../utils/protegerRotas');
 
 router.post('/custo', custosController.criarCusto);
 router.get('/custo', custosController.listarCustos);
@@ -15,5 +17,7 @@ router.put('/custo/setAguaSemImposto/:idCusto', custosController.setAguaSemImpos
 router.put('/custo/setAguaComImposto/:idCusto', custosController.setAguaComImpostoCusto);
 router.put('/custo/setData/:idCusto', custosController.setDataCusto);
 router.delete('/custo/:idCusto', custosController.deletarCusto);
+
+protegerRotas(router, verifyToken);
 
 module.exports = router;

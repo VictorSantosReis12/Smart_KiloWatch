@@ -1,40 +1,77 @@
 // React Native
-import React, { useState } from 'react'
-import { Alert, TouchableOpacity, Image, View, Text, StyleSheet } from "react-native"
-import { Ionicons } from '@expo/vector-icons'
+import React, { useState, useEffect } from 'react';
+import { TouchableOpacity, Alert, Image, View, StyleSheet, StatusBar, Keyboard, KeyboardEvent, ScrollView, Animated, useWindowDimensions, Text } from "react-native";
+import { HelperText, TextInput } from 'react-native-paper';
+import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { RFValue } from "react-native-responsive-fontsize";
 
 // Componentes
-import { Input } from "@/components/input"
-
-// Tamanhos
-import { Dimensions } from "react-native"
-const { width } = Dimensions.get("window")
+import { Button } from "@/components/button";
+import { Input } from "@/components/input";
 
 // Fontes
-import { useFonts } from 'expo-font'
+import { useFonts } from 'expo-font';
 import {
     Inder_400Regular
-} from "@expo-google-fonts/inder"
+} from "@expo-google-fonts/inder";
 import {
     KronaOne_400Regular
-} from "@expo-google-fonts/krona-one"
-import { fontFamily } from "@/styles/FontFamily"
+} from "@expo-google-fonts/krona-one";
+import { fontFamily } from "@/styles/FontFamily";
 
 // Cores
-import { colors } from "@/styles/colors"
+import { colors } from "@/styles/colors";
 
-export default function CadastroScreen({ navigation }: any) {
+// API
+import { cadastrarUsuario } from "../services/api";
+
+export default function CadastroScreen({ route, navigation }: any) {
+    const { nome, email } = route.params;
     const [fontsLoaded] = useFonts({
         Inder_400Regular,
         KronaOne_400Regular
     })
 
-    if (!fontsLoaded) {
-        return null
-    }
+    // Dimensões da janela
+    const { width, height } = useWindowDimensions();
+    const isLandscape = width > height;
+    const isVeryWide = (width / height) > 2.4;
 
-    const [nome, setNome] = useState('');
-    const [email, setEmail] = useState('');
+    // Teclado
+    const [keyboardHeight, setKeyboardHeight] = useState(0);
+    const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+
+    // Estados
+    const [senhaVisivel, setSenhaVisivel] = useState(false);
+    const [confirmarSenhaVisivel, setConfirmarSenhaVisivel] = useState(false);
+    const [senha, setSenha] = useState('');
+    const [confirmarSenha, setConfirmarSenha] = useState('');
+    const [checked, setChecked] = useState(false);
+    const [errorMessages, setErrorMessages] = useState({ senha: '', confirmarSenha: '' });
+    const [errors, setErrors] = useState({ senha: '', confirmarSenha: '' });
+    const [snackbarVisible, setSnackbarVisible] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+
+    useEffect(() => {
+        const onKeyboardShow = (e: KeyboardEvent) => {
+            setKeyboardHeight(e.endCoordinates.height);
+            setIsKeyboardVisible(true);
+        };
+        const onKeyboardHide = () => {
+            setKeyboardHeight(0);
+            setIsKeyboardVisible(false);
+        };
+
+        const showSub = Keyboard.addListener('keyboardDidShow', onKeyboardShow);
+        const hideSub = Keyboard.addListener('keyboardDidHide', onKeyboardHide);
+
+        return () => {
+            showSub.remove();
+            hideSub.remove();
+        };
+    }, []);
 
     function mostrarAlert() {
         if (!nome || !email) {
@@ -54,94 +91,480 @@ export default function CadastroScreen({ navigation }: any) {
         }
     }
 
+    const handleRegister = async () => {
+        let hasError = false;
+        const newErrors: { senha: string; confirmarSenha: string } = { senha: '', confirmarSenha: '' };
+
+        if (senha.trim() === '') {
+            newErrors.senha = 'Por favor, preencha a Senha.';
+            hasError = true;
+        }
+
+        if (confirmarSenha.trim() === '') {
+            newErrors.confirmarSenha = 'Por favor, preencha o Confirmar Senha.';
+            hasError = true;
+        }
+
+        if (hasError) {
+            setErrors(newErrors);
+            return;
+        }
+
+        if (senha !== confirmarSenha) {
+            newErrors.confirmarSenha = 'As senhas não coincidem.';
+            setErrors(newErrors);
+            return;
+        }
+
+        setErrors({ senha: '', confirmarSenha: '' });
+
+        try {
+            const cadastroResponse = await cadastrarUsuario(nome, email, senha, checked);
+
+            if (!cadastroResponse.success) {
+                console.log('Erro no cadastro: ' + (cadastroResponse.message || ''));
+                return;
+            }
+
+            navigation.navigate("Login");
+        } catch (error) {
+            console.error('Erro no handleRegister:', error);
+        }
+    };
+
+    if (!fontsLoaded) {
+        return null
+    }
+
     return (
-        <View style={styles.container}>
-            <Ionicons
-                name="arrow-back-circle"
-                size={39}
-                color="white"
-                style={{ position: "absolute", top: 51, left: 20 }}
-                onPress={() => navigation.goBack()}
-            />
+        <SafeAreaProvider>
+            <SafeAreaView style={styles.safeArea}>
+                {!isLandscape && !isVeryWide ?
+                    <Ionicons
+                        name="chevron-back-circle"
+                        size={RFValue(39)}
+                        color="white"
+                        style={{ position: "absolute", top: RFValue(51), left: RFValue(10) }}
+                        onPress={() => navigation.navigate("TelaInicial", {
+                            fromCadastro: true,
+                            nome,
+                            email
+                        })}
+                        zIndex={1000}
+                    />
+                    : isLandscape && isVeryWide ? (
+                        <View style={{ position: "absolute", top: RFValue(20), left: RFValue(20), width: RFValue(25), height: RFValue(25), zIndex: 1000, borderRadius: '50%' }}>
+                            <Ionicons
+                                name="chevron-back-circle"
+                                size={RFValue(25)}
+                                color="white"
+                                onPress={() => navigation.navigate("TelaInicial", {
+                                    fromCadastro: true,
+                                    nome,
+                                    email
+                                })}
+                                zIndex={1000}
+                            />
+                        </View>
+                    ) : null
+                }
+                <ScrollView
+                    contentContainerStyle={{ paddingBottom: keyboardHeight, flexGrow: 1 }}
+                    keyboardShouldPersistTaps="always"
+                >
+                    <View style={[styles.container, { flexDirection: isLandscape ? 'row' : 'column', gap: isLandscape ? RFValue(60) : '0' }]}>
+                        <StatusBar barStyle="light-content" backgroundColor={colors.blue[500]} />
 
-            <Image
-                style={styles.logo}
-                source={require("@/assets/logo-titulo.png")}
-            />
+                        <Animated.Image
 
-            <Input
-                placeholder="Nome Completo"
-                value={nome}
-                onChangeText={setNome}
-                style={styles.input}
-                placeholderTextColor={colors.gray}
-            />
+                            style={[styles.logo, { width: isLandscape ? RFValue(210) : (isKeyboardVisible ? RFValue(224) : RFValue(316)), height: isLandscape ? RFValue(134) : (isKeyboardVisible ? RFValue(143) : RFValue(202)) }]}
+                            source={require("@/assets/logo-titulo.png")}
 
-            <Input
-                placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
-                style={styles.input}
-                placeholderTextColor={colors.gray}
-            />
+                        />
+                        {isLandscape ? (
+                            !isVeryWide ? (
+                                <View style={{ alignItems: "center", justifyContent: "center", borderWidth: RFValue(1), borderColor: colors.white, borderRadius: RFValue(10), padding: RFValue(15) }}>
+                                    <Ionicons
+                                        name="chevron-back-circle"
+                                        size={RFValue(20)}
+                                        style={{ position: "absolute", top: RFValue(11), left: RFValue(5) }}
+                                        color="white"
+                                        onPress={() => navigation.navigate("TelaInicial", {
+                                            fromCadastro: true,
+                                            nome,
+                                            email
+                                        })}
+                                        zIndex={1000}
+                                    />
+                                    <Text style={{ fontSize: RFValue(12), fontFamily: fontFamily.krona, color: colors.white, marginBottom: RFValue(25) }}>
+                                        Cadastrar-se
+                                    </Text>
+                                    <Input
+                                        border={!!errors.senha === true ? colors.red : colors.gray}
+                                        autoCapitalize="none"
+                                        label="Senha"
+                                        value={senha}
+                                        styleLabel={{ color: !!errors.senha === true ? colors.red : colors.white, fontSize: RFValue(10) }}
+                                        contentStyle={{ fontSize: RFValue(10) }}
+                                        outlineColor={!!errors.senha === true ? colors.red : 'transparent'}
+                                        onChangeText={v => {
+                                            setSenha(v);
+                                            if (errors.senha) {
+                                                setErrors(prev => ({ ...prev, senha: '' }));
+                                            }
+                                            if (errorMessages.senha) {
+                                                setErrorMessages(prev => ({ ...prev, senha: '' }));
+                                            }
+                                        }}
+                                        style={[styles.input, { width: RFValue(190), height: RFValue(30), marginBottom: RFValue(18), borderRadius: RFValue(10) }]}
+                                        hasError={!!errors.senha}
+                                        errorText={errors.senha}
+                                        helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(6) }]}
+                                        secureTextEntry={!senhaVisivel}
+                                        right={
+                                            <TextInput.Icon
+                                                icon={senhaVisivel ? 'eye-off' : 'eye'}
+                                                color="#fff"
+                                                size={RFValue(15)}
+                                                onPress={() => setSenhaVisivel(!senhaVisivel)}
+                                                forceTextInputFocus={false}
+                                            />
+                                        }
+                                    />
 
-            <TouchableOpacity
-                activeOpacity={0.7}
-                style={styles.botao}
-                onPress={() => mostrarAlert()}
-            >
+                                    <Input
+                                        border={!!errors.confirmarSenha === true ? colors.red : colors.gray}
+                                        autoCapitalize="none"
+                                        label="Confirmar Senha"
+                                        value={confirmarSenha}
+                                        styleLabel={{ color: !!errors.confirmarSenha === true ? colors.red : colors.white, fontSize: RFValue(10) }}
+                                        contentStyle={{ fontSize: RFValue(10) }}
+                                        outlineColor={!!errors.confirmarSenha === true ? colors.red : 'transparent'}
+                                        onChangeText={v => {
+                                            setConfirmarSenha(v);
+                                            if (errors.confirmarSenha) {
+                                                setErrors(prev => ({ ...prev, confirmarSenha: '' }));
+                                            }
+                                            if (errorMessages.confirmarSenha) {
+                                                setErrorMessages(prev => ({ ...prev, confirmarSenha: '' }));
+                                            }
+                                        }}
+                                        style={[styles.input, { width: RFValue(190), height: RFValue(30), marginBottom: RFValue(10), borderRadius: RFValue(10) }]}
+                                        hasError={!!errors.confirmarSenha}
+                                        errorText={errors.confirmarSenha}
+                                        helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(6) }]}
+                                        secureTextEntry={!confirmarSenhaVisivel}
+                                        right={
+                                            <TextInput.Icon
+                                                icon={confirmarSenhaVisivel ? 'eye-off' : 'eye'}
+                                                color="#fff"
+                                                size={RFValue(15)}
+                                                onPress={() => setConfirmarSenhaVisivel(!confirmarSenhaVisivel)}
+                                                forceTextInputFocus={false}
+                                            />
+                                        }
+                                    />
 
-                <Text style={styles.title}>Próximo</Text>
+                                    <TouchableOpacity
+                                        style={[styles.caixa, {
+                                            width: RFValue(190),
+                                            height: RFValue(30),
+                                            marginBottom: RFValue(30)
+                                        }]}
+                                        onPress={() => setChecked(!checked)}
+                                        activeOpacity={1}
+                                    >
+                                        {checked ? (
+                                            <Ionicons name="checkbox" size={RFValue(20)} color={colors.white} />
+                                        ) : (
+                                            <Ionicons name="square-outline" size={RFValue(20)} color={colors.white} />
+                                        )}
+                                        <Text style={[styles.label, { fontSize: RFValue(10) }]}>Receber notificações</Text>
+                                    </TouchableOpacity>
 
-                <Ionicons
-                    name="arrow-forward-circle"
-                    size={34}
-                    color={colors.yellow[200]}
-                    style={{ position: "absolute", right: 50 }}
-                />
+                                    <Button
+                                        children="Cadastrar-se"
+                                        contentStyle={{ paddingVertical: RFValue(4) }}
+                                        labelStyle={{ fontSize: RFValue(10) }}
+                                        style={{
+                                            width: RFValue(190),
+                                            backgroundColor: colors.blue[300],
+                                            marginTop: RFValue(15),
+                                            borderRadius: RFValue(8)
+                                        }}
+                                        onPress={handleRegister}
+                                    />
+                                </View>
+                            ) : (
+                                <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                                    <View style={{ flexDirection: 'row', gap: RFValue(10), alignItems: 'center', justifyContent: 'center' }}>
+                                        <Input
+                                            border={!!errors.senha === true ? colors.red : colors.gray}
+                                            autoCapitalize="none"
+                                            label="Senha"
+                                            value={senha}
+                                            styleLabel={{ color: !!errors.senha === true ? colors.red : colors.white, fontSize: RFValue(10) }}
+                                            contentStyle={{ fontSize: RFValue(10) }}
+                                            outlineColor={!!errors.senha === true ? colors.red : 'transparent'}
+                                            onChangeText={v => {
+                                                setSenha(v);
+                                                if (errors.senha) {
+                                                    setErrors(prev => ({ ...prev, senha: '' }));
+                                                }
+                                                if (errorMessages.senha) {
+                                                    setErrorMessages(prev => ({ ...prev, senha: '' }));
+                                                }
+                                            }}
+                                            style={[styles.input, { width: RFValue(190), height: RFValue(30), marginBottom: RFValue(18), borderRadius: RFValue(10) }]}
+                                            hasError={!!errors.senha}
+                                            errorText={errors.senha}
+                                            helperStyle={styles.helperText}
+                                            secureTextEntry={!senhaVisivel}
+                                            right={
+                                                <TextInput.Icon
+                                                    icon={senhaVisivel ? 'eye-off' : 'eye'}
+                                                    color="#fff"
+                                                    onPress={() => setSenhaVisivel(!senhaVisivel)}
+                                                    forceTextInputFocus={false}
+                                                />
+                                            }
+                                        />
 
-            </TouchableOpacity>
-        </View>
+                                        <Input
+                                            border={!!errors.confirmarSenha === true ? colors.red : colors.gray}
+                                            autoCapitalize="none"
+                                            label="Confirmar Senha"
+                                            value={confirmarSenha}
+                                            styleLabel={{ color: !!errors.confirmarSenha === true ? colors.red : colors.white, fontSize: RFValue(10) }}
+                                            contentStyle={{ fontSize: RFValue(10) }}
+                                            outlineColor={!!errors.confirmarSenha === true ? colors.red : 'transparent'}
+                                            onChangeText={v => {
+                                                setConfirmarSenha(v);
+                                                if (errors.confirmarSenha) {
+                                                    setErrors(prev => ({ ...prev, confirmarSenha: '' }));
+                                                }
+                                                if (errorMessages.confirmarSenha) {
+                                                    setErrorMessages(prev => ({ ...prev, confirmarSenha: '' }));
+                                                }
+                                            }}
+                                            style={[styles.input, { width: RFValue(190), height: RFValue(30), marginBottom: RFValue(18), borderRadius: RFValue(10) }]}
+                                            hasError={!!errors.confirmarSenha}
+                                            errorText={errors.confirmarSenha}
+                                            helperStyle={styles.helperText}
+                                            secureTextEntry={!confirmarSenhaVisivel}
+                                            right={
+                                                <TextInput.Icon
+                                                    icon={confirmarSenhaVisivel ? 'eye-off' : 'eye'}
+                                                    color="#fff"
+                                                    onPress={() => setConfirmarSenhaVisivel(!confirmarSenhaVisivel)}
+                                                    forceTextInputFocus={false}
+                                                />
+                                            }
+                                        />
+                                    </View>
+
+                                    <TouchableOpacity
+                                        style={[styles.caixa,{
+                                            backgroundColor: "#FF0000"
+                                        }]}
+                                        onPress={() => setChecked(!checked)}
+                                        activeOpacity={1}
+                                    >
+                                        {checked ? (
+                                            <Ionicons name="checkbox" size={35} color={colors.white} />
+                                        ) : (
+                                            <Ionicons name="square-outline" size={35} color={colors.white} />
+                                        )}
+                                        <Text style={styles.label}>Receber notificações</Text>
+                                    </TouchableOpacity>
+
+                                    <Button
+                                        children="Cadastrar-se"
+                                        contentStyle={{ paddingVertical: RFValue(3) }}
+                                        labelStyle={{ fontSize: RFValue(10) }}
+                                        style={{
+                                            width: RFValue(190),
+                                            backgroundColor: colors.blue[300],
+                                            marginTop: RFValue(15),
+                                            borderRadius: RFValue(8)
+                                        }}
+                                        onPress={handleRegister}
+                                    />
+                                </View>
+                            )
+                        ) : (
+                            <>
+                                <Input
+                                    border={!!errors.senha === true ? colors.red : colors.gray}
+                                    autoCapitalize="none"
+                                    label="Senha"
+                                    value={senha}
+                                    styleLabel={{ color: !!errors.senha === true ? colors.red : colors.white }}
+                                    outlineColor={!!errors.senha === true ? colors.red : 'transparent'}
+                                    onChangeText={v => {
+                                        setSenha(v);
+                                        if (errors.senha) {
+                                            setErrors(prev => ({ ...prev, senha: '' }));
+                                        }
+                                        if (errorMessages.senha) {
+                                            setErrorMessages(prev => ({ ...prev, senha: '' }));
+                                        }
+                                    }}
+                                    style={styles.input}
+                                    hasError={!!errors.senha}
+                                    errorText={errors.senha}
+                                    helperStyle={styles.helperText}
+                                    secureTextEntry={!senhaVisivel}
+                                    right={
+                                        <TextInput.Icon
+                                            icon={senhaVisivel ? 'eye-off' : 'eye'}
+                                            color="#fff"
+                                            onPress={() => setSenhaVisivel(!senhaVisivel)}
+                                            forceTextInputFocus={false}
+                                        />
+                                    }
+                                />
+
+                                <Input
+                                    border={!!errors.confirmarSenha === true ? colors.red : colors.gray}
+                                    autoCapitalize="none"
+                                    label="Confirmar Senha"
+                                    value={confirmarSenha}
+                                    styleLabel={{ color: !!errors.confirmarSenha === true ? colors.red : colors.white }}
+                                    outlineColor={!!errors.confirmarSenha === true ? colors.red : 'transparent'}
+                                    onChangeText={v => {
+                                        setConfirmarSenha(v);
+                                        if (errors.confirmarSenha) {
+                                            setErrors(prev => ({ ...prev, confirmarSenha: '' }));
+                                        }
+                                        if (errorMessages.confirmarSenha) {
+                                            setErrorMessages(prev => ({ ...prev, confirmarSenha: '' }));
+                                        }
+                                    }}
+                                    style={styles.input}
+                                    hasError={!!errors.confirmarSenha}
+                                    errorText={errors.confirmarSenha}
+                                    helperStyle={styles.helperText}
+                                    secureTextEntry={!confirmarSenhaVisivel}
+                                    right={
+                                        <TextInput.Icon
+                                            icon={confirmarSenhaVisivel ? 'eye-off' : 'eye'}
+                                            color="#fff"
+                                            onPress={() => setConfirmarSenhaVisivel(!confirmarSenhaVisivel)}
+                                            forceTextInputFocus={false}
+                                        />
+                                    }
+                                />
+
+                                <TouchableOpacity
+                                    style={styles.caixa}
+                                    onPress={() => setChecked(!checked)}
+                                    activeOpacity={1}
+                                >
+                                    {checked ? (
+                                        <Ionicons name="checkbox" size={35} color={colors.white} />
+                                    ) : (
+                                        <Ionicons name="square-outline" size={35} color={colors.white} />
+                                    )}
+                                    <Text style={styles.label}>Receber notificações</Text>
+                                </TouchableOpacity>
+
+                                <Button
+                                    children="Cadastrar-se"
+                                    style={{
+                                        width: RFValue(255),
+                                        paddingVertical: RFValue(2),
+                                        backgroundColor: colors.blue[300],
+                                        marginTop: RFValue(62),
+                                        borderRadius: RFValue(20)
+                                    }}
+                                    onPress={handleRegister}
+                                />
+                            </>
+                        )
+                        }
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
+        </SafeAreaProvider>
     )
 }
 
 const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+        backgroundColor: colors.blue[500]
+    },
     container: {
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: colors.blue[500]
     },
     logo: {
-        width: width * 0.877,
-        height: width * 0.561,
-        resizeMode: "contain",
-        marginBottom: width * 0.069
+        width: RFValue(316),
+        height: RFValue(202),
+        resizeMode: "contain"
     },
     input: {
-        width: width * 0.708,
-        height: 52,
-        borderRadius: 5,
-        backgroundColor: "#056EA7",
-        padding: 12,
-        fontSize: 16,
+        width: RFValue(255),
+        height: RFValue(57),
+        marginBottom: RFValue(37),
+        fontFamily: fontFamily.inder
+    },
+    helperText: {
+        color: colors.red,
+        position: 'absolute',
+        bottom: RFValue(14),
+        left: RFValue(0),
+        fontSize: RFValue(12),
         fontFamily: fontFamily.inder,
+        backgroundColor: 'transparent',
+        margin: RFValue(0),
+        padding: RFValue(0)
+    },
+    caixa: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: RFValue(255),
+        height: RFValue(35),
+        marginBottom: RFValue(15)
+    },
+    label: {
+        marginLeft: RFValue(8),
+        fontSize: RFValue(14),
         color: colors.white,
-        marginBottom: width * 0.102
-    },
-    botao: {
-        width: width * 0.777,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: colors.blue[300],
-        paddingHorizontal: 49,
-        paddingVertical: 11,
-        borderRadius: 20,
-        marginTop: width * 0.172
-    },
-    title: {
-        fontSize: 18,
-        fontFamily: fontFamily.krona,
-        color: colors.yellow[200]
+        fontFamily: fontFamily.inder
     }
 })
+
+{/* <View>
+                <Input
+                    placeholder="Confirmar Senha"
+                    value={confirmarSenha}
+                    onChangeText={setConfirmarSenha}
+                    style={styles.input}
+                    placeholderTextColor={colors.gray}
+                    secureTextEntry={!confirmarSenhaVisivel}
+                />
+
+                <Ionicons
+                    name={confirmarSenhaVisivel ? "eye-off" : "eye"}
+                    size={29}
+                    color={colors.white}
+                    style={{ position: "absolute", right: 12, top: 12, zIndex: 10 }}
+                    onPress={() => setConfirmarSenhaVisivel(!confirmarSenhaVisivel)}
+                />
+            </View> */}
+
+{/* <TouchableOpacity
+                style={styles.caixa}
+                onPress={() => setChecked(!checked)}
+                activeOpacity={1}
+            >
+                {checked ? (
+                    <Ionicons name="checkbox" size={35} color={colors.white} />
+                ) : (
+                    <Ionicons name="square-outline" size={35} color={colors.white} />
+                )}
+                <Text style={styles.label}>Receber notificações</Text>
+            </TouchableOpacity> */}

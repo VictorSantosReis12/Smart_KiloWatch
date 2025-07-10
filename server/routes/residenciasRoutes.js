@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const residenciasController = require('../controllers/residenciasController');
+const { verifyToken } = require('../middlewares/AuthMiddleware');
+const protegerRotas = require('../utils/protegerRotas');
 
 router.post('/residencia', residenciasController.criarResidencia);
 router.get('/residencia', residenciasController.listarResidencias);
@@ -14,5 +16,7 @@ router.put('/residencia/setRua/:idResidencia', residenciasController.setRuaResid
 router.put('/residencia/setNumero/:idResidencia', residenciasController.setNumeroResidencia);
 router.put('/residencia/setComplemento/:idResidencia', residenciasController.setComplementoResidencia);
 router.delete('/residencia/:idResidencia', residenciasController.deletarResidencia);
+
+protegerRotas(router, verifyToken);
 
 module.exports = router;

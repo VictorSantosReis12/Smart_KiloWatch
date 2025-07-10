@@ -1,6 +1,8 @@
 const connection = require('../config/db');
 const bcrypt = require('bcrypt');
 const validator = require('validator');
+const jwt = require('jsonwebtoken');
+const jwtSecret = process.env.JWT_SECRET || 'senhajwt';
 
 exports.criarUsuario = (req, res) => {
     const { nome, email, senha, ativarNotificacao } = req.body;
@@ -102,9 +104,7 @@ exports.login = (req, res) => {
 
     const query = 'SELECT * FROM Usuarios WHERE email = ?';
     connection.query(query, [email], (err, results) => {
-        if (err) {
-            return res.status(500).json({ success: false, message: 'Erro ao buscar usuário.' });
-        }
+        if (err) return res.status(500).json({ success: false, message: 'Erro ao buscar usuário.' });
 
         if (results.length === 0) {
             return res.status(404).json({ success: false, message: 'Usuário não encontrado.' });
@@ -113,20 +113,18 @@ exports.login = (req, res) => {
         const usuario = results[0];
 
         bcrypt.compare(senha, usuario.senha, (err, isMatch) => {
-            if (err) {
-                return res.status(500).json({ success: false, message: 'Erro ao verificar senha.' });
-            }
+            if (err) return res.status(500).json({ success: false, message: 'Erro ao verificar senha.' });
 
-            if (!isMatch) {
-                return res.status(401).json({ success: false, message: 'Senha incorreta.' });
-            }
+            if (!isMatch) return res.status(401).json({ success: false, message: 'Senha incorreta.' });
 
             delete usuario.senha;
             usuario.ativar_notificacao = usuario.ativar_notificacao === 1;
 
-            res.status(200).json({ success: true, data: usuario });
-        })
-    })
+            const token = jwt.sign({ id_usuario: usuario.id_usuario, nome: usuario.nome, email: usuario.email }, jwtSecret);
+
+            res.status(200).json({ success: true, token, data: usuario });
+        });
+    });
 }
 
 exports.atualizarUsuario = (req, res) => {
@@ -136,9 +134,7 @@ exports.atualizarUsuario = (req, res) => {
     const selectQuery = 'SELECT senha FROM Usuarios WHERE id_usuario = ?';
 
     connection.query(selectQuery, [idUsuario], (err, results) => {
-        if (err) {
-            return res.status(500).json({ success: false, message: 'Erro ao buscar usuário.' });
-        }
+        if (err) return res.status(500).json({ success: false, message: 'Erro ao buscar usuário.' });
 
         if (results.length === 0) {
             return res.status(404).json({ success: false, message: 'Usuário não encontrado.' });
@@ -147,29 +143,28 @@ exports.atualizarUsuario = (req, res) => {
         const senhaSalva = results[0].senha;
 
         bcrypt.compare(senhaAtual, senhaSalva, (err, isMatch) => {
-            if (err) {
-                return res.status(500).json({ success: false, message: 'Erro ao verificar senha.' });
-            }
+            if (err) return res.status(500).json({ success: false, message: 'Erro ao verificar senha.' });
 
-            if (!isMatch) {
-                return res.status(401).json({ success: false, message: 'Senha incorreta.' });
-            }
+            if (!isMatch) return res.status(401).json({ success: false, message: 'Senha incorreta.' });
 
             const saltRounds = 10;
             bcrypt.hash(senhaNova, saltRounds, (err, senhaNovaCriptografada) => {
-                if (err) {
-                    return res.status(500).json({ success: false, message: 'Erro ao criptografar nova senha.' });
-                }
+                if (err) return res.status(500).json({ success: false, message: 'Erro ao criptografar nova senha.' });
 
                 const updateQuery = 'UPDATE Usuarios SET nome = ?, email = ?, senha = ?, ativar_notificacao = ? WHERE id_usuario = ?';
                 const params = [nome, email, senhaNovaCriptografada, ativarNotificacao, idUsuario];
 
                 connection.query(updateQuery, params, (err, results) => {
-                    if (err) {
-                        return res.status(500).json({ success: false, message: 'Erro ao atualizar o usuário.' });
-                    }
+                    if (err) return res.status(500).json({ success: false, message: 'Erro ao atualizar o usuário.' });
 
-                    res.json({ success: true, message: 'Usuário atualizado com sucesso!' });
+                    const token = jwt.sign({ id_usuario: idUsuario, nome, email }, jwtSecret, { expiresIn: '1h' });
+
+                    res.json({
+                        success: true,
+                        message: 'Usuário atualizado com sucesso!',
+                        token,
+                        data: { id_usuario: idUsuario, nome, email, ativarNotificacao }
+                    });
                 });
             });
         });

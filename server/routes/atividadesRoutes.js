@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const atividadesController = require('../controllers/atividadesController');
+const { verifyToken } = require('../middlewares/AuthMiddleware');
+const protegerRotas = require('../utils/protegerRotas');
 
 router.post('/atividade', atividadesController.criarAtividade);
 router.get('/atividade', atividadesController.listarAtividades);
@@ -14,5 +16,7 @@ router.put('/atividade/setLitrosMinuto/:idAtividade', atividadesController.setLi
 router.put('/atividade/setIsTempoUso/:idAtividade', atividadesController.setIsTempoUsoAtividade);
 router.put('/atividade/setManterTempoUso/:idAtividade', atividadesController.setManterTempoUsoAtividade);
 router.delete('/atividade/:idAtividade', atividadesController.deletarAtividade);
+
+protegerRotas(router, verifyToken);
 
 module.exports = router;

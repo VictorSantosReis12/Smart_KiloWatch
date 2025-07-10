@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const metasController = require('../controllers/metasController');
+const { verifyToken } = require('../middlewares/AuthMiddleware');
+const protegerRotas = require('../utils/protegerRotas');
 
 router.post('/meta', metasController.criarMeta);
 router.get('/meta', metasController.listarMetas);
@@ -12,5 +14,7 @@ router.put('/meta/setEnergia/:idMeta', metasController.setEnergiaMeta);
 router.put('/meta/setAgua/:idMeta', metasController.setAguaMeta);
 router.put('/meta/setData/:idMeta', metasController.setDataMeta);
 router.delete('/meta/:idMeta', metasController.deletarMeta);
+
+protegerRotas(router, verifyToken);
 
 module.exports = router;

@@ -1,21 +1,54 @@
-import { TouchableOpacity, TouchableOpacityProps, Text } from "react-native"
+import { Button as PaperButton, ButtonProps } from "react-native-paper"
+import { StyleProp, ViewStyle, Text } from "react-native"
+import { RFValue } from "react-native-responsive-fontsize"
 
-import { styles } from "./styles"
+import { colors } from "@/styles/colors"
+import { fontFamily } from "@/styles/FontFamily"
 
-type Props = TouchableOpacityProps & {
-    title: string
+type Props = ButtonProps & {
+    children: string
+    onPress: () => void
+    style?: StyleProp<ViewStyle>
+    contentStyle?: StyleProp<ViewStyle>
 }
 
-export function Button({ title, ...rest }: Props) {
+export function Button({ children, onPress, style, contentStyle, labelStyle, ...rest }: Props) {
     return (
-        <TouchableOpacity
-        
-        activeOpacity={0.7}
-        style={styles.button}
-        {...rest}
-
+        <PaperButton
+            {...rest}
+            mode="contained"
+            onPress={onPress}
+            elevation={4}
+            contentStyle={[
+                {
+                    paddingVertical: RFValue(6),
+                    backgroundColor: colors.blue[300],
+                    shadowColor: colors.black,
+                    shadowOffset: { width: RFValue(0), height: RFValue(3) },
+                    shadowOpacity: RFValue(0.8),
+                    shadowRadius: RFValue(4.65)
+                },
+                contentStyle
+            ]}
+            labelStyle={[
+                {
+                    fontSize: RFValue(18),
+                    fontFamily: fontFamily.krona,
+                    color: colors.yellow[200]
+                },
+                labelStyle
+            ]}
+            style={[
+                {
+                    shadowColor: colors.black,
+                    shadowOffset: { width: RFValue(0), height: RFValue(3) },
+                    shadowOpacity: RFValue(0.8),
+                    shadowRadius: RFValue(4.65)
+                },
+                style
+            ]}
         >
-            <Text style={styles.title}>{title}</Text>
-        </TouchableOpacity>
+            {children}
+        </PaperButton>
     )
 }

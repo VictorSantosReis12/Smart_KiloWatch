@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const consumosEnergiaController = require('../controllers/consumosEnergiaController');
+const { verifyToken } = require('../middlewares/AuthMiddleware');
+const protegerRotas = require('../utils/protegerRotas');
 
 router.post('/consumoEnergia', consumosEnergiaController.criarConsumoEnergia);
 router.get('/consumoEnergia', consumosEnergiaController.listarConsumosEnergia);
@@ -12,5 +14,7 @@ router.put('/consumoEnergia/setEletrodomestico/:idConsumoEnergia', consumosEnerg
 router.put('/consumoEnergia/setTempo/:idConsumoEnergia', consumosEnergiaController.setTempoConsumoEnergia);
 router.put('/consumoEnergia/setData/:idConsumoEnergia', consumosEnergiaController.setDataConsumoEnergia);
 router.delete('/consumoEnergia/:idConsumoEnergia', consumosEnergiaController.deletarConsumoEnergia);
+
+protegerRotas(router, verifyToken);
 
 module.exports = router;

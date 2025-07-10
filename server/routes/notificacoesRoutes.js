@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const notificacoesController = require('../controllers/notificacoesController');
+const { verifyToken } = require('../middlewares/AuthMiddleware');
+const protegerRotas = require('../utils/protegerRotas');
 
 router.post('/notificacao', notificacoesController.criarNotificacao);
 router.get('/notificacao', notificacoesController.listarNotificacoes);
@@ -12,5 +14,7 @@ router.put('/notificacao/setTexto/:idNotificacao', notificacoesController.setTex
 router.put('/notificacao/setImagem/:idNotificacao', notificacoesController.setImagemNotificacao);
 router.put('/notificacao/setData/:idNotificacao', notificacoesController.setDataNotificacao);
 router.delete('/notificacao/:idNotificacao', notificacoesController.deletarNotificacao);
+
+protegerRotas(router, verifyToken);
 
 module.exports = router;

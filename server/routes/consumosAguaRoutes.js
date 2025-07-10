@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const consumosAguaController = require('../controllers/consumosAguaController');
+const { verifyToken } = require('../middlewares/AuthMiddleware');
+const protegerRotas = require('../utils/protegerRotas');
 
 router.post('/consumoAgua', consumosAguaController.criarConsumoAgua);
 router.get('/consumoAgua', consumosAguaController.listarConsumosAgua);
@@ -12,5 +14,7 @@ router.put('/consumoAgua/setEletrodomestico/:idConsumoAgua', consumosAguaControl
 router.put('/consumoAgua/setTempo/:idConsumoAgua', consumosAguaController.setTempoConsumoAgua);
 router.put('/consumoAgua/setData/:idConsumoAgua', consumosAguaController.setDataConsumoAgua);
 router.delete('/consumoAgua/:idConsumoAgua', consumosAguaController.deletarConsumoAgua);
+
+protegerRotas(router, verifyToken);
 
 module.exports = router;

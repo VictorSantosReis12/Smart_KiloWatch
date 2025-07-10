@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const eletrodomesticosController = require('../controllers/eletrodomesticosController');
+const { verifyToken } = require('../middlewares/AuthMiddleware');
+const protegerRotas = require('../utils/protegerRotas');
 
 router.post('/eletrodomestico', eletrodomesticosController.criarEletrodomestico);
 router.get('/eletrodomestico', eletrodomesticosController.listarEletrodomesticos);
@@ -16,5 +18,7 @@ router.put('/eletrodomestico/setConsumoMensal/:idEletrodomestico', eletrodomesti
 router.put('/eletrodomestico/setConsumoDiario/:idEletrodomestico', eletrodomesticosController.setConsumoDiarioEletrodomestico);
 router.put('/eletrodomestico/setManterTempo/:idEletrodomestico', eletrodomesticosController.setManterTempoEletrodomestico);
 router.delete('/eletrodomestico/:idEletrodomestico', eletrodomesticosController.deletarEletrodomestico);
+
+protegerRotas(router, verifyToken);
 
 module.exports = router;
