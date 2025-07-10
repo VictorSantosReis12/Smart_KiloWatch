@@ -8,4 +8,4 @@ A aplicação permite que os usuários cadastrem suas residências, metas de con
 
 ## 📝 Figma
 
-[Link do Figma do Smart KiloWatch](https://github.com/VictorSantosReis12/Smart_KiloWatch)
+[Link do Figma do Smart KiloWatch](https://www.figma.com/design/sEJditsxUmXhEh4uYaEOvt/Smart-KiloWatch?node-id=0-1&p=f&t=26P11JG5T0jkvBLL-0)
