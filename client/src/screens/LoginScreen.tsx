@@ -1,7 +1,7 @@
 // React Native
 import React, { useState, useEffect, useContext } from 'react';
 import { TouchableOpacity, Alert, Image, View, StyleSheet, StatusBar, Keyboard, KeyboardEvent, ScrollView, Animated, useWindowDimensions, Text } from "react-native";
-import { HelperText, TextInput } from 'react-native-paper';
+import { HelperText, TextInput, Snackbar } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -28,7 +28,7 @@ import { colors } from "@/styles/colors";
 // API
 import { login } from "../services/api";
 
-export default function CadastroScreen({ navigation }: any) {
+export default function LoginScreen({ navigation }: any) {
     const [fontsLoaded] = useFonts({
         Inder_400Regular,
         KronaOne_400Regular
@@ -127,7 +127,8 @@ export default function CadastroScreen({ navigation }: any) {
             navigation.navigate("Login");
         } catch (error) {
             if (error instanceof Error) {
-                console.error('Erro no login:', error.message);
+                setSnackbarVisible(true);
+                setSnackbarMessage(error.message || "Erro no login.");
             } else {
                 console.error('Erro no login desconhecido:', error);
             }
@@ -159,7 +160,7 @@ export default function CadastroScreen({ navigation }: any) {
                     ) : null
                 }
                 <ScrollView
-                    contentContainerStyle={{ paddingBottom: keyboardHeight, flexGrow: 1 }}
+                    contentContainerStyle={{ paddingBottom: 0, flexGrow: 1 }}
                     keyboardShouldPersistTaps="always"
                 >
                     <View style={[styles.container, { flexDirection: isLandscape ? 'row' : 'column', gap: isLandscape ? RFValue(60) : '0' }]}>
@@ -425,6 +426,25 @@ export default function CadastroScreen({ navigation }: any) {
                             </>
                         )
                         }
+                        <Snackbar
+                            visible={snackbarVisible}
+                            onDismiss={() => setSnackbarVisible(false)}
+                            duration={5000}
+                            action={{
+                                label: 'OK',
+                                onPress: () => setSnackbarVisible(false),
+                                textColor: colors.blue[200],
+                            }}
+                            style={{
+                                alignSelf: 'center',
+                                width: isLandscape ? '50%' : '90%',
+                                borderRadius: 6,
+                                backgroundColor: colors.strongGray,
+                            }}
+
+                        >
+                            <Text style={{ color: colors.white, fontFamily: fontFamily.inder }}>{snackbarMessage}</Text>
+                        </Snackbar>
                     </View>
                 </ScrollView>
             </SafeAreaView>

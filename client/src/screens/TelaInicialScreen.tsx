@@ -1,7 +1,7 @@
 // React Native
 import React, { useState, useEffect, useCallback } from 'react';
 import { Image, View, Text, StyleSheet, StatusBar, useWindowDimensions, Keyboard, KeyboardEvent, ScrollView, KeyboardAvoidingView, Platform, Animated } from "react-native";
-import { HelperText } from "react-native-paper";
+import { HelperText, Snackbar } from "react-native-paper";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -483,6 +483,25 @@ export default function TelaInicialScreen({ navigation, route }: any) {
                                 </>
                             )
                         )}
+                        <Snackbar
+                            visible={snackbarVisible}
+                            onDismiss={() => setSnackbarVisible(false)}
+                            duration={5000}
+                            action={{
+                                label: 'OK',
+                                onPress: () => setSnackbarVisible(false),
+                                textColor: colors.blue[200],
+                            }}
+                            style={{
+                                alignSelf: 'center',
+                                width: isLandscape ? '50%' : '90%',
+                                borderRadius: 6,
+                                backgroundColor: colors.strongGray,
+                            }}
+
+                        >
+                            <Text style={{ color: colors.white, fontFamily: fontFamily.inder }}>{snackbarMessage}</Text>
+                        </Snackbar>
                     </View>
                 </ScrollView>
             </SafeAreaView>

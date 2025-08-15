@@ -157,7 +157,7 @@ exports.atualizarUsuario = (req, res) => {
                 connection.query(updateQuery, params, (err, results) => {
                     if (err) return res.status(500).json({ success: false, message: 'Erro ao atualizar o usuário.' });
 
-                    const token = jwt.sign({ id_usuario: idUsuario, nome, email }, jwtSecret, { expiresIn: '1h' });
+                    const token = jwt.sign({ id_usuario: idUsuario, nome, email }, jwtSecret);
 
                     res.json({
                         success: true,
@@ -172,7 +172,7 @@ exports.atualizarUsuario = (req, res) => {
 }
 
 exports.setNomeUsuario = (req, res) => {
-    const nome = req.body.nome;
+    const { nome, email } = req.body;
     const idUsuario = req.params.idUsuario;
     const query = 'UPDATE Usuarios SET nome = ? WHERE id_usuario = ?';
     const params = [nome, idUsuario];
@@ -181,12 +181,15 @@ exports.setNomeUsuario = (req, res) => {
         if (err || results.length == 0) {
             return res.status(500).json({ success: false, message: 'Erro ao atualizar o nome do usuário.' });
         }
-        res.json({ success: true, message: 'Nome do usuário atualizado com sucesso!' });
+
+        const token = jwt.sign({ id_usuario: idUsuario, nome, email }, jwtSecret);
+
+        res.json({ success: true, message: 'Nome do usuário atualizado com sucesso!', token });
     });
 }
 
 exports.setEmailUsuario = (req, res) => {
-    const email = req.body.email;
+    const { nome, email } = req.body;
     const idUsuario = req.params.idUsuario;
     const query = 'UPDATE Usuarios SET email = ? WHERE id_usuario = ?';
     const params = [email, idUsuario];
@@ -195,7 +198,10 @@ exports.setEmailUsuario = (req, res) => {
         if (err || results.length == 0) {
             return res.status(500).json({ success: false, message: 'Erro ao atualizar o email do usuário.' });
         }
-        res.json({ success: true, message: 'Email do usuário atualizado com sucesso!' });
+
+        const token = jwt.sign({ id_usuario: idUsuario, nome, email }, jwtSecret);
+
+        res.json({ success: true, message: 'Email do usuário atualizado com sucesso!', token });
     });
 }
 

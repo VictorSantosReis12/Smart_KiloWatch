@@ -18,6 +18,8 @@ type Props = {
     value: string
     border: string
     onChangeText: (text: string) => void
+    onFocus?: () => void
+    onBlur?: () => void
     placeholder?: string
     label?: string
     outlineColor?: string
@@ -25,6 +27,7 @@ type Props = {
     styleLabel?: StyleProp<TextStyle>
     contentStyle?: StyleProp<TextStyle>
     secureTextEntry?: boolean
+    disableLabel?: boolean
     style?: StyleProp<ViewStyle>
     helperStyle?: StyleProp<TextStyle>
     hasError?: boolean
@@ -37,6 +40,8 @@ export function Input({
     value,
     border,
     onChangeText,
+    onFocus,
+    onBlur,
     placeholder,
     label,
     outlineColor,
@@ -44,6 +49,7 @@ export function Input({
     styleLabel,
     contentStyle,
     secureTextEntry = false,
+    disableLabel = false,
     style,
     helperStyle,
     hasError = false,
@@ -67,18 +73,19 @@ export function Input({
                 autoCapitalize={autoCapitalize}
                 value={value}
                 onChangeText={onChangeText}
+                onFocus={onFocus}
+                onBlur={onBlur}
                 placeholder={placeholder}
                 label={
-                    <Text style={[
-                        {
+                    disableLabel ? undefined : (
+                        <Text style={[{
                             color: colors.white,
                             fontFamily: fontFamily.inder,
                             fontSize: RFValue(16)
-                        },
-                        styleLabel
-                    ]}>
-                        {label}
-                    </Text>
+                        }, styleLabel]}>
+                            {label}
+                        </Text>
+                    )
                 }
                 secureTextEntry={secureTextEntry}
                 style={[

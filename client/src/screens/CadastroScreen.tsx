@@ -1,7 +1,7 @@
 // React Native
 import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, Alert, Image, View, StyleSheet, StatusBar, Keyboard, KeyboardEvent, ScrollView, Animated, useWindowDimensions, Text } from "react-native";
-import { HelperText, TextInput } from 'react-native-paper';
+import { HelperText, TextInput, Snackbar } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -73,24 +73,6 @@ export default function CadastroScreen({ route, navigation }: any) {
         };
     }, []);
 
-    function mostrarAlert() {
-        if (!nome || !email) {
-            Alert.alert(
-                "Atenção!",
-                "Por favor, preencha todos os campos.",
-                [
-                    { text: "OK" }
-                ],
-                { cancelable: true }
-            );
-        } else {
-            navigation.navigate("CadastroSenha", {
-                nome: nome,
-                email: email
-            });
-        }
-    }
-
     const handleRegister = async () => {
         let hasError = false;
         const newErrors: { senha: string; confirmarSenha: string } = { senha: '', confirmarSenha: '' };
@@ -122,7 +104,8 @@ export default function CadastroScreen({ route, navigation }: any) {
             const cadastroResponse = await cadastrarUsuario(nome, email, senha, checked);
 
             if (!cadastroResponse.success) {
-                console.log('Erro no cadastro: ' + (cadastroResponse.message || ''));
+                setSnackbarVisible(true);
+                setSnackbarMessage(cadastroResponse.message || 'Erro no cadastro.');
                 return;
             }
 
@@ -364,7 +347,7 @@ export default function CadastroScreen({ route, navigation }: any) {
                                     </View>
 
                                     <TouchableOpacity
-                                        style={[styles.caixa,{
+                                        style={[styles.caixa, {
                                             backgroundColor: "#FF0000"
                                         }]}
                                         onPress={() => setChecked(!checked)}
@@ -483,6 +466,25 @@ export default function CadastroScreen({ route, navigation }: any) {
                             </>
                         )
                         }
+                        <Snackbar
+                            visible={snackbarVisible}
+                            onDismiss={() => setSnackbarVisible(false)}
+                            duration={5000}
+                            action={{
+                                label: 'OK',
+                                onPress: () => setSnackbarVisible(false),
+                                textColor: colors.blue[200],
+                            }}
+                            style={{
+                                alignSelf: 'center',
+                                width: isLandscape ? '50%' : '90%',
+                                borderRadius: 6,
+                                backgroundColor: colors.strongGray,
+                            }}
+
+                        >
+                            <Text style={{ color: colors.white, fontFamily: fontFamily.inder }}>{snackbarMessage}</Text>
+                        </Snackbar>
                     </View>
                 </ScrollView>
             </SafeAreaView>
@@ -536,35 +538,3 @@ const styles = StyleSheet.create({
         fontFamily: fontFamily.inder
     }
 })
-
-{/* <View>
-                <Input
-                    placeholder="Confirmar Senha"
-                    value={confirmarSenha}
-                    onChangeText={setConfirmarSenha}
-                    style={styles.input}
-                    placeholderTextColor={colors.gray}
-                    secureTextEntry={!confirmarSenhaVisivel}
-                />
-
-                <Ionicons
-                    name={confirmarSenhaVisivel ? "eye-off" : "eye"}
-                    size={29}
-                    color={colors.white}
-                    style={{ position: "absolute", right: 12, top: 12, zIndex: 10 }}
-                    onPress={() => setConfirmarSenhaVisivel(!confirmarSenhaVisivel)}
-                />
-            </View> */}
-
-{/* <TouchableOpacity
-                style={styles.caixa}
-                onPress={() => setChecked(!checked)}
-                activeOpacity={1}
-            >
-                {checked ? (
-                    <Ionicons name="checkbox" size={35} color={colors.white} />
-                ) : (
-                    <Ionicons name="square-outline" size={35} color={colors.white} />
-                )}
-                <Text style={styles.label}>Receber notificações</Text>
-            </TouchableOpacity> */}

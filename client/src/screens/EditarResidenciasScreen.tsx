@@ -26,11 +26,12 @@ import { fontFamily } from "@/styles/FontFamily"
 import { colors } from "@/styles/colors"
 
 // API
-import { cadastrarResidencia } from "@/services/api";
+import { editarResidencia } from "@/services/api";
 
 const estadosBR = ['Acre', 'Alagoas', 'Amapá', 'Amazonas', 'Bahia', 'Ceará', 'Distrito Federal', 'Espírito Santo', 'Goiás', 'Maranhão', 'Mato Grosso', 'Mato Grosso do Sul', 'Minas Gerais', 'Pará', 'Paraíba', 'Paraná', 'Pernambuco', 'Piauí', 'Rio de Janeiro', 'Rio Grande do Norte', 'Rio Grande do Sul', 'Rondônia', 'Roraima', 'Santa Catarina', 'São Paulo', 'Sergipe', 'Tocantins'];
 
-export default function CadastrarResidenciaScreen({ navigation }: any) {
+export default function EditarResidenciasScreen({ navigation, route }: any) {
+    const { residencia } = route.params;
     const { userData } = useContext(AuthContext);
     const { userToken } = useContext(AuthContext);
 
@@ -49,13 +50,13 @@ export default function CadastrarResidenciaScreen({ navigation }: any) {
     const [keyboardHeight, setKeyboardHeight] = useState(0);
 
     // Estados
-    const [estado, setEstado] = useState('');
+    const [estado, setEstado] = useState(residencia?.estado || '');
     const [filteredEstados, setFilteredEstados] = useState<string[]>(estadosBR);
     const [isFocused, setIsFocused] = useState(false);
-    const [cidade, setCidade] = useState('');
-    const [rua, setRua] = useState('');
-    const [numero, setNumero] = useState('');
-    const [complemento, setComplemento] = useState('');
+    const [cidade, setCidade] = useState(residencia?.cidade || '');
+    const [rua, setRua] = useState(residencia?.rua || '');
+    const [numero, setNumero] = useState(residencia?.numero || '');
+    const [complemento, setComplemento] = useState(residencia?.complemento || '');
     const [errorMessages, setErrorMessages] = useState({ estado: '', cidade: '', rua: '', numero: '', complemento: '' });
     const [errors, setErrors] = useState({ estado: '', cidade: '', rua: '', numero: '', complemento: '' });
     const [snackbarVisible, setSnackbarVisible] = useState(false);
@@ -78,7 +79,6 @@ export default function CadastrarResidenciaScreen({ navigation }: any) {
     }
 
     function onSelectEstado(estadoSelecionado: string) {
-        console.log('Estado selecionado:', estadoSelecionado);
         setEstado(estadoSelecionado);
         setFilteredEstados([]);
         setIsFocused(false);
@@ -125,11 +125,11 @@ export default function CadastrarResidenciaScreen({ navigation }: any) {
 
         const idUsuario = userData.id_usuario;
         try {
-            const cadastroResponse = await cadastrarResidencia(userToken, idUsuario, estado, cidade, rua, numero, complemento);
+            const editarResponse = await editarResidencia(userToken, idUsuario, estado, cidade, rua, numero, complemento, residencia.id_residencia);
 
-            if (!cadastroResponse.success) {
+            if (!editarResponse.success) {
                 setSnackbarVisible(true);
-                setSnackbarMessage(cadastroResponse.message || 'Erro ao cadastrar residência.');
+                setSnackbarMessage(editarResponse.message || 'Erro ao editar residência.');
                 return;
             }
 
@@ -153,7 +153,7 @@ export default function CadastrarResidenciaScreen({ navigation }: any) {
                         <View style={{ borderWidth: RFValue(1), borderColor: colors.white, borderRadius: RFValue(10), padding: RFValue(10), height: "100%" }}>
                             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: RFValue(600), paddingBottom: RFValue(8), borderBottomWidth: RFValue(3), borderBottomColor: colors.yellow[300] }}>
                                 <Text style={{ fontSize: RFValue(12), fontFamily: fontFamily.krona, color: colors.white }}>
-                                    Cadastrar Residência
+                                    Editar Residência
                                 </Text>
 
                                 <Button
@@ -361,7 +361,7 @@ export default function CadastrarResidenciaScreen({ navigation }: any) {
                         <View style={{ paddingHorizontal: RFValue(6), paddingVertical: RFValue(20), height: "100%", width: "100%" }}>
                             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%", paddingBottom: RFValue(15), borderBottomWidth: RFValue(3), borderBottomColor: colors.yellow[300], marginTop: RFValue(15) }}>
                                 <Text style={{ fontSize: RFValue(18), fontFamily: fontFamily.krona, color: colors.white }}>
-                                    Cadastrar Residência
+                                    Editar Residência
                                 </Text>
                             </View>
 

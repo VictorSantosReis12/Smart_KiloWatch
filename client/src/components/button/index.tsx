@@ -10,9 +10,10 @@ type Props = ButtonProps & {
     onPress: () => void
     style?: StyleProp<ViewStyle>
     contentStyle?: StyleProp<ViewStyle>
+    disabled?: boolean
 }
 
-export function Button({ children, onPress, style, contentStyle, labelStyle, ...rest }: Props) {
+export function Button({ children, onPress, style, contentStyle, labelStyle, disabled, ...rest }: Props) {
     return (
         <PaperButton
             {...rest}
@@ -30,6 +31,7 @@ export function Button({ children, onPress, style, contentStyle, labelStyle, ...
                 },
                 contentStyle
             ]}
+            disabled={disabled}
             labelStyle={[
                 {
                     fontSize: RFValue(18),
