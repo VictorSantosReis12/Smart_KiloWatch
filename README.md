@@ -5,3 +5,7 @@ Smart KiloWatch é uma aplicação desenvolvida com o objetivo de promover o **m
 ## 📘 Descrição
 
 A aplicação permite que os usuários cadastrem suas residências, metas de consumo, eletrodomésticos e atividades do dia a dia, para então monitorar, por meio de registros diários, o quanto estão consumindo de água e energia. Com base nesses dados, o sistema gera notificações, calcula custos com e sem impostos, e permite uma análise crítica dos hábitos de consumo.
+
+## 📝 Figma
+
+[Link do Figma do Smart KiloWatch](https://www.figma.com/design/sEJditsxUmXhEh4uYaEOvt/Smart-KiloWatch?node-id=0-1&p=f&t=26P11JG5T0jkvBLL-0)
