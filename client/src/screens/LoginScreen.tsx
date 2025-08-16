@@ -159,199 +159,37 @@ export default function LoginScreen({ navigation }: any) {
                         </View>
                     ) : null
                 }
-                <ScrollView
-                    contentContainerStyle={{ paddingBottom: 0, flexGrow: 1 }}
-                    keyboardShouldPersistTaps="always"
-                >
-                    <View style={[styles.container, { flexDirection: isLandscape ? 'row' : 'column', gap: isLandscape ? RFValue(60) : '0' }]}>
-                        <StatusBar barStyle="light-content" backgroundColor={colors.blue[500]} />
+                <View style={[styles.container, { flexDirection: isLandscape ? 'row' : 'column', gap: isLandscape ? RFValue(60) : '0' }]}>
+                    <StatusBar barStyle="light-content" backgroundColor={colors.blue[500]} />
 
-                        <Animated.Image
+                    <Image
 
-                            style={[styles.logo, { width: isLandscape ? RFValue(210) : (isKeyboardVisible ? RFValue(224) : RFValue(316)), height: isLandscape ? RFValue(134) : (isKeyboardVisible ? RFValue(143) : RFValue(202)) }]}
-                            source={require("@/assets/logo-titulo.png")}
+                        style={[styles.logo, { width: isLandscape ? RFValue(210) : RFValue(316), height: isLandscape ? RFValue(134) : RFValue(202) }]}
+                        source={require("@/assets/logo-titulo.png")}
 
-                        />
-                        {isLandscape ? (
-                            !isVeryWide ? (
-                                <View style={{ alignItems: "center", justifyContent: "center", borderWidth: RFValue(1), borderColor: colors.white, borderRadius: RFValue(10), padding: RFValue(15) }}>
-                                    <Ionicons
-                                        name="chevron-back-circle"
-                                        size={RFValue(20)}
-                                        style={{ position: "absolute", top: RFValue(11), left: RFValue(5) }}
-                                        color="white"
-                                        onPress={() => navigation.navigate("TelaInicial")}
-                                        zIndex={1000}
-                                    />
-                                    <Text style={{ fontSize: RFValue(12), fontFamily: fontFamily.krona, color: colors.white, marginBottom: RFValue(25) }}>
-                                        Entrar
-                                    </Text>
-                                    <Input
-                                        border={!!errors.email === true ? colors.red : colors.gray}
-                                        autoCapitalize="none"
-                                        keyboardType='email-address'
-                                        label="Email"
-                                        value={email}
-                                        styleLabel={{ color: !!errors.email === true ? colors.red : colors.white, fontSize: RFValue(10) }}
-                                        contentStyle={{ fontSize: RFValue(10) }}
-                                        outlineColor={!!errors.email === true ? colors.red : 'transparent'}
-                                        onChangeText={v => {
-                                            setEmail(v);
-                                            if (errors.email) {
-                                                setErrors(prev => ({ ...prev, email: '' }));
-                                            }
-                                            if (errorMessages.email) {
-                                                setErrorMessages(prev => ({ ...prev, email: '' }));
-                                            }
-                                        }}
-                                        style={[styles.input, { width: RFValue(190), height: RFValue(30), marginBottom: RFValue(18), borderRadius: RFValue(10) }]}
-                                        hasError={!!errors.email}
-                                        errorText={errors.email}
-                                        helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(6) }]}
-                                    />
-
-                                    <Input
-                                        border={!!errors.senha === true ? colors.red : colors.gray}
-                                        autoCapitalize="none"
-                                        label="Senha"
-                                        value={senha}
-                                        styleLabel={{ color: !!errors.senha === true ? colors.red : colors.white, fontSize: RFValue(10) }}
-                                        contentStyle={{ fontSize: RFValue(10) }}
-                                        outlineColor={!!errors.senha === true ? colors.red : 'transparent'}
-                                        onChangeText={v => {
-                                            setSenha(v);
-                                            if (errors.senha) {
-                                                setErrors(prev => ({ ...prev, senha: '' }));
-                                            }
-                                            if (errorMessages.senha) {
-                                                setErrorMessages(prev => ({ ...prev, senha: '' }));
-                                            }
-                                        }}
-                                        style={[styles.input, { width: RFValue(190), height: RFValue(30), marginBottom: RFValue(10), borderRadius: RFValue(10) }]}
-                                        hasError={!!errors.senha}
-                                        errorText={errors.senha}
-                                        helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(6) }]}
-                                        secureTextEntry={!senhaVisivel}
-                                        right={
-                                            <TextInput.Icon
-                                                icon={senhaVisivel ? 'eye-off' : 'eye'}
-                                                color="#fff"
-                                                size={RFValue(15)}
-                                                onPress={() => setSenhaVisivel(!senhaVisivel)}
-                                                forceTextInputFocus={false}
-                                            />
-                                        }
-                                    />
-
-                                    <TouchableOpacity
-                                        style={[styles.caixa, {
-                                            width: RFValue(190),
-                                            height: RFValue(30),
-                                            marginBottom: RFValue(30)
-                                        }]}
-                                        onPress={() => setChecked(!checked)}
-                                        activeOpacity={1}
-                                    >
-                                        {checked ? (
-                                            <Ionicons name="checkbox" size={RFValue(20)} color={colors.white} />
-                                        ) : (
-                                            <Ionicons name="square-outline" size={RFValue(20)} color={colors.white} />
-                                        )}
-                                        <Text style={[styles.label, { fontSize: RFValue(10) }]}>Lembrar de mim</Text>
-                                    </TouchableOpacity>
-
-                                    <Button
-                                        children="Entrar"
-                                        contentStyle={{ paddingVertical: RFValue(4) }}
-                                        labelStyle={{ fontSize: RFValue(10) }}
-                                        style={{
-                                            width: RFValue(190),
-                                            backgroundColor: colors.blue[300],
-                                            marginTop: RFValue(15),
-                                            borderRadius: RFValue(8)
-                                        }}
-                                        onPress={handleLogin}
-                                    />
-                                </View>
-                            ) : (
-                                <>
-                                    <Input
-                                        border={!!errors.email === true ? colors.red : colors.gray}
-                                        autoCapitalize="none"
-                                        keyboardType='email-address'
-                                        label="Email"
-                                        value={email}
-                                        styleLabel={{ color: !!errors.email === true ? colors.red : colors.white, fontSize: RFValue(10) }}
-                                        contentStyle={{ fontSize: RFValue(10) }}
-                                        outlineColor={!!errors.email === true ? colors.red : 'transparent'}
-                                        onChangeText={v => {
-                                            setEmail(v);
-                                            if (errors.email) {
-                                                setErrors(prev => ({ ...prev, email: '' }));
-                                            }
-                                            if (errorMessages.email) {
-                                                setErrorMessages(prev => ({ ...prev, email: '' }));
-                                            }
-                                        }}
-                                        style={[styles.input, { width: RFValue(190), height: RFValue(30), marginBottom: RFValue(18), borderRadius: RFValue(10) }]}
-                                        hasError={!!errors.email}
-                                        errorText={errors.email}
-                                        helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(6) }]}
-                                    />
-
-                                    <Input
-                                        border={!!errors.senha === true ? colors.red : colors.gray}
-                                        autoCapitalize="none"
-                                        label="Senha"
-                                        value={senha}
-                                        styleLabel={{ color: !!errors.senha === true ? colors.red : colors.white }}
-                                        outlineColor={!!errors.senha === true ? colors.red : 'transparent'}
-                                        onChangeText={v => {
-                                            setSenha(v);
-                                            if (errors.senha) {
-                                                setErrors(prev => ({ ...prev, senha: '' }));
-                                            }
-                                            if (errorMessages.senha) {
-                                                setErrorMessages(prev => ({ ...prev, senha: '' }));
-                                            }
-                                        }}
-                                        style={styles.input}
-                                        hasError={!!errors.senha}
-                                        errorText={errors.senha}
-                                        helperStyle={styles.helperText}
-                                        secureTextEntry={!senhaVisivel}
-                                        right={
-                                            <TextInput.Icon
-                                                icon={senhaVisivel ? 'eye-off' : 'eye'}
-                                                color="#fff"
-                                                onPress={() => setSenhaVisivel(!senhaVisivel)}
-                                                forceTextInputFocus={false}
-                                            />
-                                        }
-                                    />
-
-                                    <Button
-                                        children="Cadastrar-se"
-                                        style={{
-                                            width: RFValue(255),
-                                            paddingVertical: RFValue(2),
-                                            backgroundColor: colors.blue[300],
-                                            marginTop: RFValue(62),
-                                            borderRadius: RFValue(20)
-                                        }}
-                                        onPress={handleLogin}
-                                    />
-                                </>
-                            )
-                        ) : (
-                            <>
+                    />
+                    {isLandscape ? (
+                        !isVeryWide ? (
+                            <View style={{ alignItems: "center", justifyContent: "center", borderWidth: RFValue(1), borderColor: colors.white, borderRadius: RFValue(10), padding: RFValue(15) }}>
+                                <Ionicons
+                                    name="chevron-back-circle"
+                                    size={RFValue(20)}
+                                    style={{ position: "absolute", top: RFValue(11), left: RFValue(5) }}
+                                    color="white"
+                                    onPress={() => navigation.navigate("TelaInicial")}
+                                    zIndex={1000}
+                                />
+                                <Text style={{ fontSize: RFValue(12), fontFamily: fontFamily.krona, color: colors.white, marginBottom: RFValue(25) }}>
+                                    Entrar
+                                </Text>
                                 <Input
                                     border={!!errors.email === true ? colors.red : colors.gray}
                                     autoCapitalize="none"
                                     keyboardType='email-address'
                                     label="Email"
                                     value={email}
-                                    styleLabel={{ color: !!errors.email === true ? colors.red : colors.white }}
+                                    styleLabel={{ color: !!errors.email === true ? colors.red : colors.white, fontSize: RFValue(10) }}
+                                    contentStyle={{ fontSize: RFValue(10) }}
                                     outlineColor={!!errors.email === true ? colors.red : 'transparent'}
                                     onChangeText={v => {
                                         setEmail(v);
@@ -362,10 +200,99 @@ export default function LoginScreen({ navigation }: any) {
                                             setErrorMessages(prev => ({ ...prev, email: '' }));
                                         }
                                     }}
-                                    style={styles.input}
+                                    style={[styles.input, { width: RFValue(190), height: RFValue(30), marginBottom: RFValue(18), borderRadius: RFValue(10) }]}
                                     hasError={!!errors.email}
                                     errorText={errors.email}
-                                    helperStyle={styles.helperText}
+                                    helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(6) }]}
+                                />
+
+                                <Input
+                                    border={!!errors.senha === true ? colors.red : colors.gray}
+                                    autoCapitalize="none"
+                                    label="Senha"
+                                    value={senha}
+                                    styleLabel={{ color: !!errors.senha === true ? colors.red : colors.white, fontSize: RFValue(10) }}
+                                    contentStyle={{ fontSize: RFValue(10) }}
+                                    outlineColor={!!errors.senha === true ? colors.red : 'transparent'}
+                                    onChangeText={v => {
+                                        setSenha(v);
+                                        if (errors.senha) {
+                                            setErrors(prev => ({ ...prev, senha: '' }));
+                                        }
+                                        if (errorMessages.senha) {
+                                            setErrorMessages(prev => ({ ...prev, senha: '' }));
+                                        }
+                                    }}
+                                    style={[styles.input, { width: RFValue(190), height: RFValue(30), marginBottom: RFValue(10), borderRadius: RFValue(10) }]}
+                                    hasError={!!errors.senha}
+                                    errorText={errors.senha}
+                                    helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(6) }]}
+                                    secureTextEntry={!senhaVisivel}
+                                    right={
+                                        <TextInput.Icon
+                                            icon={senhaVisivel ? 'eye-off' : 'eye'}
+                                            color="#fff"
+                                            size={RFValue(15)}
+                                            onPress={() => setSenhaVisivel(!senhaVisivel)}
+                                            forceTextInputFocus={false}
+                                        />
+                                    }
+                                />
+
+                                <TouchableOpacity
+                                    style={[styles.caixa, {
+                                        width: RFValue(190),
+                                        height: RFValue(30),
+                                        marginBottom: RFValue(30)
+                                    }]}
+                                    onPress={() => setChecked(!checked)}
+                                    activeOpacity={1}
+                                >
+                                    {checked ? (
+                                        <Ionicons name="checkbox" size={RFValue(20)} color={colors.white} />
+                                    ) : (
+                                        <Ionicons name="square-outline" size={RFValue(20)} color={colors.white} />
+                                    )}
+                                    <Text style={[styles.label, { fontSize: RFValue(10) }]}>Lembrar de mim</Text>
+                                </TouchableOpacity>
+
+                                <Button
+                                    children="Entrar"
+                                    contentStyle={{ paddingVertical: RFValue(4) }}
+                                    labelStyle={{ fontSize: RFValue(10) }}
+                                    style={{
+                                        width: RFValue(190),
+                                        backgroundColor: colors.blue[300],
+                                        marginTop: RFValue(15),
+                                        borderRadius: RFValue(8)
+                                    }}
+                                    onPress={handleLogin}
+                                />
+                            </View>
+                        ) : (
+                            <>
+                                <Input
+                                    border={!!errors.email === true ? colors.red : colors.gray}
+                                    autoCapitalize="none"
+                                    keyboardType='email-address'
+                                    label="Email"
+                                    value={email}
+                                    styleLabel={{ color: !!errors.email === true ? colors.red : colors.white, fontSize: RFValue(10) }}
+                                    contentStyle={{ fontSize: RFValue(10) }}
+                                    outlineColor={!!errors.email === true ? colors.red : 'transparent'}
+                                    onChangeText={v => {
+                                        setEmail(v);
+                                        if (errors.email) {
+                                            setErrors(prev => ({ ...prev, email: '' }));
+                                        }
+                                        if (errorMessages.email) {
+                                            setErrorMessages(prev => ({ ...prev, email: '' }));
+                                        }
+                                    }}
+                                    style={[styles.input, { width: RFValue(190), height: RFValue(30), marginBottom: RFValue(18), borderRadius: RFValue(10) }]}
+                                    hasError={!!errors.email}
+                                    errorText={errors.email}
+                                    helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(6) }]}
                                 />
 
                                 <Input
@@ -399,21 +326,8 @@ export default function LoginScreen({ navigation }: any) {
                                     }
                                 />
 
-                                <TouchableOpacity
-                                    style={styles.caixa}
-                                    onPress={() => setChecked(!checked)}
-                                    activeOpacity={1}
-                                >
-                                    {checked ? (
-                                        <Ionicons name="checkbox" size={35} color={colors.white} />
-                                    ) : (
-                                        <Ionicons name="square-outline" size={35} color={colors.white} />
-                                    )}
-                                    <Text style={styles.label}>Lembrar de mim</Text>
-                                </TouchableOpacity>
-
                                 <Button
-                                    children="Entrar"
+                                    children="Cadastrar-se"
                                     style={{
                                         width: RFValue(255),
                                         paddingVertical: RFValue(2),
@@ -425,28 +339,109 @@ export default function LoginScreen({ navigation }: any) {
                                 />
                             </>
                         )
-                        }
-                        <Snackbar
-                            visible={snackbarVisible}
-                            onDismiss={() => setSnackbarVisible(false)}
-                            duration={5000}
-                            action={{
-                                label: 'OK',
-                                onPress: () => setSnackbarVisible(false),
-                                textColor: colors.blue[200],
-                            }}
-                            style={{
-                                alignSelf: 'center',
-                                width: isLandscape ? '50%' : '90%',
-                                borderRadius: 6,
-                                backgroundColor: colors.strongGray,
-                            }}
+                    ) : (
+                        <>
+                            <Input
+                                border={!!errors.email === true ? colors.red : colors.gray}
+                                autoCapitalize="none"
+                                keyboardType='email-address'
+                                label="Email"
+                                value={email}
+                                styleLabel={{ color: !!errors.email === true ? colors.red : colors.white }}
+                                outlineColor={!!errors.email === true ? colors.red : 'transparent'}
+                                onChangeText={v => {
+                                    setEmail(v);
+                                    if (errors.email) {
+                                        setErrors(prev => ({ ...prev, email: '' }));
+                                    }
+                                    if (errorMessages.email) {
+                                        setErrorMessages(prev => ({ ...prev, email: '' }));
+                                    }
+                                }}
+                                style={styles.input}
+                                hasError={!!errors.email}
+                                errorText={errors.email}
+                                helperStyle={styles.helperText}
+                            />
 
-                        >
-                            <Text style={{ color: colors.white, fontFamily: fontFamily.inder }}>{snackbarMessage}</Text>
-                        </Snackbar>
-                    </View>
-                </ScrollView>
+                            <Input
+                                border={!!errors.senha === true ? colors.red : colors.gray}
+                                autoCapitalize="none"
+                                label="Senha"
+                                value={senha}
+                                styleLabel={{ color: !!errors.senha === true ? colors.red : colors.white }}
+                                outlineColor={!!errors.senha === true ? colors.red : 'transparent'}
+                                onChangeText={v => {
+                                    setSenha(v);
+                                    if (errors.senha) {
+                                        setErrors(prev => ({ ...prev, senha: '' }));
+                                    }
+                                    if (errorMessages.senha) {
+                                        setErrorMessages(prev => ({ ...prev, senha: '' }));
+                                    }
+                                }}
+                                style={styles.input}
+                                hasError={!!errors.senha}
+                                errorText={errors.senha}
+                                helperStyle={styles.helperText}
+                                secureTextEntry={!senhaVisivel}
+                                right={
+                                    <TextInput.Icon
+                                        icon={senhaVisivel ? 'eye-off' : 'eye'}
+                                        color="#fff"
+                                        onPress={() => setSenhaVisivel(!senhaVisivel)}
+                                        forceTextInputFocus={false}
+                                    />
+                                }
+                            />
+
+                            <TouchableOpacity
+                                style={styles.caixa}
+                                onPress={() => setChecked(!checked)}
+                                activeOpacity={1}
+                            >
+                                {checked ? (
+                                    <Ionicons name="checkbox" size={35} color={colors.white} />
+                                ) : (
+                                    <Ionicons name="square-outline" size={35} color={colors.white} />
+                                )}
+                                <Text style={styles.label}>Lembrar de mim</Text>
+                            </TouchableOpacity>
+
+                            <Button
+                                children="Entrar"
+                                style={{
+                                    width: RFValue(255),
+                                    paddingVertical: RFValue(2),
+                                    backgroundColor: colors.blue[300],
+                                    marginTop: RFValue(62),
+                                    borderRadius: RFValue(20)
+                                }}
+                                onPress={handleLogin}
+                            />
+                        </>
+                    )
+                    }
+                    <Snackbar
+                        visible={snackbarVisible}
+                        onDismiss={() => setSnackbarVisible(false)}
+                        duration={5000}
+                        action={{
+                            label: 'OK',
+                            onPress: () => setSnackbarVisible(false),
+                            textColor: colors.blue[200],
+                        }}
+                        style={{
+                            alignSelf: 'center',
+                            width: isLandscape ? '50%' : '90%',
+                            borderRadius: 6,
+                            backgroundColor: colors.strongGray,
+                        }}
+
+                    >
+                        <Text style={{ color: colors.white, fontFamily: fontFamily.inder }}>{snackbarMessage}</Text>
+                    </Snackbar>
+                </View>
             </SafeAreaView>
         </SafeAreaProvider>
     )

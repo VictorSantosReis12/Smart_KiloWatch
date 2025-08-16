@@ -151,37 +151,132 @@ export default function CadastroScreen({ route, navigation }: any) {
                         </View>
                     ) : null
                 }
-                <ScrollView
-                    contentContainerStyle={{ paddingBottom: keyboardHeight, flexGrow: 1 }}
-                    keyboardShouldPersistTaps="always"
-                >
-                    <View style={[styles.container, { flexDirection: isLandscape ? 'row' : 'column', gap: isLandscape ? RFValue(60) : '0' }]}>
-                        <StatusBar barStyle="light-content" backgroundColor={colors.blue[500]} />
+                <View style={[styles.container, { flexDirection: isLandscape ? 'row' : 'column', gap: isLandscape ? RFValue(60) : '0' }]}>
+                    <StatusBar barStyle="light-content" backgroundColor={colors.blue[500]} />
 
-                        <Animated.Image
+                    <Image
 
-                            style={[styles.logo, { width: isLandscape ? RFValue(210) : (isKeyboardVisible ? RFValue(224) : RFValue(316)), height: isLandscape ? RFValue(134) : (isKeyboardVisible ? RFValue(143) : RFValue(202)) }]}
-                            source={require("@/assets/logo-titulo.png")}
+                        style={[styles.logo, { width: isLandscape ? RFValue(210) : RFValue(316), height: isLandscape ? RFValue(134) : RFValue(202) }]}
+                        source={require("@/assets/logo-titulo.png")}
 
-                        />
-                        {isLandscape ? (
-                            !isVeryWide ? (
-                                <View style={{ alignItems: "center", justifyContent: "center", borderWidth: RFValue(1), borderColor: colors.white, borderRadius: RFValue(10), padding: RFValue(15) }}>
-                                    <Ionicons
-                                        name="chevron-back-circle"
-                                        size={RFValue(20)}
-                                        style={{ position: "absolute", top: RFValue(11), left: RFValue(5) }}
-                                        color="white"
-                                        onPress={() => navigation.navigate("TelaInicial", {
-                                            fromCadastro: true,
-                                            nome,
-                                            email
-                                        })}
-                                        zIndex={1000}
-                                    />
-                                    <Text style={{ fontSize: RFValue(12), fontFamily: fontFamily.krona, color: colors.white, marginBottom: RFValue(25) }}>
-                                        Cadastrar-se
-                                    </Text>
+                    />
+                    {isLandscape ? (
+                        !isVeryWide ? (
+                            <View style={{ alignItems: "center", justifyContent: "center", borderWidth: RFValue(1), borderColor: colors.white, borderRadius: RFValue(10), padding: RFValue(15) }}>
+                                <Ionicons
+                                    name="chevron-back-circle"
+                                    size={RFValue(20)}
+                                    style={{ position: "absolute", top: RFValue(11), left: RFValue(5) }}
+                                    color="white"
+                                    onPress={() => navigation.navigate("TelaInicial", {
+                                        fromCadastro: true,
+                                        nome,
+                                        email
+                                    })}
+                                    zIndex={1000}
+                                />
+                                <Text style={{ fontSize: RFValue(12), fontFamily: fontFamily.krona, color: colors.white, marginBottom: RFValue(25) }}>
+                                    Cadastrar-se
+                                </Text>
+                                <Input
+                                    border={!!errors.senha === true ? colors.red : colors.gray}
+                                    autoCapitalize="none"
+                                    label="Senha"
+                                    value={senha}
+                                    styleLabel={{ color: !!errors.senha === true ? colors.red : colors.white, fontSize: RFValue(10) }}
+                                    contentStyle={{ fontSize: RFValue(10) }}
+                                    outlineColor={!!errors.senha === true ? colors.red : 'transparent'}
+                                    onChangeText={v => {
+                                        setSenha(v);
+                                        if (errors.senha) {
+                                            setErrors(prev => ({ ...prev, senha: '' }));
+                                        }
+                                        if (errorMessages.senha) {
+                                            setErrorMessages(prev => ({ ...prev, senha: '' }));
+                                        }
+                                    }}
+                                    style={[styles.input, { width: RFValue(190), height: RFValue(30), marginBottom: RFValue(18), borderRadius: RFValue(10) }]}
+                                    hasError={!!errors.senha}
+                                    errorText={errors.senha}
+                                    helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(6) }]}
+                                    secureTextEntry={!senhaVisivel}
+                                    right={
+                                        <TextInput.Icon
+                                            icon={senhaVisivel ? 'eye-off' : 'eye'}
+                                            color="#fff"
+                                            size={RFValue(15)}
+                                            onPress={() => setSenhaVisivel(!senhaVisivel)}
+                                            forceTextInputFocus={false}
+                                        />
+                                    }
+                                />
+
+                                <Input
+                                    border={!!errors.confirmarSenha === true ? colors.red : colors.gray}
+                                    autoCapitalize="none"
+                                    label="Confirmar Senha"
+                                    value={confirmarSenha}
+                                    styleLabel={{ color: !!errors.confirmarSenha === true ? colors.red : colors.white, fontSize: RFValue(10) }}
+                                    contentStyle={{ fontSize: RFValue(10) }}
+                                    outlineColor={!!errors.confirmarSenha === true ? colors.red : 'transparent'}
+                                    onChangeText={v => {
+                                        setConfirmarSenha(v);
+                                        if (errors.confirmarSenha) {
+                                            setErrors(prev => ({ ...prev, confirmarSenha: '' }));
+                                        }
+                                        if (errorMessages.confirmarSenha) {
+                                            setErrorMessages(prev => ({ ...prev, confirmarSenha: '' }));
+                                        }
+                                    }}
+                                    style={[styles.input, { width: RFValue(190), height: RFValue(30), marginBottom: RFValue(10), borderRadius: RFValue(10) }]}
+                                    hasError={!!errors.confirmarSenha}
+                                    errorText={errors.confirmarSenha}
+                                    helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(0) }]}
+                                    secureTextEntry={!confirmarSenhaVisivel}
+                                    right={
+                                        <TextInput.Icon
+                                            icon={confirmarSenhaVisivel ? 'eye-off' : 'eye'}
+                                            color="#fff"
+                                            size={RFValue(15)}
+                                            onPress={() => setConfirmarSenhaVisivel(!confirmarSenhaVisivel)}
+                                            forceTextInputFocus={false}
+                                        />
+                                    }
+                                />
+
+                                <TouchableOpacity
+                                    style={[styles.caixa, {
+                                        width: RFValue(190),
+                                        height: RFValue(30),
+                                        marginBottom: RFValue(30)
+                                    }]}
+                                    onPress={() => setChecked(!checked)}
+                                    activeOpacity={1}
+                                >
+                                    {checked ? (
+                                        <Ionicons name="checkbox" size={RFValue(20)} color={colors.white} />
+                                    ) : (
+                                        <Ionicons name="square-outline" size={RFValue(20)} color={colors.white} />
+                                    )}
+                                    <Text style={[styles.label, { fontSize: RFValue(10) }]}>Receber notificações</Text>
+                                </TouchableOpacity>
+
+                                <Button
+                                    children="Cadastrar-se"
+                                    contentStyle={{ paddingVertical: RFValue(4) }}
+                                    labelStyle={{ fontSize: RFValue(10) }}
+                                    style={{
+                                        width: RFValue(190),
+                                        backgroundColor: colors.blue[300],
+                                        marginTop: RFValue(15),
+                                        borderRadius: RFValue(8)
+                                    }}
+                                    onPress={handleRegister}
+                                />
+                            </View>
+                        ) : (
+                            <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                                <View style={{ flexDirection: 'row', gap: RFValue(10), alignItems: 'center', justifyContent: 'center' }}>
                                     <Input
                                         border={!!errors.senha === true ? colors.red : colors.gray}
                                         autoCapitalize="none"
@@ -202,13 +297,12 @@ export default function CadastroScreen({ route, navigation }: any) {
                                         style={[styles.input, { width: RFValue(190), height: RFValue(30), marginBottom: RFValue(18), borderRadius: RFValue(10) }]}
                                         hasError={!!errors.senha}
                                         errorText={errors.senha}
-                                        helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(6) }]}
+                                        helperStyle={styles.helperText}
                                         secureTextEntry={!senhaVisivel}
                                         right={
                                             <TextInput.Icon
                                                 icon={senhaVisivel ? 'eye-off' : 'eye'}
                                                 color="#fff"
-                                                size={RFValue(15)}
                                                 onPress={() => setSenhaVisivel(!senhaVisivel)}
                                                 forceTextInputFocus={false}
                                             />
@@ -232,215 +326,26 @@ export default function CadastroScreen({ route, navigation }: any) {
                                                 setErrorMessages(prev => ({ ...prev, confirmarSenha: '' }));
                                             }
                                         }}
-                                        style={[styles.input, { width: RFValue(190), height: RFValue(30), marginBottom: RFValue(10), borderRadius: RFValue(10) }]}
+                                        style={[styles.input, { width: RFValue(190), height: RFValue(30), marginBottom: RFValue(18), borderRadius: RFValue(10) }]}
                                         hasError={!!errors.confirmarSenha}
                                         errorText={errors.confirmarSenha}
-                                        helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(6) }]}
+                                        helperStyle={styles.helperText}
                                         secureTextEntry={!confirmarSenhaVisivel}
                                         right={
                                             <TextInput.Icon
                                                 icon={confirmarSenhaVisivel ? 'eye-off' : 'eye'}
                                                 color="#fff"
-                                                size={RFValue(15)}
                                                 onPress={() => setConfirmarSenhaVisivel(!confirmarSenhaVisivel)}
                                                 forceTextInputFocus={false}
                                             />
                                         }
                                     />
-
-                                    <TouchableOpacity
-                                        style={[styles.caixa, {
-                                            width: RFValue(190),
-                                            height: RFValue(30),
-                                            marginBottom: RFValue(30)
-                                        }]}
-                                        onPress={() => setChecked(!checked)}
-                                        activeOpacity={1}
-                                    >
-                                        {checked ? (
-                                            <Ionicons name="checkbox" size={RFValue(20)} color={colors.white} />
-                                        ) : (
-                                            <Ionicons name="square-outline" size={RFValue(20)} color={colors.white} />
-                                        )}
-                                        <Text style={[styles.label, { fontSize: RFValue(10) }]}>Receber notificações</Text>
-                                    </TouchableOpacity>
-
-                                    <Button
-                                        children="Cadastrar-se"
-                                        contentStyle={{ paddingVertical: RFValue(4) }}
-                                        labelStyle={{ fontSize: RFValue(10) }}
-                                        style={{
-                                            width: RFValue(190),
-                                            backgroundColor: colors.blue[300],
-                                            marginTop: RFValue(15),
-                                            borderRadius: RFValue(8)
-                                        }}
-                                        onPress={handleRegister}
-                                    />
                                 </View>
-                            ) : (
-                                <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                                    <View style={{ flexDirection: 'row', gap: RFValue(10), alignItems: 'center', justifyContent: 'center' }}>
-                                        <Input
-                                            border={!!errors.senha === true ? colors.red : colors.gray}
-                                            autoCapitalize="none"
-                                            label="Senha"
-                                            value={senha}
-                                            styleLabel={{ color: !!errors.senha === true ? colors.red : colors.white, fontSize: RFValue(10) }}
-                                            contentStyle={{ fontSize: RFValue(10) }}
-                                            outlineColor={!!errors.senha === true ? colors.red : 'transparent'}
-                                            onChangeText={v => {
-                                                setSenha(v);
-                                                if (errors.senha) {
-                                                    setErrors(prev => ({ ...prev, senha: '' }));
-                                                }
-                                                if (errorMessages.senha) {
-                                                    setErrorMessages(prev => ({ ...prev, senha: '' }));
-                                                }
-                                            }}
-                                            style={[styles.input, { width: RFValue(190), height: RFValue(30), marginBottom: RFValue(18), borderRadius: RFValue(10) }]}
-                                            hasError={!!errors.senha}
-                                            errorText={errors.senha}
-                                            helperStyle={styles.helperText}
-                                            secureTextEntry={!senhaVisivel}
-                                            right={
-                                                <TextInput.Icon
-                                                    icon={senhaVisivel ? 'eye-off' : 'eye'}
-                                                    color="#fff"
-                                                    onPress={() => setSenhaVisivel(!senhaVisivel)}
-                                                    forceTextInputFocus={false}
-                                                />
-                                            }
-                                        />
-
-                                        <Input
-                                            border={!!errors.confirmarSenha === true ? colors.red : colors.gray}
-                                            autoCapitalize="none"
-                                            label="Confirmar Senha"
-                                            value={confirmarSenha}
-                                            styleLabel={{ color: !!errors.confirmarSenha === true ? colors.red : colors.white, fontSize: RFValue(10) }}
-                                            contentStyle={{ fontSize: RFValue(10) }}
-                                            outlineColor={!!errors.confirmarSenha === true ? colors.red : 'transparent'}
-                                            onChangeText={v => {
-                                                setConfirmarSenha(v);
-                                                if (errors.confirmarSenha) {
-                                                    setErrors(prev => ({ ...prev, confirmarSenha: '' }));
-                                                }
-                                                if (errorMessages.confirmarSenha) {
-                                                    setErrorMessages(prev => ({ ...prev, confirmarSenha: '' }));
-                                                }
-                                            }}
-                                            style={[styles.input, { width: RFValue(190), height: RFValue(30), marginBottom: RFValue(18), borderRadius: RFValue(10) }]}
-                                            hasError={!!errors.confirmarSenha}
-                                            errorText={errors.confirmarSenha}
-                                            helperStyle={styles.helperText}
-                                            secureTextEntry={!confirmarSenhaVisivel}
-                                            right={
-                                                <TextInput.Icon
-                                                    icon={confirmarSenhaVisivel ? 'eye-off' : 'eye'}
-                                                    color="#fff"
-                                                    onPress={() => setConfirmarSenhaVisivel(!confirmarSenhaVisivel)}
-                                                    forceTextInputFocus={false}
-                                                />
-                                            }
-                                        />
-                                    </View>
-
-                                    <TouchableOpacity
-                                        style={[styles.caixa, {
-                                            backgroundColor: "#FF0000"
-                                        }]}
-                                        onPress={() => setChecked(!checked)}
-                                        activeOpacity={1}
-                                    >
-                                        {checked ? (
-                                            <Ionicons name="checkbox" size={35} color={colors.white} />
-                                        ) : (
-                                            <Ionicons name="square-outline" size={35} color={colors.white} />
-                                        )}
-                                        <Text style={styles.label}>Receber notificações</Text>
-                                    </TouchableOpacity>
-
-                                    <Button
-                                        children="Cadastrar-se"
-                                        contentStyle={{ paddingVertical: RFValue(3) }}
-                                        labelStyle={{ fontSize: RFValue(10) }}
-                                        style={{
-                                            width: RFValue(190),
-                                            backgroundColor: colors.blue[300],
-                                            marginTop: RFValue(15),
-                                            borderRadius: RFValue(8)
-                                        }}
-                                        onPress={handleRegister}
-                                    />
-                                </View>
-                            )
-                        ) : (
-                            <>
-                                <Input
-                                    border={!!errors.senha === true ? colors.red : colors.gray}
-                                    autoCapitalize="none"
-                                    label="Senha"
-                                    value={senha}
-                                    styleLabel={{ color: !!errors.senha === true ? colors.red : colors.white }}
-                                    outlineColor={!!errors.senha === true ? colors.red : 'transparent'}
-                                    onChangeText={v => {
-                                        setSenha(v);
-                                        if (errors.senha) {
-                                            setErrors(prev => ({ ...prev, senha: '' }));
-                                        }
-                                        if (errorMessages.senha) {
-                                            setErrorMessages(prev => ({ ...prev, senha: '' }));
-                                        }
-                                    }}
-                                    style={styles.input}
-                                    hasError={!!errors.senha}
-                                    errorText={errors.senha}
-                                    helperStyle={styles.helperText}
-                                    secureTextEntry={!senhaVisivel}
-                                    right={
-                                        <TextInput.Icon
-                                            icon={senhaVisivel ? 'eye-off' : 'eye'}
-                                            color="#fff"
-                                            onPress={() => setSenhaVisivel(!senhaVisivel)}
-                                            forceTextInputFocus={false}
-                                        />
-                                    }
-                                />
-
-                                <Input
-                                    border={!!errors.confirmarSenha === true ? colors.red : colors.gray}
-                                    autoCapitalize="none"
-                                    label="Confirmar Senha"
-                                    value={confirmarSenha}
-                                    styleLabel={{ color: !!errors.confirmarSenha === true ? colors.red : colors.white }}
-                                    outlineColor={!!errors.confirmarSenha === true ? colors.red : 'transparent'}
-                                    onChangeText={v => {
-                                        setConfirmarSenha(v);
-                                        if (errors.confirmarSenha) {
-                                            setErrors(prev => ({ ...prev, confirmarSenha: '' }));
-                                        }
-                                        if (errorMessages.confirmarSenha) {
-                                            setErrorMessages(prev => ({ ...prev, confirmarSenha: '' }));
-                                        }
-                                    }}
-                                    style={styles.input}
-                                    hasError={!!errors.confirmarSenha}
-                                    errorText={errors.confirmarSenha}
-                                    helperStyle={styles.helperText}
-                                    secureTextEntry={!confirmarSenhaVisivel}
-                                    right={
-                                        <TextInput.Icon
-                                            icon={confirmarSenhaVisivel ? 'eye-off' : 'eye'}
-                                            color="#fff"
-                                            onPress={() => setConfirmarSenhaVisivel(!confirmarSenhaVisivel)}
-                                            forceTextInputFocus={false}
-                                        />
-                                    }
-                                />
 
                                 <TouchableOpacity
-                                    style={styles.caixa}
+                                    style={[styles.caixa, {
+                                        backgroundColor: "#FF0000"
+                                    }]}
                                     onPress={() => setChecked(!checked)}
                                     activeOpacity={1}
                                 >
@@ -454,39 +359,129 @@ export default function CadastroScreen({ route, navigation }: any) {
 
                                 <Button
                                     children="Cadastrar-se"
+                                    contentStyle={{ paddingVertical: RFValue(3) }}
+                                    labelStyle={{ fontSize: RFValue(10) }}
                                     style={{
-                                        width: RFValue(255),
-                                        paddingVertical: RFValue(2),
+                                        width: RFValue(190),
                                         backgroundColor: colors.blue[300],
-                                        marginTop: RFValue(62),
-                                        borderRadius: RFValue(20)
+                                        marginTop: RFValue(15),
+                                        borderRadius: RFValue(8)
                                     }}
                                     onPress={handleRegister}
                                 />
-                            </>
+                            </View>
                         )
-                        }
-                        <Snackbar
-                            visible={snackbarVisible}
-                            onDismiss={() => setSnackbarVisible(false)}
-                            duration={5000}
-                            action={{
-                                label: 'OK',
-                                onPress: () => setSnackbarVisible(false),
-                                textColor: colors.blue[200],
-                            }}
-                            style={{
-                                alignSelf: 'center',
-                                width: isLandscape ? '50%' : '90%',
-                                borderRadius: 6,
-                                backgroundColor: colors.strongGray,
-                            }}
+                    ) : (
+                        <>
+                            <Input
+                                border={!!errors.senha === true ? colors.red : colors.gray}
+                                autoCapitalize="none"
+                                label="Senha"
+                                value={senha}
+                                styleLabel={{ color: !!errors.senha === true ? colors.red : colors.white }}
+                                outlineColor={!!errors.senha === true ? colors.red : 'transparent'}
+                                onChangeText={v => {
+                                    setSenha(v);
+                                    if (errors.senha) {
+                                        setErrors(prev => ({ ...prev, senha: '' }));
+                                    }
+                                    if (errorMessages.senha) {
+                                        setErrorMessages(prev => ({ ...prev, senha: '' }));
+                                    }
+                                }}
+                                style={styles.input}
+                                hasError={!!errors.senha}
+                                errorText={errors.senha}
+                                helperStyle={styles.helperText}
+                                secureTextEntry={!senhaVisivel}
+                                right={
+                                    <TextInput.Icon
+                                        icon={senhaVisivel ? 'eye-off' : 'eye'}
+                                        color="#fff"
+                                        onPress={() => setSenhaVisivel(!senhaVisivel)}
+                                        forceTextInputFocus={false}
+                                    />
+                                }
+                            />
 
-                        >
-                            <Text style={{ color: colors.white, fontFamily: fontFamily.inder }}>{snackbarMessage}</Text>
-                        </Snackbar>
-                    </View>
-                </ScrollView>
+                            <Input
+                                border={!!errors.confirmarSenha === true ? colors.red : colors.gray}
+                                autoCapitalize="none"
+                                label="Confirmar Senha"
+                                value={confirmarSenha}
+                                styleLabel={{ color: !!errors.confirmarSenha === true ? colors.red : colors.white }}
+                                outlineColor={!!errors.confirmarSenha === true ? colors.red : 'transparent'}
+                                onChangeText={v => {
+                                    setConfirmarSenha(v);
+                                    if (errors.confirmarSenha) {
+                                        setErrors(prev => ({ ...prev, confirmarSenha: '' }));
+                                    }
+                                    if (errorMessages.confirmarSenha) {
+                                        setErrorMessages(prev => ({ ...prev, confirmarSenha: '' }));
+                                    }
+                                }}
+                                style={styles.input}
+                                hasError={!!errors.confirmarSenha}
+                                errorText={errors.confirmarSenha}
+                                helperStyle={styles.helperText}
+                                secureTextEntry={!confirmarSenhaVisivel}
+                                right={
+                                    <TextInput.Icon
+                                        icon={confirmarSenhaVisivel ? 'eye-off' : 'eye'}
+                                        color="#fff"
+                                        onPress={() => setConfirmarSenhaVisivel(!confirmarSenhaVisivel)}
+                                        forceTextInputFocus={false}
+                                    />
+                                }
+                            />
+
+                            <TouchableOpacity
+                                style={styles.caixa}
+                                onPress={() => setChecked(!checked)}
+                                activeOpacity={1}
+                            >
+                                {checked ? (
+                                    <Ionicons name="checkbox" size={35} color={colors.white} />
+                                ) : (
+                                    <Ionicons name="square-outline" size={35} color={colors.white} />
+                                )}
+                                <Text style={styles.label}>Receber notificações</Text>
+                            </TouchableOpacity>
+
+                            <Button
+                                children="Cadastrar-se"
+                                style={{
+                                    width: RFValue(255),
+                                    paddingVertical: RFValue(2),
+                                    backgroundColor: colors.blue[300],
+                                    marginTop: RFValue(62),
+                                    borderRadius: RFValue(20)
+                                }}
+                                onPress={handleRegister}
+                            />
+                        </>
+                    )
+                    }
+                    <Snackbar
+                        visible={snackbarVisible}
+                        onDismiss={() => setSnackbarVisible(false)}
+                        duration={5000}
+                        action={{
+                            label: 'OK',
+                            onPress: () => setSnackbarVisible(false),
+                            textColor: colors.blue[200],
+                        }}
+                        style={{
+                            alignSelf: 'center',
+                            width: isLandscape ? '50%' : '90%',
+                            borderRadius: 6,
+                            backgroundColor: colors.strongGray,
+                        }}
+
+                    >
+                        <Text style={{ color: colors.white, fontFamily: fontFamily.inder }}>{snackbarMessage}</Text>
+                    </Snackbar>
+                </View>
             </SafeAreaView>
         </SafeAreaProvider>
     )

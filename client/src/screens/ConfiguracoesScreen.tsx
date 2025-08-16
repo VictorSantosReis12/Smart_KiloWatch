@@ -71,11 +71,9 @@ export default function ConfiguracoesScreen({ navigation }: any) {
     }, [userData?.email]);
 
     async function handleModificarNotificacao() {
-        console.log("Modificando notificações");
         setChecked(!checked);
 
         const response = await editarNotificacaoUsuario(userToken, idUsuario, !checked);
-        console.log("Resposta da API:", response);
         if (!response) {
             return;
         }
@@ -89,7 +87,7 @@ export default function ConfiguracoesScreen({ navigation }: any) {
         <SafeAreaProvider>
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.container}>
-                    <StatusBar barStyle="light-content" backgroundColor={colors.blue[500]} />
+                    <StatusBar barStyle="light-content" backgroundColor={colors.blue[400]} />
 
                     <Sidebar navigation={navigation} />
 
