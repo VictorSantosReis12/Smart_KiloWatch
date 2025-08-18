@@ -8,6 +8,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { RFValue } from "react-native-responsive-fontsize";
 import AuthContext from '../context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as NavigationBar from 'expo-navigation-bar';
 
 // Componentes
 import Sidebar from "../screens/SidebarModal";
@@ -75,24 +76,10 @@ export default function HomeScreen({ navigation }: any) {
     const [graficoAguaValores, setGraficoAguaValores] = useState(definirGraficoAguaValores);
     const [graficoAguaTempo, setGraficoAguaTempo] = useState(definirGraficoAguaTempo);
 
-    // useEffect(() => {
-    //     const onKeyboardShow = (e: KeyboardEvent) => {
-    //         setKeyboardHeight(e.endCoordinates.height);
-    //         setIsKeyboardVisible(true);
-    //     };
-    //     const onKeyboardHide = () => {
-    //         setKeyboardHeight(0);
-    //         setIsKeyboardVisible(false);
-    //     };
-
-    //     const showSub = Keyboard.addListener('keyboardDidShow', onKeyboardShow);
-    //     const hideSub = Keyboard.addListener('keyboardDidHide', onKeyboardHide);
-
-    //     return () => {
-    //         showSub.remove();
-    //         hideSub.remove();
-    //     };
-    // }, []);
+    useEffect(() => {
+        NavigationBar.setBackgroundColorAsync('#04498E');
+        NavigationBar.setButtonStyleAsync('light');
+    }, []);
 
     if (!fontsLoaded) {
         return null
@@ -313,22 +300,41 @@ export default function HomeScreen({ navigation }: any) {
                                         </View>
                                     </View>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={{ width: "100%", height: RFValue(180), backgroundColor: colors.blue[300], borderRadius: RFValue(10), paddingHorizontal: RFValue(8), paddingVertical: RFValue(8) }}
+                                <TouchableOpacity style={{ width: "100%", height: RFValue(200), backgroundColor: colors.blue[300], borderRadius: RFValue(10), paddingHorizontal: RFValue(8), paddingVertical: RFValue(8), marginTop: RFValue(15) }}
                                     activeOpacity={1}
                                     onPress={() => navigation.navigate("Eletrodomesticos")}>
                                     <View style={{ width: "100%", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                                         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-                                            <Icon name="lightning-bolt" size={RFValue(15)} color={colors.white} />
-                                            <Text style={{ color: colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(10), marginLeft: RFValue(5) }}>Lista de Eletrodomésticos</Text>
+                                            <Icon name="lightning-bolt" size={RFValue(25)} color={colors.white} />
+                                            <Text style={{ color: colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(12), marginLeft: RFValue(5) }}>Lista de Eletrodomésticos</Text>
                                         </View>
-                                        <Icon name="arrow-right-circle-outline" size={RFValue(15)} color={colors.white} />
+                                        <Icon name="arrow-right-circle-outline" size={RFValue(25)} color={colors.white} />
                                     </View>
                                     {hasEletrodomestico ? (
                                         <>
                                         </>
                                     ) : (
                                         <View style={{ width: "100%", height: "80%", alignItems: "center", justifyContent: "center", marginTop: RFValue(5) }}>
-                                            <Text style={{ color: colors.white, fontFamily: fontFamily.inder, fontSize: RFValue(10) }}>Nenhum eletrodoméstico cadastrado</Text>
+                                            <Text style={{ color: colors.white, fontFamily: fontFamily.inder, fontSize: RFValue(14) }}>Nenhum eletrodoméstico cadastrado</Text>
+                                        </View>
+                                    )}
+                                </TouchableOpacity>
+                                <TouchableOpacity style={{ width: "100%", height: RFValue(200), backgroundColor: colors.blue[300], borderRadius: RFValue(10), paddingHorizontal: RFValue(8), paddingVertical: RFValue(8), marginTop: RFValue(15) }}
+                                    activeOpacity={1}
+                                    onPress={() => navigation.navigate("Atividades")}>
+                                    <View style={{ width: "100%", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                                        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+                                            <Icon name="water" size={RFValue(25)} color={colors.white} />
+                                            <Text style={{ color: colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(12), marginLeft: RFValue(5) }}>Lista de Atividades</Text>
+                                        </View>
+                                        <Icon name="arrow-right-circle-outline" size={RFValue(25)} color={colors.white} />
+                                    </View>
+                                    {hasAtividade ? (
+                                        <>
+                                        </>
+                                    ) : (
+                                        <View style={{ width: "100%", height: "80%", alignItems: "center", justifyContent: "center", marginTop: RFValue(5) }}>
+                                            <Text style={{ color: colors.white, fontFamily: fontFamily.inder, fontSize: RFValue(14) }}>Nenhuma atividade cadastrada</Text>
                                         </View>
                                     )}
                                 </TouchableOpacity>

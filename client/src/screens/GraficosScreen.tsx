@@ -76,7 +76,7 @@ export default function GraficosScreen({ navigation }: any) {
         <SafeAreaProvider>
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.container}>
-                    <StatusBar barStyle="light-content" backgroundColor={colors.blue[500]} />
+                    <StatusBar barStyle="light-content" backgroundColor={colors.blue[400]} />
 
                     <Sidebar navigation={navigation} />
 

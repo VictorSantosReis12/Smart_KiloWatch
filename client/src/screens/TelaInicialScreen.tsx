@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { RFValue } from "react-native-responsive-fontsize";
 import { useFocusEffect } from '@react-navigation/native';
+import * as NavigationBar from 'expo-navigation-bar';
 
 // Componentes
 import { Button } from "@/components/button";
@@ -63,6 +64,8 @@ export default function TelaInicialScreen({ navigation, route }: any) {
     );
 
     useEffect(() => {
+        NavigationBar.setBackgroundColorAsync('#001C38');
+        NavigationBar.setButtonStyleAsync('light');
         const checkLogin = async () => {
             try {
                 const value = await AsyncStorage.getItem("permanecerConectado");
@@ -175,27 +178,118 @@ export default function TelaInicialScreen({ navigation, route }: any) {
                         </View>
                     ) : null
                 }
-                <ScrollView
-                    contentContainerStyle={{ paddingBottom: keyboardHeight, flexGrow: 1 }}
-                    keyboardShouldPersistTaps="always"
-                >
-                    <View style={[styles.container, { flexDirection: isLandscape ? 'row' : 'column', gap: isLandscape ? isCadastro ? RFValue(30) : RFValue(60) : '0' }]}>
-                        <StatusBar barStyle="light-content" backgroundColor={colors.blue[500]} />
+                <View style={[styles.container, { flexDirection: isLandscape ? 'row' : 'column', gap: isLandscape ? isCadastro ? RFValue(30) : RFValue(60) : '0' }]}>
+                    <StatusBar barStyle="light-content" backgroundColor={colors.blue[500]} />
 
-                        <Animated.Image
+                    <Image
 
-                            style={[styles.logo, { width: isLandscape ? RFValue(210) : (isKeyboardVisible ? RFValue(224) : RFValue(316)), height: isLandscape ? RFValue(134) : (isKeyboardVisible ? RFValue(143) : RFValue(202)) }]}
-                            source={require("@/assets/logo-titulo.png")}
+                        style={[styles.logo, { width: isLandscape ? RFValue(210) : RFValue(316), height: isLandscape ? RFValue(134) : RFValue(202) }]}
+                        source={require("@/assets/logo-titulo.png")}
 
-                        />
+                    />
 
-                        {isLandscape ? (
-                            !isVeryWide ? (
-                                <View style={{ alignItems: "center", justifyContent: "center" }}>
-                                    <View style={{ alignItems: "center", justifyContent: "center", borderWidth: RFValue(1), borderColor: colors.white, borderRadius: RFValue(10), padding: RFValue(15) }}>
-                                        <Text style={{ fontSize: RFValue(12), fontFamily: fontFamily.krona, color: colors.white, marginBottom: RFValue(10) }}>
-                                            Cadastrar-se
-                                        </Text>
+                    {isLandscape ? (
+                        !isVeryWide ? (
+                            <View style={{ alignItems: "center", justifyContent: "center" }}>
+                                <View style={{ alignItems: "center", justifyContent: "center", borderWidth: RFValue(1), borderColor: colors.white, borderRadius: RFValue(10), padding: RFValue(15) }}>
+                                    <Text style={{ fontSize: RFValue(12), fontFamily: fontFamily.krona, color: colors.white, marginBottom: RFValue(10) }}>
+                                        Cadastrar-se
+                                    </Text>
+                                    <Input
+                                        border={!!errors.nome === true ? colors.red : colors.gray}
+                                        label="Nome Completo"
+                                        value={nome}
+                                        styleLabel={{ color: !!errors.nome === true ? colors.red : colors.white, fontSize: RFValue(10) }}
+                                        contentStyle={{ fontSize: RFValue(10) }}
+                                        outlineColor={!!errors.email === true ? colors.red : 'transparent'}
+                                        onChangeText={v => {
+                                            setNome(v);
+                                            if (errors.nome) {
+                                                setErrors(prev => ({ ...prev, nome: '' }));
+                                            }
+                                            if (errorMessages.nome) {
+                                                setErrorMessages(prev => ({ ...prev, nome: '' }));
+                                            }
+                                        }}
+                                        style={[styles.input, { width: RFValue(190), height: RFValue(30), marginBottom: RFValue(18), borderRadius: RFValue(10) }]}
+                                        hasError={!!errors.nome}
+                                        errorText={errors.nome}
+                                        helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(6) }]}
+                                    />
+
+                                    <Input
+                                        border={!!errors.email === true ? colors.red : colors.gray}
+                                        autoCapitalize="none"
+                                        label="Email"
+                                        value={email}
+                                        styleLabel={{ color: !!errors.email === true ? colors.red : colors.white, fontSize: RFValue(10) }}
+                                        contentStyle={{ fontSize: RFValue(10) }}
+                                        outlineColor={!!errors.email === true ? colors.red : 'transparent'}
+                                        onChangeText={v => {
+                                            setEmail(v);
+                                            if (errors.email) {
+                                                setErrors(prev => ({ ...prev, email: '' }));
+                                            }
+                                            if (errorMessages.email) {
+                                                setErrorMessages(prev => ({ ...prev, email: '' }));
+                                            }
+                                        }}
+                                        style={[styles.input, { width: RFValue(190), height: RFValue(30), marginBottom: RFValue(18), borderRadius: RFValue(10) }]}
+                                        keyboardType='email-address'
+                                        hasError={!!errors.email}
+                                        errorText={errors.email}
+                                        helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(6) }]}
+                                    />
+
+                                    <Button
+                                        children="Próximo"
+                                        icon={({ size, color }) => (
+                                            <Ionicons
+                                                name="chevron-forward-circle"
+                                                size={RFValue(20)}
+                                                color={color}
+                                            />
+                                        )}
+                                        contentStyle={{ flexDirection: 'row-reverse', paddingVertical: RFValue(3) }}
+                                        labelStyle={{ fontSize: RFValue(10) }}
+                                        style={{
+                                            width: RFValue(190),
+                                            backgroundColor: colors.blue[300],
+                                            marginTop: RFValue(15),
+                                            borderRadius: RFValue(8)
+                                        }}
+                                        onPress={handleRegister}
+                                    />
+                                </View>
+
+                                <View style={[styles.div_or, { width: RFValue(220), marginVertical: RFValue(15) }]}>
+                                    <View style={styles.line} />
+                                    <Text style={[styles.text_or, { fontSize: RFValue(10) }]} >ou</Text>
+                                    <View style={styles.line} />
+                                </View>
+
+                                <Button
+                                    children="Entrar"
+                                    contentStyle={{ backgroundColor: 'transparent', paddingVertical: RFValue(3) }}
+                                    labelStyle={{ fontSize: RFValue(10) }}
+                                    style={{
+                                        width: RFValue(220),
+                                        backgroundColor: "transparent",
+                                        borderWidth: RFValue(2),
+                                        borderColor: colors.yellow[300],
+                                        borderRadius: RFValue(8)
+                                    }}
+                                    onPress={() => navigation.navigate("Login")}
+                                />
+                            </View>
+                        ) : (
+                            isCadastro ? (
+                                <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                                    <Text style={{ fontSize: RFValue(12), fontFamily: fontFamily.krona, color: colors.white, marginBottom: RFValue(20) }}>
+                                        Cadastrar-se
+                                    </Text>
+
+                                    <View style={{ flexDirection: 'row', gap: RFValue(10), alignItems: 'center', justifyContent: 'center' }}>
                                         <Input
                                             border={!!errors.nome === true ? colors.red : colors.gray}
                                             label="Nome Completo"
@@ -241,27 +335,36 @@ export default function TelaInicialScreen({ navigation, route }: any) {
                                             errorText={errors.email}
                                             helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(6) }]}
                                         />
-
-                                        <Button
-                                            children="Próximo"
-                                            icon={({ size, color }) => (
-                                                <Ionicons
-                                                    name="chevron-forward-circle"
-                                                    size={RFValue(20)}
-                                                    color={color}
-                                                />
-                                            )}
-                                            contentStyle={{ flexDirection: 'row-reverse', paddingVertical: RFValue(3) }}
-                                            labelStyle={{ fontSize: RFValue(10) }}
-                                            style={{
-                                                width: RFValue(190),
-                                                backgroundColor: colors.blue[300],
-                                                marginTop: RFValue(15),
-                                                borderRadius: RFValue(8)
-                                            }}
-                                            onPress={handleRegister}
-                                        />
                                     </View>
+
+                                    <Button
+                                        children="Próximo"
+                                        icon={({ size, color }) => (
+                                            <Ionicons
+                                                name="chevron-forward-circle"
+                                                size={RFValue(20)}
+                                                color={color}
+                                            />
+                                        )}
+                                        contentStyle={{ flexDirection: 'row-reverse', paddingVertical: RFValue(3) }}
+                                        labelStyle={{ fontSize: RFValue(10) }}
+                                        style={{
+                                            width: RFValue(190),
+                                            backgroundColor: colors.blue[300],
+                                            marginTop: RFValue(15),
+                                            borderRadius: RFValue(8)
+                                        }}
+                                        onPress={handleRegister}
+                                    />
+                                </View>
+                            ) : (
+                                <View style={{ alignItems: "center", justifyContent: "center" }}>
+                                    <Button
+                                        children="Cadastrar-se"
+                                        labelStyle={{ fontSize: RFValue(10) }}
+                                        onPress={() => setIsCadastro(true)}
+                                        style={{ width: RFValue(220), borderRadius: RFValue(8) }}
+                                    />
 
                                     <View style={[styles.div_or, { width: RFValue(220), marginVertical: RFValue(15) }]}>
                                         <View style={styles.line} />
@@ -283,227 +386,122 @@ export default function TelaInicialScreen({ navigation, route }: any) {
                                         onPress={() => navigation.navigate("Login")}
                                     />
                                 </View>
-                            ) : (
-                                isCadastro ? (
-                                    <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Text style={{ fontSize: RFValue(12), fontFamily: fontFamily.krona, color: colors.white, marginBottom: RFValue(20) }}>
-                                            Cadastrar-se
-                                        </Text>
-
-                                        <View style={{ flexDirection: 'row', gap: RFValue(10), alignItems: 'center', justifyContent: 'center' }}>
-                                            <Input
-                                                border={!!errors.nome === true ? colors.red : colors.gray}
-                                                label="Nome Completo"
-                                                value={nome}
-                                                styleLabel={{ color: !!errors.nome === true ? colors.red : colors.white, fontSize: RFValue(10) }}
-                                                contentStyle={{ fontSize: RFValue(10) }}
-                                                outlineColor={!!errors.email === true ? colors.red : 'transparent'}
-                                                onChangeText={v => {
-                                                    setNome(v);
-                                                    if (errors.nome) {
-                                                        setErrors(prev => ({ ...prev, nome: '' }));
-                                                    }
-                                                    if (errorMessages.nome) {
-                                                        setErrorMessages(prev => ({ ...prev, nome: '' }));
-                                                    }
-                                                }}
-                                                style={[styles.input, { width: RFValue(190), height: RFValue(30), marginBottom: RFValue(18), borderRadius: RFValue(10) }]}
-                                                hasError={!!errors.nome}
-                                                errorText={errors.nome}
-                                                helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(6) }]}
-                                            />
-
-                                            <Input
-                                                border={!!errors.email === true ? colors.red : colors.gray}
-                                                autoCapitalize="none"
-                                                label="Email"
-                                                value={email}
-                                                styleLabel={{ color: !!errors.email === true ? colors.red : colors.white, fontSize: RFValue(10) }}
-                                                contentStyle={{ fontSize: RFValue(10) }}
-                                                outlineColor={!!errors.email === true ? colors.red : 'transparent'}
-                                                onChangeText={v => {
-                                                    setEmail(v);
-                                                    if (errors.email) {
-                                                        setErrors(prev => ({ ...prev, email: '' }));
-                                                    }
-                                                    if (errorMessages.email) {
-                                                        setErrorMessages(prev => ({ ...prev, email: '' }));
-                                                    }
-                                                }}
-                                                style={[styles.input, { width: RFValue(190), height: RFValue(30), marginBottom: RFValue(18), borderRadius: RFValue(10) }]}
-                                                keyboardType='email-address'
-                                                hasError={!!errors.email}
-                                                errorText={errors.email}
-                                                helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(6) }]}
-                                            />
-                                        </View>
-
-                                        <Button
-                                            children="Próximo"
-                                            icon={({ size, color }) => (
-                                                <Ionicons
-                                                    name="chevron-forward-circle"
-                                                    size={RFValue(20)}
-                                                    color={color}
-                                                />
-                                            )}
-                                            contentStyle={{ flexDirection: 'row-reverse', paddingVertical: RFValue(3) }}
-                                            labelStyle={{ fontSize: RFValue(10) }}
-                                            style={{
-                                                width: RFValue(190),
-                                                backgroundColor: colors.blue[300],
-                                                marginTop: RFValue(15),
-                                                borderRadius: RFValue(8)
-                                            }}
-                                            onPress={handleRegister}
-                                        />
-                                    </View>
-                                ) : (
-                                    <View style={{ alignItems: "center", justifyContent: "center" }}>
-                                        <Button
-                                            children="Cadastrar-se"
-                                            labelStyle={{ fontSize: RFValue(10) }}
-                                            onPress={() => setIsCadastro(true)}
-                                            style={{ width: RFValue(220), borderRadius: RFValue(8) }}
-                                        />
-
-                                        <View style={[styles.div_or, { width: RFValue(220), marginVertical: RFValue(15) }]}>
-                                            <View style={styles.line} />
-                                            <Text style={[styles.text_or, { fontSize: RFValue(10) }]} >ou</Text>
-                                            <View style={styles.line} />
-                                        </View>
-
-                                        <Button
-                                            children="Entrar"
-                                            contentStyle={{ backgroundColor: 'transparent', paddingVertical: RFValue(3) }}
-                                            labelStyle={{ fontSize: RFValue(10) }}
-                                            style={{
-                                                width: RFValue(220),
-                                                backgroundColor: "transparent",
-                                                borderWidth: RFValue(2),
-                                                borderColor: colors.yellow[300],
-                                                borderRadius: RFValue(8)
-                                            }}
-                                            onPress={() => navigation.navigate("Login")}
-                                        />
-                                    </View>
-                                )
                             )
-                        ) : (
-                            !isCadastro ? (
-                                <>
-                                    <Button
-                                        children="Cadastrar-se"
-                                        onPress={() => setIsCadastro(true)}
-                                        style={{ width: RFValue(255) }}
-                                    />
+                        )
+                    ) : (
+                        !isCadastro ? (
+                            <>
+                                <Button
+                                    children="Cadastrar-se"
+                                    onPress={() => setIsCadastro(true)}
+                                    style={{ width: RFValue(255) }}
+                                />
 
-                                    <View style={styles.div_or}>
-                                        <View style={styles.line} />
-                                        <Text style={styles.text_or} >ou</Text>
-                                        <View style={styles.line} />
-                                    </View>
+                                <View style={styles.div_or}>
+                                    <View style={styles.line} />
+                                    <Text style={styles.text_or} >ou</Text>
+                                    <View style={styles.line} />
+                                </View>
 
-                                    <Button
-                                        children="Entrar"
-                                        contentStyle={{ backgroundColor: 'transparent' }}
-                                        style={{
-                                            width: RFValue(255),
-                                            backgroundColor: "transparent",
-                                            borderWidth: RFValue(3),
-                                            borderColor: colors.yellow[300],
-                                        }}
-                                        onPress={() => navigation.navigate("Login")}
-                                    />
-                                </>) : (
-                                <>
-                                    <Input
-                                        border={!!errors.nome === true ? colors.red : colors.gray}
-                                        label="Nome Completo"
-                                        value={nome}
-                                        styleLabel={{ color: !!errors.nome === true ? colors.red : colors.white }}
-                                        outlineColor={!!errors.nome === true ? colors.red : 'transparent'}
-                                        onChangeText={v => {
-                                            setNome(v);
-                                            if (errors.nome) {
-                                                setErrors(prev => ({ ...prev, nome: '' }));
-                                            }
-                                            if (errorMessages.nome) {
-                                                setErrorMessages(prev => ({ ...prev, nome: '' }));
-                                            }
-                                        }}
-                                        style={styles.input}
-                                        hasError={!!errors.nome}
-                                        errorText={errors.nome}
-                                        helperStyle={styles.helperText}
-                                    />
+                                <Button
+                                    children="Entrar"
+                                    contentStyle={{ backgroundColor: 'transparent' }}
+                                    style={{
+                                        width: RFValue(255),
+                                        backgroundColor: "transparent",
+                                        borderWidth: RFValue(3),
+                                        borderColor: colors.yellow[300],
+                                    }}
+                                    onPress={() => navigation.navigate("Login")}
+                                />
+                            </>) : (
+                            <>
+                                <Input
+                                    border={!!errors.nome === true ? colors.red : colors.gray}
+                                    label="Nome Completo"
+                                    value={nome}
+                                    styleLabel={{ color: !!errors.nome === true ? colors.red : colors.white }}
+                                    outlineColor={!!errors.nome === true ? colors.red : 'transparent'}
+                                    onChangeText={v => {
+                                        setNome(v);
+                                        if (errors.nome) {
+                                            setErrors(prev => ({ ...prev, nome: '' }));
+                                        }
+                                        if (errorMessages.nome) {
+                                            setErrorMessages(prev => ({ ...prev, nome: '' }));
+                                        }
+                                    }}
+                                    style={styles.input}
+                                    hasError={!!errors.nome}
+                                    errorText={errors.nome}
+                                    helperStyle={styles.helperText}
+                                />
 
-                                    <Input
-                                        border={!!errors.email === true ? colors.red : colors.gray}
-                                        autoCapitalize="none"
-                                        label="Email"
-                                        value={email}
-                                        styleLabel={{ color: !!errors.email === true ? colors.red : colors.white }}
-                                        outlineColor={!!errors.email === true ? colors.red : 'transparent'}
-                                        onChangeText={v => {
-                                            setEmail(v);
-                                            if (errors.email) {
-                                                setErrors(prev => ({ ...prev, email: '' }));
-                                            }
-                                            if (errorMessages.email) {
-                                                setErrorMessages(prev => ({ ...prev, email: '' }));
-                                            }
-                                        }}
-                                        style={styles.input}
-                                        keyboardType='email-address'
-                                        hasError={!!errors.email}
-                                        errorText={errors.email}
-                                        helperStyle={styles.helperText}
-                                    />
+                                <Input
+                                    border={!!errors.email === true ? colors.red : colors.gray}
+                                    autoCapitalize="none"
+                                    label="Email"
+                                    value={email}
+                                    styleLabel={{ color: !!errors.email === true ? colors.red : colors.white }}
+                                    outlineColor={!!errors.email === true ? colors.red : 'transparent'}
+                                    onChangeText={v => {
+                                        setEmail(v);
+                                        if (errors.email) {
+                                            setErrors(prev => ({ ...prev, email: '' }));
+                                        }
+                                        if (errorMessages.email) {
+                                            setErrorMessages(prev => ({ ...prev, email: '' }));
+                                        }
+                                    }}
+                                    style={styles.input}
+                                    keyboardType='email-address'
+                                    hasError={!!errors.email}
+                                    errorText={errors.email}
+                                    helperStyle={styles.helperText}
+                                />
 
-                                    <Button
-                                        children="Próximo"
-                                        icon={({ size, color }) => (
-                                            <Ionicons
-                                                name="chevron-forward-circle"
-                                                size={RFValue(30)}
-                                                color={color}
-                                            />
-                                        )}
-                                        contentStyle={{ flexDirection: 'row-reverse' }}
-                                        style={{
-                                            width: RFValue(255),
-                                            paddingVertical: RFValue(2),
-                                            backgroundColor: colors.blue[300],
-                                            marginTop: RFValue(62),
-                                            borderRadius: RFValue(20)
-                                        }}
-                                        onPress={handleRegister}
-                                    />
-                                </>
-                            )
-                        )}
-                        <Snackbar
-                            visible={snackbarVisible}
-                            onDismiss={() => setSnackbarVisible(false)}
-                            duration={5000}
-                            action={{
-                                label: 'OK',
-                                onPress: () => setSnackbarVisible(false),
-                                textColor: colors.blue[200],
-                            }}
-                            style={{
-                                alignSelf: 'center',
-                                width: isLandscape ? '50%' : '90%',
-                                borderRadius: 6,
-                                backgroundColor: colors.strongGray,
-                            }}
+                                <Button
+                                    children="Próximo"
+                                    icon={({ size, color }) => (
+                                        <Ionicons
+                                            name="chevron-forward-circle"
+                                            size={RFValue(30)}
+                                            color={color}
+                                        />
+                                    )}
+                                    contentStyle={{ flexDirection: 'row-reverse' }}
+                                    style={{
+                                        width: RFValue(255),
+                                        paddingVertical: RFValue(2),
+                                        backgroundColor: colors.blue[300],
+                                        marginTop: RFValue(62),
+                                        borderRadius: RFValue(20)
+                                    }}
+                                    onPress={handleRegister}
+                                />
+                            </>
+                        )
+                    )}
+                    <Snackbar
+                        visible={snackbarVisible}
+                        onDismiss={() => setSnackbarVisible(false)}
+                        duration={5000}
+                        action={{
+                            label: 'OK',
+                            onPress: () => setSnackbarVisible(false),
+                            textColor: colors.blue[200],
+                        }}
+                        style={{
+                            alignSelf: 'center',
+                            width: isLandscape ? '50%' : '90%',
+                            borderRadius: 6,
+                            backgroundColor: colors.strongGray,
+                        }}
 
-                        >
-                            <Text style={{ color: colors.white, fontFamily: fontFamily.inder }}>{snackbarMessage}</Text>
-                        </Snackbar>
-                    </View>
-                </ScrollView>
+                    >
+                        <Text style={{ color: colors.white, fontFamily: fontFamily.inder }}>{snackbarMessage}</Text>
+                    </Snackbar>
+                </View>
             </SafeAreaView>
         </SafeAreaProvider>
     )

@@ -145,7 +145,7 @@ export default function EditarResidenciasConfigScreen({ navigation, route }: any
         <SafeAreaProvider>
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.container}>
-                    <StatusBar barStyle="light-content" backgroundColor={colors.blue[500]} />
+                    <StatusBar barStyle="light-content" backgroundColor={colors.blue[400]} />
 
                     <Sidebar navigation={navigation} />
 
@@ -349,7 +349,206 @@ export default function EditarResidenciasConfigScreen({ navigation, route }: any
                                 <Text style={{ color: colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(18) }}>Editar Residência</Text>
                             </View>
                             <View style={{ width: "100%", marginTop: RFValue(30), gap: RFValue(25) }}>
+                                <View
+                                    style={{ width: "100%" }}
+                                >
+                                    <View style={{ position: "relative", zIndex: 1000 }}>
+                                        <Text style={{ fontSize: RFValue(16), color: colors.white, fontFamily: fontFamily.inder, marginBottom: RFValue(8) }}>
+                                            Estado
+                                        </Text>
+                                        <Input
+                                            border={!!errors.estado === true ? colors.red : colors.gray}
+                                            autoCapitalize="none"
+                                            disableLabel={true}
+                                            placeholder="Estado"
+                                            value={estado}
+                                            styleLabel={{ color: !!errors.estado === true ? colors.red : colors.white, fontSize: RFValue(16) }}
+                                            contentStyle={{ fontSize: RFValue(16) }}
+                                            outlineColor={!!errors.estado === true ? colors.red : 'transparent'}
+                                            onChangeText={handleChangeText}
+                                            onFocus={() => setIsFocused(true)}
+                                            onBlur={() => {
+                                                setTimeout(() => setIsFocused(false), 100);
+                                            }}
+                                            style={[styles.input, { width: "100%", height: RFValue(40), marginBottom: RFValue(20), borderRadius: RFValue(10) }]}
+                                            hasError={!!errors.estado}
+                                            errorText={errors.estado}
+                                            helperStyle={[styles.helperText, { fontSize: RFValue(12), bottom: RFValue(0) }]}
+                                        />
+                                        {isFocused && filteredEstados.length > 0 && (
+                                            <FlatList
+                                                data={filteredEstados}
+                                                keyExtractor={item => item}
+                                                keyboardShouldPersistTaps="handled"
+                                                renderItem={({ item }) => (
+                                                    <TouchableOpacity onPress={() => onSelectEstado(item)}>
+                                                        <Text style={{ padding: 8, backgroundColor: colors.blue[200], fontFamily: fontFamily.inder, color: colors.white }}>{item}</Text>
+                                                    </TouchableOpacity>
+                                                )}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: RFValue(64),
+                                                    width: "100%",
+                                                    maxHeight: RFValue(90),
+                                                    backgroundColor: colors.blue[200],
+                                                    marginTop: 4,
+                                                    borderRadius: 5,
+                                                    zIndex: 1000,
+                                                    elevation: 5
+                                                }}
+                                            />
+                                        )}
+                                    </View>
+                                    <View>
+                                        <Text style={{ fontSize: RFValue(16), color: colors.white, fontFamily: fontFamily.inder, marginBottom: RFValue(8) }}>
+                                            Cidade
+                                        </Text>
+                                        <Input
+                                            border={!!errors.cidade === true ? colors.red : colors.gray}
+                                            autoCapitalize="none"
+                                            disableLabel={true}
+                                            placeholder="Cidade"
+                                            value={cidade}
+                                            styleLabel={{ color: !!errors.cidade === true ? colors.red : colors.white, fontSize: RFValue(16) }}
+                                            contentStyle={{ fontSize: RFValue(16) }}
+                                            outlineColor={!!errors.cidade === true ? colors.red : 'transparent'}
+                                            onChangeText={v => {
+                                                setCidade(v);
+                                                if (errors.cidade) {
+                                                    setErrors(prev => ({ ...prev, cidade: '' }));
+                                                }
+                                                if (errorMessages.cidade) {
+                                                    setErrorMessages(prev => ({ ...prev, cidade: '' }));
+                                                }
+                                            }}
+                                            style={[styles.input, { width: "100%", height: RFValue(40), marginBottom: RFValue(20), borderRadius: RFValue(10) }]}
+                                            hasError={!!errors.cidade}
+                                            errorText={errors.cidade}
+                                            helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(0) }]}
+                                        />
+                                    </View>
+                                    <View>
+                                        <Text style={{ fontSize: RFValue(16), color: colors.white, fontFamily: fontFamily.inder, marginBottom: RFValue(8) }}>
+                                            Rua
+                                        </Text>
+                                        <Input
+                                            border={!!errors.rua === true ? colors.red : colors.gray}
+                                            autoCapitalize="none"
+                                            disableLabel={true}
+                                            placeholder="Rua"
+                                            value={rua}
+                                            styleLabel={{ color: !!errors.rua === true ? colors.red : colors.white, fontSize: RFValue(16) }}
+                                            contentStyle={{ fontSize: RFValue(16) }}
+                                            outlineColor={!!errors.rua === true ? colors.red : 'transparent'}
+                                            onChangeText={v => {
+                                                setRua(v);
+                                                if (errors.rua) {
+                                                    setErrors(prev => ({ ...prev, rua: '' }));
+                                                }
+                                                if (errorMessages.rua) {
+                                                    setErrorMessages(prev => ({ ...prev, rua: '' }));
+                                                }
+                                            }}
+                                            style={[styles.input, { width: "100%", height: RFValue(40), marginBottom: RFValue(20), borderRadius: RFValue(10) }]}
+                                            hasError={!!errors.rua}
+                                            errorText={errors.rua}
+                                            helperStyle={[styles.helperText, { fontSize: RFValue(12), bottom: RFValue(0) }]}
+                                        />
+                                    </View>
 
+                                    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                                        <View>
+                                            <Text style={{ fontSize: RFValue(16), color: colors.white, fontFamily: fontFamily.inder, marginBottom: RFValue(8) }}>
+                                                Número
+                                            </Text>
+                                            <Input
+                                                border={!!errors.numero === true ? colors.red : colors.gray}
+                                                autoCapitalize="none"
+                                                disableLabel={true}
+                                                placeholder="Número"
+                                                value={numero}
+                                                styleLabel={{ color: !!errors.numero === true ? colors.red : colors.white, fontSize: RFValue(16) }}
+                                                contentStyle={{ fontSize: RFValue(16) }}
+                                                outlineColor={!!errors.numero === true ? colors.red : 'transparent'}
+                                                onChangeText={v => {
+                                                    setNumero(v);
+                                                    if (errors.numero) {
+                                                        setErrors(prev => ({ ...prev, numero: '' }));
+                                                    }
+                                                    if (errorMessages.numero) {
+                                                        setErrorMessages(prev => ({ ...prev, numero: '' }));
+                                                    }
+                                                }}
+                                                style={[styles.input, { width: RFValue(145), height: RFValue(40), marginBottom: RFValue(10), borderRadius: RFValue(10) }]}
+                                                keyboardType='numeric'
+                                                hasError={!!errors.numero}
+                                                errorText={errors.numero}
+                                                helperStyle={[styles.helperText, { fontSize: RFValue(12), bottom: RFValue(0) }]}
+                                            />
+                                        </View>
+
+                                        <View>
+                                            <Text style={{ fontSize: RFValue(16), color: colors.white, fontFamily: fontFamily.inder, marginBottom: RFValue(8) }}>
+                                                Complemento
+                                            </Text>
+                                            <Input
+                                                border={!!errors.complemento === true ? colors.red : colors.gray}
+                                                autoCapitalize="none"
+                                                disableLabel={true}
+                                                placeholder="Complemento"
+                                                value={complemento}
+                                                styleLabel={{ color: !!errors.complemento === true ? colors.red : colors.white, fontSize: RFValue(16) }}
+                                                contentStyle={{ fontSize: RFValue(16) }}
+                                                outlineColor={!!errors.complemento === true ? colors.red : 'transparent'}
+                                                onChangeText={v => {
+                                                    setComplemento(v);
+                                                    if (errors.complemento) {
+                                                        setErrors(prev => ({ ...prev, complemento: '' }));
+                                                    }
+                                                    if (errorMessages.complemento) {
+                                                        setErrorMessages(prev => ({ ...prev, complemento: '' }));
+                                                    }
+                                                }}
+                                                style={[styles.input, { width: RFValue(145), height: RFValue(40), marginBottom: RFValue(10), borderRadius: RFValue(10) }]}
+                                                hasError={!!errors.complemento}
+                                                errorText={errors.complemento}
+                                                helperStyle={[styles.helperText, { fontSize: RFValue(12), bottom: RFValue(0) }]}
+                                            />
+                                        </View>
+                                    </View>
+                                </View>
+
+                                <View style={{
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                    width: "100%",
+                                    paddingVertical: RFValue(5)
+                                }}>
+                                    <Button
+                                        children="Confirmar"
+                                        contentStyle={{ paddingVertical: RFValue(6), backgroundColor: colors.green }}
+                                        labelStyle={{ fontSize: RFValue(14), color: colors.white }}
+                                        style={{
+                                            width: RFValue(145),
+                                            backgroundColor: colors.green,
+                                            borderRadius: RFValue(20)
+                                        }}
+                                        onPress={() => handleRegister()}
+                                    />
+
+                                    <Button
+                                        children="Cancelar"
+                                        compact
+                                        contentStyle={{ paddingVertical: RFValue(6), backgroundColor: colors.blue[500], borderColor: colors.white, borderWidth: RFValue(2), width: RFValue(145), borderRadius: RFValue(20) }}
+                                        labelStyle={{ fontSize: RFValue(14), color: colors.white }}
+                                        style={{
+                                            alignSelf: "center",
+                                            borderRadius: RFValue(20)
+                                        }}
+                                        onPress={() => navigation.navigate('ResidenciasConfig')}
+                                    />
+                                </View>
                             </View>
                         </View>
                     }
@@ -367,6 +566,8 @@ export default function EditarResidenciasConfigScreen({ navigation, route }: any
                             width: isLandscape ? '50%' : '90%',
                             borderRadius: 6,
                             backgroundColor: colors.strongGray,
+                            marginBottom: isLandscape ? RFValue(0) : RFValue(85),
+                            zIndex: 5000,
                         }}
 
                     >

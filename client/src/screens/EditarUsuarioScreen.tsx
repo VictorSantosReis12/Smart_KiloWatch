@@ -123,6 +123,9 @@ export default function EditarUsuarioScreen({ navigation }: any) {
                 setSnackbarMessage(emailResponse.message || 'Erro ao editar email.');
                 return;
             }
+            setSnackbarVisible(true);
+            setSnackbarMessage('Usuário editado com sucesso.');
+            setErrors({ nome: '', email: '', senhaAtual: '', senhaNova: '' });
         } else {
             const usuarioResponse = await editarUsuario(userToken, idUsuario, nome, email, senhaAtual, senhaNova, notificacao);
             if (!usuarioResponse.success) {
@@ -162,7 +165,7 @@ export default function EditarUsuarioScreen({ navigation }: any) {
         <SafeAreaProvider>
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.container}>
-                    <StatusBar barStyle="light-content" backgroundColor={colors.blue[500]} />
+                    <StatusBar barStyle="light-content" backgroundColor={colors.blue[400]} />
 
                     <Sidebar navigation={navigation} />
 
@@ -325,8 +328,155 @@ export default function EditarUsuarioScreen({ navigation }: any) {
                             <View style={{ width: "100%", flexDirection: "row", justifyContent: "flex-start", alignItems: "center", paddingBottom: RFValue(20), paddingTop: RFValue(10), borderBottomWidth: RFValue(3), borderColor: colors.yellow[300] }}>
                                 <Text style={{ color: colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(18) }}>Editar Usuário</Text>
                             </View>
-                            <View style={{ width: "100%", marginTop: RFValue(30), gap: RFValue(25) }}>
+                            <View style={{ width: "100%", marginTop: RFValue(30), gap: RFValue(15) }}>
+                                <View>
+                                    <Text style={{ fontSize: RFValue(16), color: colors.white, fontFamily: fontFamily.inder, marginBottom: RFValue(8) }}>
+                                        Nome Completo
+                                    </Text>
+                                    <Input
+                                        border={!!errors.nome === true ? colors.red : colors.gray}
+                                        autoCapitalize="none"
+                                        disableLabel={true}
+                                        placeholder="Nome Completo"
+                                        value={nome}
+                                        styleLabel={{ color: !!errors.nome === true ? colors.red : colors.white, fontSize: RFValue(16) }}
+                                        contentStyle={{ fontSize: RFValue(16) }}
+                                        outlineColor={!!errors.nome === true ? colors.red : 'transparent'}
+                                        onChangeText={v => {
+                                            setNome(v);
+                                            if (errors.nome) {
+                                                setErrors(prev => ({ ...prev, nome: '' }));
+                                            }
+                                            if (errorMessages.nome) {
+                                                setErrorMessages(prev => ({ ...prev, nome: '' }));
+                                            }
+                                        }}
+                                        style={[styles.input, { width: "100%", height: RFValue(40), marginBottom: RFValue(10), borderRadius: RFValue(10) }]}
+                                        hasError={!!errors.nome}
+                                        errorText={errors.nome}
+                                        helperStyle={[styles.helperText, { fontSize: RFValue(12), bottom: RFValue(0) }]}
+                                    />
+                                </View>
+                                <View>
+                                    <Text style={{ fontSize: RFValue(16), color: colors.white, fontFamily: fontFamily.inder, marginBottom: RFValue(8) }}>
+                                        Email
+                                    </Text>
+                                    <Input
+                                        border={!!errors.email === true ? colors.red : colors.gray}
+                                        autoCapitalize="none"
+                                        disableLabel={true}
+                                        placeholder="Email"
+                                        value={email}
+                                        styleLabel={{ color: !!errors.email === true ? colors.red : colors.white, fontSize: RFValue(16) }}
+                                        contentStyle={{ fontSize: RFValue(16) }}
+                                        outlineColor={!!errors.email === true ? colors.red : 'transparent'}
+                                        onChangeText={v => {
+                                            setEmail(v);
+                                            if (errors.email) {
+                                                setErrors(prev => ({ ...prev, email: '' }));
+                                            }
+                                            if (errorMessages.email) {
+                                                setErrorMessages(prev => ({ ...prev, email: '' }));
+                                            }
+                                        }}
+                                        style={[styles.input, { width: "100%", height: RFValue(40), marginBottom: RFValue(10), borderRadius: RFValue(10) }]}
+                                        hasError={!!errors.email}
+                                        errorText={errors.email}
+                                        helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(0) }]}
+                                    />
+                                </View>
+                                <View>
+                                    <Text style={{ fontSize: RFValue(16), color: colors.white, fontFamily: fontFamily.inder, marginBottom: RFValue(8) }}>
+                                        Senha Atual
+                                    </Text>
+                                    <Input
+                                        border={!!errors.senhaAtual === true ? colors.red : colors.gray}
+                                        autoCapitalize="none"
+                                        disableLabel={true}
+                                        placeholder="Senha Nova"
+                                        value={senhaAtual}
+                                        styleLabel={{ color: !!errors.senhaAtual === true ? colors.red : colors.white, fontSize: RFValue(16) }}
+                                        contentStyle={{ fontSize: RFValue(16) }}
+                                        outlineColor={!!errors.senhaAtual === true ? colors.red : 'transparent'}
+                                        onChangeText={v => {
+                                            setSenhaAtual(v);
+                                            if (errors.senhaAtual) {
+                                                setErrors(prev => ({ ...prev, senhaAtual: '' }));
+                                            }
+                                            if (errorMessages.senhaAtual) {
+                                                setErrorMessages(prev => ({ ...prev, senhaAtual: '' }));
+                                            }
+                                        }}
+                                        style={[styles.input, { width: "100%", height: RFValue(40), marginBottom: RFValue(10), borderRadius: RFValue(10) }]}
+                                        keyboardType='numeric'
+                                        hasError={!!errors.senhaAtual}
+                                        errorText={errors.senhaAtual}
+                                        helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(0) }]}
+                                        secureTextEntry={!senhaAtualVisivel}
+                                        right={
+                                            <TextInput.Icon
+                                                icon={senhaAtualVisivel ? 'eye-off' : 'eye'}
+                                                color="#fff"
+                                                size={RFValue(25)}
+                                                onPress={() => setSenhaAtualVisivel(!senhaAtualVisivel)}
+                                                forceTextInputFocus={false}
+                                            />
+                                        }
+                                    />
+                                </View>
 
+                                <View>
+                                    <Text style={{ fontSize: RFValue(16), color: colors.white, fontFamily: fontFamily.inder, marginBottom: RFValue(8) }}>
+                                        Senha Nova
+                                    </Text>
+                                    <Input
+                                        border={!!errors.senhaNova === true ? colors.red : colors.gray}
+                                        autoCapitalize="none"
+                                        disableLabel={true}
+                                        placeholder="Senha Nova"
+                                        value={senhaNova}
+                                        styleLabel={{ color: !!errors.senhaNova === true ? colors.red : colors.white, fontSize: RFValue(16) }}
+                                        contentStyle={{ fontSize: RFValue(16) }}
+                                        outlineColor={!!errors.senhaNova === true ? colors.red : 'transparent'}
+                                        onChangeText={v => {
+                                            setSenhaNova(v);
+                                            if (errors.senhaNova) {
+                                                setErrors(prev => ({ ...prev, senhaNova: '' }));
+                                            }
+                                            if (errorMessages.senhaNova) {
+                                                setErrorMessages(prev => ({ ...prev, senhaNova: '' }));
+                                            }
+                                        }}
+                                        style={[styles.input, { width: "100%", height: RFValue(40), marginBottom: RFValue(10), borderRadius: RFValue(10) }]}
+                                        hasError={!!errors.senhaNova}
+                                        errorText={errors.senhaNova}
+                                        helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(0) }]}
+                                        secureTextEntry={!senhaNovaVisivel}
+                                        right={
+                                            <TextInput.Icon
+                                                icon={senhaNovaVisivel ? 'eye-off' : 'eye'}
+                                                color="#fff"
+                                                size={RFValue(25)}
+                                                onPress={() => setSenhaNovaVisivel(!senhaNovaVisivel)}
+                                                forceTextInputFocus={false}
+                                            />
+                                        }
+                                    />
+                                </View>
+
+                                <Button
+                                    children="Confirmar"
+                                    contentStyle={{ paddingVertical: RFValue(4), backgroundColor: colors.green }}
+                                    labelStyle={{ fontSize: RFValue(16), color: colors.white }}
+                                    style={{
+                                        width: RFValue(200),
+                                        backgroundColor: colors.green,
+                                        borderRadius: RFValue(20),
+                                        marginTop: RFValue(15),
+                                        alignSelf: 'center'
+                                    }}
+                                    onPress={() => handleRegister()}
+                                />
                             </View>
                         </View>
                     }
@@ -344,6 +494,8 @@ export default function EditarUsuarioScreen({ navigation }: any) {
                             width: isLandscape ? '50%' : '90%',
                             borderRadius: 6,
                             backgroundColor: colors.strongGray,
+                            marginBottom: isLandscape ? RFValue(0) : RFValue(85),
+                            zIndex: 5000,
                         }}
 
                     >

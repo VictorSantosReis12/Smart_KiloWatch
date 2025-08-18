@@ -117,7 +117,7 @@ export default function UsuarioScreen({ navigation }: any) {
         <SafeAreaProvider>
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.container}>
-                    <StatusBar barStyle="light-content" backgroundColor={colors.blue[500]} />
+                    <StatusBar barStyle="light-content" backgroundColor={colors.blue[400]} />
 
                     <Sidebar navigation={navigation} />
 
@@ -200,6 +200,8 @@ export default function UsuarioScreen({ navigation }: any) {
                             width: isLandscape ? '50%' : '90%',
                             borderRadius: 6,
                             backgroundColor: colors.strongGray,
+                            marginBottom: isLandscape ? RFValue(0) : RFValue(85),
+                            zIndex: 5000,
                         }}
 
                     >

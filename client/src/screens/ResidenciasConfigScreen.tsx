@@ -76,9 +76,9 @@ export default function ResidenciasConfigScreen({ navigation }: any) {
         setButtonConfirmar('Excluir');
         setHandleConfirmar(() => async () => {
             if (Number(residenciaAtiva) === selecionada) {
-                setSnackbarVisible(true);
-                setSnackbarMessage("Não é possível excluir a residência ativa.");
                 setModalVisible(false);
+                setSnackbarMessage("Não é possível excluir a residência ativa.");
+                setSnackbarVisible(true);
                 return;
             }
             try {
@@ -139,13 +139,11 @@ export default function ResidenciasConfigScreen({ navigation }: any) {
         fetchData();
     }, [userData, userToken]);
 
-    console.log(residenciaAtiva)
-
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.container}>
-                    <StatusBar barStyle="light-content" backgroundColor={colors.blue[500]} />
+                    <StatusBar barStyle="light-content" backgroundColor={colors.blue[400]} />
 
                     <Sidebar navigation={navigation} />
 
@@ -320,8 +318,175 @@ export default function ResidenciasConfigScreen({ navigation }: any) {
                             <View style={{ width: "100%", flexDirection: "row", justifyContent: "flex-start", alignItems: "center", paddingBottom: RFValue(20), paddingTop: RFValue(10), borderBottomWidth: RFValue(3), borderColor: colors.yellow[300] }}>
                                 <Text style={{ color: colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(18) }}>Suas Residências</Text>
                             </View>
-                            <View style={{ width: "100%", marginTop: RFValue(30), gap: RFValue(25) }}>
+                            <View style={{ width: "100%", marginTop: RFValue(25), gap: RFValue(25) }}>
+                                <View style={{
+                                    flexDirection: "row",
+                                    justifyContent: "space-evenly",
+                                    alignItems: "center",
+                                    width: "100%",
+                                    backgroundColor: colors.blue[500],
+                                    paddingVertical: RFValue(5)
+                                }}>
 
+                                    <View style={{
+                                        height: RFValue(45),
+                                        width: RFValue(45),
+                                        backgroundColor: colors.green,
+                                        borderRadius: "50%",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        elevation: 4
+                                    }}>
+                                        <IconButton
+                                            icon={({ color, size }) => (
+                                                <Icon name="home-plus" color={colors.white} size={RFValue(25)} />
+                                            )}
+                                            size={RFValue(40)}
+                                            iconColor="#fff"
+                                            onPress={() => navigation.navigate("CadastrarResidenciasConfig")}
+                                        />
+                                    </View>
+
+                                    <Button
+                                        children="Ativar"
+                                        contentStyle={{ paddingVertical: RFValue(2), backgroundColor: colors.blue[400], gap: RFValue(5) }}
+                                        labelStyle={{ fontSize: RFValue(10), color: colors.white }}
+                                        icon={({ size, color }) => (
+                                            <Icon name="home-switch" color={colors.white} size={RFValue(25)} />
+                                        )}
+                                        style={{
+                                            width: RFValue(120),
+                                            backgroundColor: colors.blue[400],
+                                            borderRadius: RFValue(20)
+                                        }}
+                                        onPress={() => handleSalvar()}
+                                        disabled={nenhumaSelecionada}
+                                    />
+
+                                    <View style={{
+                                        height: RFValue(39),
+                                        width: RFValue(120),
+                                        backgroundColor: colors.black,
+                                        borderRadius: RFValue(20),
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        elevation: 4,
+                                        position: "absolute",
+                                        top: RFValue(8),
+                                        left: RFValue(98),
+                                        display: (nenhumaSelecionada || selecionada === Number(residenciaAtiva)) ? 'flex' : 'none',
+                                        opacity: (nenhumaSelecionada || selecionada === Number(residenciaAtiva)) ? 0.5 : 0,
+                                    }}></View>
+
+                                    <View style={{
+                                        height: RFValue(45),
+                                        width: RFValue(45),
+                                        backgroundColor: colors.red,
+                                        borderRadius: "50%",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        elevation: 4
+                                    }}>
+                                        <IconButton
+                                            icon={({ color, size }) => (
+                                                <Icon name="home-minus" color={colors.white} size={RFValue(25)} />
+                                            )}
+                                            size={RFValue(40)}
+                                            iconColor="#fff"
+                                            disabled={nenhumaSelecionada}
+                                            onPress={() => handleOpenModalExcluir()}
+                                        />
+                                    </View>
+
+                                    <View style={{
+                                        height: RFValue(45),
+                                        width: RFValue(45.5),
+                                        backgroundColor: colors.black,
+                                        borderRadius: "50%",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        elevation: 4,
+                                        position: "absolute",
+                                        top: RFValue(5),
+                                        left: RFValue(245),
+                                        display: nenhumaSelecionada ? 'flex' : 'none',
+                                        opacity: nenhumaSelecionada ? 0.5 : 0,
+                                    }}></View>
+
+                                </View>
+                                <View style={{ height: RFValue(370), justifyContent: "center", alignItems: "center", backgroundColor: colors.blue[500] }}>
+                                    {carregando ? (
+                                        <ActivityIndicator animating={true} size="large" color={colors.white} />
+                                    ) : residencias.length === 0 ? (
+                                        <View
+                                            style={{
+                                                height: '100%',
+                                                width: '100%',
+                                                justifyContent: 'center',
+                                                alignItems: 'center'
+                                            }}
+                                        >
+                                            <Text
+                                                style={{
+                                                    color: colors.white,
+                                                    fontFamily: fontFamily.inder,
+                                                    fontSize: RFValue(16),
+                                                    textAlign: "center"
+                                                }}
+                                            >
+                                                Você não tem nenhuma residência cadastrada
+                                            </Text>
+                                        </View>
+                                    ) : (
+                                        <ScrollView
+                                            contentContainerStyle={{ gap: RFValue(6) }}
+                                            showsVerticalScrollIndicator={false}
+                                            style={{
+                                                width: RFValue(310),
+                                                maxHeight: RFValue(370)
+                                            }}
+                                        >
+                                            {residencias.map((r, i) => (
+                                                <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }} key={r.id_residencia}>
+                                                    <TouchableOpacity
+                                                        key={r.id_residencia}
+                                                        onPress={() => selecionarResidencia(r.id_residencia)}
+                                                        style={{
+                                                            backgroundColor: colors.blue[400],
+                                                            padding: RFValue(8),
+                                                            width: RFValue(260),
+                                                            height: RFValue(50),
+                                                            justifyContent: "center",
+                                                            borderRadius: RFValue(15),
+                                                            borderWidth: RFValue(3),
+                                                            ...(selecionada === r.id_residencia ? { borderColor: colors.yellow[300] } : { borderColor: "transparent" }),
+                                                        }}
+                                                    >
+                                                        <Text
+                                                            numberOfLines={2}
+                                                            ellipsizeMode="tail"
+                                                            style={{
+                                                                color: colors.white,
+                                                                fontFamily: fontFamily.inder,
+                                                                fontSize: RFValue(12),
+                                                            }}
+                                                        >
+                                                            {`Residência ${i + 1} — Rua ${r.rua}, ${r.numero} ${r.complemento !== null ? r.complemento : ''}`}
+                                                        </Text>
+                                                    </TouchableOpacity>
+                                                    <IconButton
+                                                        icon={({ color, size }) => (
+                                                            <Icon name="pencil" color={colors.white} size={RFValue(25)} />
+                                                        )}
+                                                        size={RFValue(35)}
+                                                        iconColor="#fff"
+                                                        onPress={() => navigation.navigate('EditarResidenciasConfig', { residencia: r })}
+                                                    />
+                                                </View>
+                                            ))}
+                                        </ScrollView>
+                                    )}
+                                </View>
                             </View>
                         </View>
                     }
@@ -339,6 +504,8 @@ export default function ResidenciasConfigScreen({ navigation }: any) {
                             width: isLandscape ? '50%' : '90%',
                             borderRadius: 6,
                             backgroundColor: colors.strongGray,
+                            marginBottom: isLandscape ? RFValue(0) : RFValue(85),
+                            zIndex: 5000,
                         }}
 
                     >

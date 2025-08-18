@@ -2,7 +2,7 @@
 // const BASE_URL = 'http://localhost:3000'
 
 // IP
-const BASE_URL = 'http://172.20.91.98:3000'
+const BASE_URL = 'http://192.168.0.14:3000'
 
 export async function cadastrarUsuario(nome, email, senha, ativarNotificacao) {
     const response = await fetch(`${BASE_URL}/usuario`, {
