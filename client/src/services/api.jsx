@@ -2,7 +2,7 @@
 // const BASE_URL = 'http://localhost:3000'
 
 // IP
-const BASE_URL = 'http://192.168.0.14:3000'
+const BASE_URL = 'http://172.20.91.98:3000'
 
 export async function cadastrarUsuario(nome, email, senha, ativarNotificacao) {
     const response = await fetch(`${BASE_URL}/usuario`, {
@@ -58,14 +58,14 @@ export async function editarNotificacaoUsuario(userToken, idUsuario, ativarNotif
     return response.json();
 }
 
-export async function editarNomeUsuario(userToken, idUsuario, nome, email) {
+export async function editarNomeUsuario(userToken, idUsuario, nome, email, senhaAtual) {
     const response = await fetch(`${BASE_URL}/usuario/setNome/${idUsuario}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${userToken}`
         },
-        body: JSON.stringify({ nome, email })
+        body: JSON.stringify({ nome, email, senhaAtual })
     });
     return response.json();
 }

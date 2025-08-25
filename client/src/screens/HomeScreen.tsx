@@ -91,8 +91,6 @@ export default function HomeScreen({ navigation }: any) {
                 <View style={styles.container}>
                     <StatusBar barStyle="light-content" backgroundColor={colors.blue[400]} />
 
-                    <Sidebar navigation={navigation} />
-
                     {isLandscape ?
                         <View style={{ height: RFValue(277), width: RFValue(640), flexDirection: "row", alignItems: "center", justifyContent: "center", position: "absolute", top: "10%", left: RFValue(40), backgroundColor: colors.blue[500], gap: RFValue(13), paddingVertical: RFValue(6) }}>
                             <View style={{ width: RFValue(280), height: "100%", alignItems: "flex-start", gap: RFValue(6) }}>
@@ -341,6 +339,9 @@ export default function HomeScreen({ navigation }: any) {
                             </ScrollView>
                         </View>
                     }
+                    
+                    <Sidebar navigation={navigation} />
+
                 </View>
             </SafeAreaView>
         </SafeAreaProvider>

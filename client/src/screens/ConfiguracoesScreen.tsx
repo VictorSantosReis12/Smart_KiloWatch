@@ -89,8 +89,6 @@ export default function ConfiguracoesScreen({ navigation }: any) {
                 <View style={styles.container}>
                     <StatusBar barStyle="light-content" backgroundColor={colors.blue[400]} />
 
-                    <Sidebar navigation={navigation} />
-
                     {isLandscape ?
                         <View style={{ height: RFValue(277), width: RFValue(640), alignItems: "center", justifyContent: "flex-start", position: "absolute", top: "10%", left: RFValue(40), backgroundColor: colors.blue[500], paddingHorizontal: RFValue(15), paddingVertical: RFValue(15) }}>
                             <View style={{ width: "100%", flexDirection: "row", justifyContent: "flex-start", alignItems: "center", paddingBottom: RFValue(10), borderBottomWidth: RFValue(3), borderColor: colors.yellow[300] }}>
@@ -106,6 +104,7 @@ export default function ConfiguracoesScreen({ navigation }: any) {
                                 <TouchableOpacity
                                     style={{ backgroundColor: colors.blue[400], width: "100%", height: RFValue(60), justifyContent: "flex-start", alignItems: "center", borderRadius: RFValue(10), flexDirection: "row", gap: RFValue(10), paddingHorizontal: RFValue(10) }}
                                     onPress={() => handleModificarNotificacao()}
+                                    activeOpacity={1}
                                 >
                                     {checked ? (
                                         <Ionicons name="checkbox" size={30} color={colors.white} />
@@ -131,6 +130,9 @@ export default function ConfiguracoesScreen({ navigation }: any) {
                             </View>
                         </View>
                     }
+
+                    <Sidebar navigation={navigation} />
+
                 </View>
             </SafeAreaView>
         </SafeAreaProvider>

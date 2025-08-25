@@ -1,7 +1,7 @@
 // React Native
 import React, { useState, useEffect, useContext } from 'react';
 import { Alert, Image, View, StyleSheet, StatusBar, ScrollView, useWindowDimensions, Text, TouchableOpacity } from "react-native";
-import { IconButton, ActivityIndicator, TextInput, Snackbar } from 'react-native-paper';
+import { IconButton, ActivityIndicator, TextInput, Snackbar, Switch } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import Icon from '@expo/vector-icons/MaterialCommunityIcons';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -13,6 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from "@/components/button";
 import { Input } from "@/components/input";
 import Sidebar from "../screens/SidebarModal";
+import InputModal from "../screens/InputModal";
 
 // Fontes
 import { useFonts } from 'expo-font';
@@ -74,27 +75,16 @@ export default function EditarUsuarioScreen({ navigation }: any) {
     const [snackbarVisible, setSnackbarVisible] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
 
-    const handleRegister = async () => {
+    // Modal
+    const [textModal, setTextModal] = useState('Inserir senha atual');
+    const [buttonCancelar, setButtonCancelar] = useState('Cancelar');
+    const [buttonConfirmar, setButtonConfirmar] = useState('Salvar');
+    const handleConfirmar = () => {
         let hasError = false;
         const newErrors: { nome: string; email: string; senhaAtual: string; senhaNova: string } = { nome: '', email: '', senhaAtual: '', senhaNova: '' };
 
-        if (nome.trim() === '') {
-            newErrors.nome = 'Por favor, preencha o Nome Completo.';
-            hasError = true;
-        }
-
-        if (email.trim() === '') {
-            newErrors.email = 'Por favor, preencha o Email.';
-            hasError = true;
-        }
-
-        if (senhaAtual.trim() === '' && senhaNova !== '') {
+        if (senhaAtual === '') {
             newErrors.senhaAtual = 'Por favor, preencha a Senha Atual.';
-            hasError = true;
-        }
-
-        if (senhaAtual.trim() !== '' && senhaNova === '') {
-            newErrors.senhaNova = 'Por favor, preencha a Senha Nova.';
             hasError = true;
         }
 
@@ -105,45 +95,64 @@ export default function EditarUsuarioScreen({ navigation }: any) {
 
         setErrors({ nome: '', email: '', senhaAtual: '', senhaNova: '' });
 
-        if (senhaAtual.trim() === '' && senhaNova === '') {
-            const nomeResponse = await editarNomeUsuario(userToken, idUsuario, nome, email);
-            const tokenNovoNome = nomeResponse.token;
-            await signIn(tokenNovoNome, null, true);
-            if (!nomeResponse.success) {
-                setSnackbarVisible(true);
-                setSnackbarMessage(nomeResponse.message || 'Erro ao editar nome.');
-                return;
-            }
+        handleRegister();
+    }
+    const [modalVisible, setModalVisible] = useState(false);
 
-            const emailResponse = await editarEmailUsuario(userToken, idUsuario, nome, email);
-            const tokenNovoEmail = emailResponse.token;
-            await signIn(tokenNovoEmail, null, true);
-            if (!emailResponse.success) {
-                setSnackbarVisible(true);
-                setSnackbarMessage(emailResponse.message || 'Erro ao editar email.');
-                return;
-            }
-            setSnackbarVisible(true);
-            setSnackbarMessage('Usuário editado com sucesso.');
-            setErrors({ nome: '', email: '', senhaAtual: '', senhaNova: '' });
-        } else {
+    const handleCloseModal = () => setModalVisible(false);
+
+    const handleRegister = async () => {
+        const newErrors: { nome: string; email: string; senhaAtual: string; senhaNova: string } = { nome: '', email: '', senhaAtual: '', senhaNova: '' };
+
+        if (checked) {
             const usuarioResponse = await editarUsuario(userToken, idUsuario, nome, email, senhaAtual, senhaNova, notificacao);
             if (!usuarioResponse.success) {
                 if (usuarioResponse.message === 'Senha incorreta.') {
-                    setSnackbarVisible(true);
-                    setSnackbarMessage(usuarioResponse.message || 'Senha Incorreta.');
                     newErrors.senhaAtual = 'Senha Incorreta.';
                     setErrors(newErrors);
                     return;
                 }
                 setSnackbarVisible(true);
                 setSnackbarMessage(usuarioResponse.message || 'Erro ao editar usuário.');
+                setModalVisible(false);
                 return;
             }
             const tokenNovoNome = usuarioResponse.token;
             await signIn(tokenNovoNome, null, true);
             setSnackbarVisible(true);
             setSnackbarMessage(usuarioResponse.message || 'Usuário editado com sucesso.');
+            setModalVisible(false);
+            setChecked(false);
+            setErrors({ nome: '', email: '', senhaAtual: '', senhaNova: '' });
+        } else {
+            const nomeResponse = await editarNomeUsuario(userToken, idUsuario, nome, email, senhaAtual);
+            if (!nomeResponse.success) {
+                if (nomeResponse.message === 'Senha incorreta.') {
+                    newErrors.senhaAtual = 'Senha Incorreta.';
+                    setErrors(newErrors);
+                    return;
+                }
+                setSnackbarVisible(true);
+                setSnackbarMessage(nomeResponse.message || 'Erro ao editar nome.');
+                setModalVisible(false);
+                return;
+            }
+            const tokenNovoNome = nomeResponse.token;
+            await signIn(tokenNovoNome, null, true);
+
+            const emailResponse = await editarEmailUsuario(userToken, idUsuario, nome, email);
+            if (!emailResponse.success) {
+                setSnackbarVisible(true);
+                setSnackbarMessage(emailResponse.message || 'Erro ao editar email.');
+                setModalVisible(false);
+                return;
+            }
+            const tokenNovoEmail = emailResponse.token;
+            await signIn(tokenNovoEmail, null, true);
+
+            setSnackbarVisible(true);
+            setSnackbarMessage('Usuário editado com sucesso.');
+            setModalVisible(false);
             setErrors({ nome: '', email: '', senhaAtual: '', senhaNova: '' });
         }
     }
@@ -156,6 +165,7 @@ export default function EditarUsuarioScreen({ navigation }: any) {
     const [senhaNovaVisivel, setSenhaNovaVisivel] = useState(false);
     const [errorMessages, setErrorMessages] = useState({ nome: '', email: '', senhaAtual: '', senhaNova: '' });
     const [errors, setErrors] = useState({ nome: '', email: '', senhaAtual: '', senhaNova: '' });
+    const [checked, setChecked] = useState(false);
 
     if (!fontsLoaded) {
         return null
@@ -166,8 +176,6 @@ export default function EditarUsuarioScreen({ navigation }: any) {
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.container}>
                     <StatusBar barStyle="light-content" backgroundColor={colors.blue[400]} />
-
-                    <Sidebar navigation={navigation} />
 
                     {isLandscape ?
                         <View style={{ height: RFValue(277), width: RFValue(640), alignItems: "center", justifyContent: "flex-start", position: "absolute", top: "10%", left: RFValue(40), backgroundColor: colors.blue[500], paddingHorizontal: RFValue(15), paddingVertical: RFValue(15) }}>
@@ -231,55 +239,33 @@ export default function EditarUsuarioScreen({ navigation }: any) {
                                 />
                             </View>
                             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: RFValue(610), marginTop: RFValue(5) }}>
-                                <View>
-                                    <Text style={{ fontSize: RFValue(10), color: colors.white, fontFamily: fontFamily.inder, marginBottom: RFValue(5) }}>
-                                        Senha Atual
-                                    </Text>
-                                    <Input
-                                        border={!!errors.senhaAtual === true ? colors.red : colors.gray}
-                                        autoCapitalize="none"
-                                        disableLabel={true}
-                                        placeholder="Senha Nova"
-                                        value={senhaAtual}
-                                        styleLabel={{ color: !!errors.senhaAtual === true ? colors.red : colors.white, fontSize: RFValue(10) }}
-                                        contentStyle={{ fontSize: RFValue(10) }}
-                                        outlineColor={!!errors.senhaAtual === true ? colors.red : 'transparent'}
-                                        onChangeText={v => {
-                                            setSenhaAtual(v);
-                                            if (errors.senhaAtual) {
-                                                setErrors(prev => ({ ...prev, senhaAtual: '' }));
-                                            }
-                                            if (errorMessages.senhaAtual) {
-                                                setErrorMessages(prev => ({ ...prev, senhaAtual: '' }));
-                                            }
-                                        }}
-                                        style={[styles.input, { width: RFValue(290), height: RFValue(25), marginBottom: RFValue(10), borderRadius: RFValue(10) }]}
-                                        keyboardType='numeric'
-                                        hasError={!!errors.senhaAtual}
-                                        errorText={errors.senhaAtual}
-                                        helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(0) }]}
-                                        secureTextEntry={!senhaAtualVisivel}
-                                        right={
-                                            <TextInput.Icon
-                                                icon={senhaAtualVisivel ? 'eye-off' : 'eye'}
-                                                color="#fff"
-                                                size={RFValue(15)}
-                                                onPress={() => setSenhaAtualVisivel(!senhaAtualVisivel)}
-                                                forceTextInputFocus={false}
-                                            />
-                                        }
+                                <TouchableOpacity
+                                    style={[styles.caixa, {
+                                        width: "auto",
+                                        height: RFValue(48),
+                                        paddingHorizontal: RFValue(10),
+                                    }]}
+                                    onPress={() => {
+                                        setChecked(!checked)
+                                        setSenhaNova('');
+                                    }}
+                                    activeOpacity={1}
+                                >
+                                    <Switch
+                                        value={checked}
+                                        onValueChange={setChecked}
+                                        color={colors.blue[200]}
+                                        trackColor={{ false: "#575757ff", true: colors.blue[400] }}
                                     />
-                                </View>
 
-                                <View>
-                                    <Text style={{ fontSize: RFValue(10), color: colors.white, fontFamily: fontFamily.inder, marginBottom: RFValue(5) }}>
-                                        Senha Nova
-                                    </Text>
+                                    <Text style={[styles.label, { fontSize: RFValue(10), color: colors.white }]}>Alterar a senha</Text>
+                                </TouchableOpacity>
+
+                                {checked && (
                                     <Input
                                         border={!!errors.senhaNova === true ? colors.red : colors.gray}
                                         autoCapitalize="none"
-                                        disableLabel={true}
-                                        placeholder="Senha Nova"
+                                        label="Senha Nova"
                                         value={senhaNova}
                                         styleLabel={{ color: !!errors.senhaNova === true ? colors.red : colors.white, fontSize: RFValue(10) }}
                                         contentStyle={{ fontSize: RFValue(10) }}
@@ -293,10 +279,10 @@ export default function EditarUsuarioScreen({ navigation }: any) {
                                                 setErrorMessages(prev => ({ ...prev, senhaNova: '' }));
                                             }
                                         }}
-                                        style={[styles.input, { width: RFValue(290), height: RFValue(25), marginBottom: RFValue(10), borderRadius: RFValue(10) }]}
+                                        style={[styles.input, { width: RFValue(450), height: RFValue(25), marginBottom: RFValue(0), borderRadius: RFValue(10) }]}
                                         hasError={!!errors.senhaNova}
                                         errorText={errors.senhaNova}
-                                        helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(0) }]}
+                                        helperStyle={[styles.helperText, { fontSize: RFValue(6), top: RFValue(25), bottom: RFValue(0) }]}
                                         secureTextEntry={!senhaNovaVisivel}
                                         right={
                                             <TextInput.Icon
@@ -307,8 +293,7 @@ export default function EditarUsuarioScreen({ navigation }: any) {
                                                 forceTextInputFocus={false}
                                             />
                                         }
-                                    />
-                                </View>
+                                    />)}
                             </View>
                             <Button
                                 children="Confirmar"
@@ -320,7 +305,36 @@ export default function EditarUsuarioScreen({ navigation }: any) {
                                     borderRadius: RFValue(20),
                                     marginTop: RFValue(15)
                                 }}
-                                onPress={() => handleRegister()}
+                                onPress={() => {
+                                    let hasError = false;
+                                    const newErrors: { nome: string; email: string; senhaAtual: string; senhaNova: string } = { nome: '', email: '', senhaAtual: '', senhaNova: '' };
+
+                                    if (nome.trim() === '') {
+                                        newErrors.nome = 'Por favor, preencha o Nome Completo.';
+                                        hasError = true;
+                                    }
+
+                                    if (email.trim() === '') {
+                                        newErrors.email = 'Por favor, preencha o Email.';
+                                        hasError = true;
+                                    }
+
+                                    if (checked && senhaNova === '') {
+                                        newErrors.senhaNova = 'Por favor, preencha a Senha Nova.';
+                                        hasError = true;
+                                    }
+
+                                    if (hasError) {
+                                        setErrors(newErrors);
+                                        return;
+                                    }
+
+                                    setErrors({ nome: '', email: '', senhaAtual: '', senhaNova: '' });
+
+                                    setSenhaAtual('');
+                                    setSenhaAtualVisivel(false);
+                                    setModalVisible(true);
+                                }}
                             />
                         </View>
                         :
@@ -385,84 +399,62 @@ export default function EditarUsuarioScreen({ navigation }: any) {
                                         helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(0) }]}
                                     />
                                 </View>
-                                <View>
-                                    <Text style={{ fontSize: RFValue(16), color: colors.white, fontFamily: fontFamily.inder, marginBottom: RFValue(8) }}>
-                                        Senha Atual
-                                    </Text>
-                                    <Input
-                                        border={!!errors.senhaAtual === true ? colors.red : colors.gray}
-                                        autoCapitalize="none"
-                                        disableLabel={true}
-                                        placeholder="Senha Nova"
-                                        value={senhaAtual}
-                                        styleLabel={{ color: !!errors.senhaAtual === true ? colors.red : colors.white, fontSize: RFValue(16) }}
-                                        contentStyle={{ fontSize: RFValue(16) }}
-                                        outlineColor={!!errors.senhaAtual === true ? colors.red : 'transparent'}
-                                        onChangeText={v => {
-                                            setSenhaAtual(v);
-                                            if (errors.senhaAtual) {
-                                                setErrors(prev => ({ ...prev, senhaAtual: '' }));
-                                            }
-                                            if (errorMessages.senhaAtual) {
-                                                setErrorMessages(prev => ({ ...prev, senhaAtual: '' }));
-                                            }
-                                        }}
-                                        style={[styles.input, { width: "100%", height: RFValue(40), marginBottom: RFValue(10), borderRadius: RFValue(10) }]}
-                                        keyboardType='numeric'
-                                        hasError={!!errors.senhaAtual}
-                                        errorText={errors.senhaAtual}
-                                        helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(0) }]}
-                                        secureTextEntry={!senhaAtualVisivel}
-                                        right={
-                                            <TextInput.Icon
-                                                icon={senhaAtualVisivel ? 'eye-off' : 'eye'}
-                                                color="#fff"
-                                                size={RFValue(25)}
-                                                onPress={() => setSenhaAtualVisivel(!senhaAtualVisivel)}
-                                                forceTextInputFocus={false}
-                                            />
-                                        }
+                                <TouchableOpacity
+                                    style={[styles.caixa, {
+                                        width: "auto",
+                                        height: RFValue(48),
+                                        paddingHorizontal: RFValue(10),
+                                        transform: [{ scaleX: RFValue(1.2) }, { scaleY: RFValue(1.2) }]
+                                    }]}
+                                    onPress={() => {
+                                        setChecked(!checked)
+                                        setSenhaNova('');
+                                    }}
+                                    activeOpacity={1}
+                                >
+                                    <Switch
+                                        value={checked}
+                                        onValueChange={setChecked}
+                                        color={colors.blue[200]}
+                                        trackColor={{ false: "#575757ff", true: colors.blue[400] }}
                                     />
-                                </View>
 
-                                <View>
-                                    <Text style={{ fontSize: RFValue(16), color: colors.white, fontFamily: fontFamily.inder, marginBottom: RFValue(8) }}>
-                                        Senha Nova
-                                    </Text>
-                                    <Input
-                                        border={!!errors.senhaNova === true ? colors.red : colors.gray}
-                                        autoCapitalize="none"
-                                        disableLabel={true}
-                                        placeholder="Senha Nova"
-                                        value={senhaNova}
-                                        styleLabel={{ color: !!errors.senhaNova === true ? colors.red : colors.white, fontSize: RFValue(16) }}
-                                        contentStyle={{ fontSize: RFValue(16) }}
-                                        outlineColor={!!errors.senhaNova === true ? colors.red : 'transparent'}
-                                        onChangeText={v => {
-                                            setSenhaNova(v);
-                                            if (errors.senhaNova) {
-                                                setErrors(prev => ({ ...prev, senhaNova: '' }));
-                                            }
-                                            if (errorMessages.senhaNova) {
-                                                setErrorMessages(prev => ({ ...prev, senhaNova: '' }));
-                                            }
-                                        }}
-                                        style={[styles.input, { width: "100%", height: RFValue(40), marginBottom: RFValue(10), borderRadius: RFValue(10) }]}
-                                        hasError={!!errors.senhaNova}
-                                        errorText={errors.senhaNova}
-                                        helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(0) }]}
-                                        secureTextEntry={!senhaNovaVisivel}
-                                        right={
-                                            <TextInput.Icon
-                                                icon={senhaNovaVisivel ? 'eye-off' : 'eye'}
-                                                color="#fff"
-                                                size={RFValue(25)}
-                                                onPress={() => setSenhaNovaVisivel(!senhaNovaVisivel)}
-                                                forceTextInputFocus={false}
-                                            />
+                                    <Text style={[styles.label, { fontSize: RFValue(16), color: colors.white }]}>Alterar a senha</Text>
+                                </TouchableOpacity>
+
+                                <Input
+                                    border={!!errors.senhaNova === true ? colors.red : colors.gray}
+                                    autoCapitalize="none"
+                                    label="Senha Nova"
+                                    value={senhaNova}
+                                    styleLabel={{ color: !!errors.senhaNova === true ? colors.red : colors.white, fontSize: RFValue(16) }}
+                                    contentStyle={{ fontSize: RFValue(16) }}
+                                    outlineColor={!!errors.senhaNova === true ? colors.red : 'transparent'}
+                                    onChangeText={v => {
+                                        setSenhaNova(v);
+                                        if (errors.senhaNova) {
+                                            setErrors(prev => ({ ...prev, senhaNova: '' }));
                                         }
-                                    />
-                                </View>
+                                        if (errorMessages.senhaNova) {
+                                            setErrorMessages(prev => ({ ...prev, senhaNova: '' }));
+                                        }
+                                    }}
+                                    style={[styles.input, { width: "100%", height: RFValue(40), marginBottom: RFValue(60), borderRadius: RFValue(10), opacity: checked ? 1 : 0 }]}
+                                    editable={!checked ? false : true}
+                                    hasError={!!errors.senhaNova}
+                                    errorText={errors.senhaNova}
+                                    helperStyle={[styles.helperText, { fontSize: RFValue(12), top: RFValue(45), opacity: checked ? 1 : 0 }]}
+                                    secureTextEntry={!senhaNovaVisivel}
+                                    right={
+                                        <TextInput.Icon
+                                            icon={senhaNovaVisivel ? 'eye-off' : 'eye'}
+                                            color="#fff"
+                                            size={RFValue(25)}
+                                            onPress={() => setSenhaNovaVisivel(!senhaNovaVisivel)}
+                                            forceTextInputFocus={false}
+                                        />
+                                    }
+                                />
 
                                 <Button
                                     children="Confirmar"
@@ -475,11 +467,43 @@ export default function EditarUsuarioScreen({ navigation }: any) {
                                         marginTop: RFValue(15),
                                         alignSelf: 'center'
                                     }}
-                                    onPress={() => handleRegister()}
+                                    onPress={() => {
+                                        let hasError = false;
+                                        const newErrors: { nome: string; email: string; senhaAtual: string; senhaNova: string } = { nome: '', email: '', senhaAtual: '', senhaNova: '' };
+
+                                        if (nome.trim() === '') {
+                                            newErrors.nome = 'Por favor, preencha o Nome Completo.';
+                                            hasError = true;
+                                        }
+
+                                        if (email.trim() === '') {
+                                            newErrors.email = 'Por favor, preencha o Email.';
+                                            hasError = true;
+                                        }
+
+                                        if (checked && senhaNova === '') {
+                                            newErrors.senhaNova = 'Por favor, preencha a Senha Nova.';
+                                            hasError = true;
+                                        }
+
+                                        if (hasError) {
+                                            setErrors(newErrors);
+                                            return;
+                                        }
+
+                                        setErrors({ nome: '', email: '', senhaAtual: '', senhaNova: '' });
+
+                                        setSenhaAtual('');
+                                        setSenhaAtualVisivel(false);
+                                        setModalVisible(true);
+                                    }}
                                 />
                             </View>
                         </View>
                     }
+
+                    <Sidebar navigation={navigation} />
+
                     <Snackbar
                         visible={snackbarVisible}
                         onDismiss={() => setSnackbarVisible(false)}
@@ -494,7 +518,7 @@ export default function EditarUsuarioScreen({ navigation }: any) {
                             width: isLandscape ? '50%' : '90%',
                             borderRadius: 6,
                             backgroundColor: colors.strongGray,
-                            marginBottom: isLandscape ? RFValue(0) : RFValue(85),
+                            marginBottom: isLandscape ? RFValue(0) : RFValue(50),
                             zIndex: 5000,
                         }}
 
@@ -502,6 +526,82 @@ export default function EditarUsuarioScreen({ navigation }: any) {
                         <Text style={{ color: colors.white, fontFamily: fontFamily.inder }}>{snackbarMessage}</Text>
                     </Snackbar>
                 </View>
+                <InputModal
+                    visible={modalVisible}
+                    onDismiss={handleCloseModal}
+                    changeText={textModal}
+                    changeButtonCancelar={buttonCancelar}
+                    changeButtonConfirmar={buttonConfirmar}
+                    handleConfirmar={handleConfirmar}
+                    input={
+                        isLandscape ?
+                            <Input
+                                border={!!errors.senhaAtual === true ? colors.red : colors.gray}
+                                autoCapitalize="none"
+                                label="Senha Atual"
+                                value={senhaAtual}
+                                styleLabel={{ color: !!errors.senhaAtual === true ? colors.red : colors.white, fontSize: RFValue(10) }}
+                                contentStyle={{ fontSize: RFValue(10) }}
+                                outlineColor={!!errors.senhaAtual === true ? colors.red : 'transparent'}
+                                onChangeText={v => {
+                                    setSenhaAtual(v);
+                                    if (errors.senhaAtual) {
+                                        setErrors(prev => ({ ...prev, senhaAtual: '' }));
+                                    }
+                                    if (errorMessages.senhaAtual) {
+                                        setErrorMessages(prev => ({ ...prev, senhaAtual: '' }));
+                                    }
+                                }}
+                                style={[styles.input, { width: RFValue(200), height: RFValue(25), marginBottom: RFValue(0), borderRadius: RFValue(10), alignSelf: 'center' }]}
+                                hasError={!!errors.senhaAtual}
+                                errorText={errors.senhaAtual}
+                                helperStyle={[styles.helperText, { fontSize: RFValue(6), bottom: RFValue(0), top: RFValue(25), left: RFValue(25) }]}
+                                secureTextEntry={!senhaAtualVisivel}
+                                right={
+                                    <TextInput.Icon
+                                        icon={senhaAtualVisivel ? 'eye-off' : 'eye'}
+                                        color="#fff"
+                                        size={RFValue(15)}
+                                        onPress={() => setSenhaAtualVisivel(!senhaAtualVisivel)}
+                                        forceTextInputFocus={false}
+                                    />
+                                }
+                            />
+                            :
+                            <Input
+                                border={!!errors.senhaAtual === true ? colors.red : colors.gray}
+                                autoCapitalize="none"
+                                label="Senha Atual"
+                                value={senhaAtual}
+                                styleLabel={{ color: !!errors.senhaAtual === true ? colors.red : colors.white, fontSize: RFValue(16) }}
+                                contentStyle={{ fontSize: RFValue(16) }}
+                                outlineColor={!!errors.senhaAtual === true ? colors.red : 'transparent'}
+                                onChangeText={v => {
+                                    setSenhaAtual(v);
+                                    if (errors.senhaAtual) {
+                                        setErrors(prev => ({ ...prev, senhaAtual: '' }));
+                                    }
+                                    if (errorMessages.senhaAtual) {
+                                        setErrorMessages(prev => ({ ...prev, senhaAtual: '' }));
+                                    }
+                                }}
+                                style={[styles.input, { width: RFValue(250), height: RFValue(40), marginBottom: RFValue(35), borderRadius: RFValue(10), alignSelf: 'center' }]}
+                                hasError={!!errors.senhaAtual}
+                                errorText={errors.senhaAtual}
+                                helperStyle={[styles.helperText, { fontSize: RFValue(12), top: RFValue(45), left: RFValue(20) }]}
+                                secureTextEntry={!senhaAtualVisivel}
+                                right={
+                                    <TextInput.Icon
+                                        icon={senhaAtualVisivel ? 'eye-off' : 'eye'}
+                                        color="#fff"
+                                        size={RFValue(25)}
+                                        onPress={() => setSenhaAtualVisivel(!senhaAtualVisivel)}
+                                        forceTextInputFocus={false}
+                                    />
+                                }
+                            />
+                    }
+                />
             </SafeAreaView>
         </SafeAreaProvider >
     )
@@ -537,5 +637,16 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         margin: RFValue(0),
         padding: RFValue(0)
+    },
+    caixa: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: RFValue(255),
+        height: RFValue(35)
+    },
+    label: {
+        marginLeft: RFValue(8),
+        fontSize: RFValue(14),
+        fontFamily: fontFamily.inder
     }
 })

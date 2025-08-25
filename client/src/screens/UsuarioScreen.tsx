@@ -119,8 +119,6 @@ export default function UsuarioScreen({ navigation }: any) {
                 <View style={styles.container}>
                     <StatusBar barStyle="light-content" backgroundColor={colors.blue[400]} />
 
-                    <Sidebar navigation={navigation} />
-
                     {isLandscape ?
                         <View style={{ height: RFValue(277), width: RFValue(640), alignItems: "center", justifyContent: "flex-start", position: "absolute", top: "10%", left: RFValue(40), backgroundColor: colors.blue[500], paddingHorizontal: RFValue(15), paddingVertical: RFValue(15) }}>
                             <View style={{ width: "100%", flexDirection: "row", justifyContent: "flex-start", alignItems: "center", paddingBottom: RFValue(10), borderBottomWidth: RFValue(3), borderColor: colors.yellow[300] }}>
@@ -186,6 +184,9 @@ export default function UsuarioScreen({ navigation }: any) {
                             </View>
                         </View>
                     }
+
+                    <Sidebar navigation={navigation} />
+
                     <Snackbar
                         visible={snackbarVisible}
                         onDismiss={() => setSnackbarVisible(false)}
@@ -200,7 +201,7 @@ export default function UsuarioScreen({ navigation }: any) {
                             width: isLandscape ? '50%' : '90%',
                             borderRadius: 6,
                             backgroundColor: colors.strongGray,
-                            marginBottom: isLandscape ? RFValue(0) : RFValue(85),
+                            marginBottom: isLandscape ? RFValue(0) : RFValue(50),
                             zIndex: 5000,
                         }}
 

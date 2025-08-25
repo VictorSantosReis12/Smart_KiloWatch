@@ -542,18 +542,6 @@ export default function CadastrarResidenciaScreen({ navigation }: any) {
                                 paddingVertical: RFValue(5)
                             }}>
                                 <Button
-                                    children="Confirmar"
-                                    contentStyle={{ paddingVertical: RFValue(6), backgroundColor: colors.green }}
-                                    labelStyle={{ fontSize: RFValue(14), color: colors.white }}
-                                    style={{
-                                        width: RFValue(145),
-                                        backgroundColor: colors.green,
-                                        borderRadius: RFValue(20)
-                                    }}
-                                    onPress={() => handleRegister()}
-                                />
-
-                                <Button
                                     children="Cancelar"
                                     compact
                                     contentStyle={{ paddingVertical: RFValue(6), backgroundColor: colors.blue[500], borderColor: colors.white, borderWidth: RFValue(2), width: RFValue(145), borderRadius: RFValue(20) }}
@@ -563,6 +551,18 @@ export default function CadastrarResidenciaScreen({ navigation }: any) {
                                         borderRadius: RFValue(20)
                                     }}
                                     onPress={() => navigation.navigate('Residencias')}
+                                />
+                                
+                                <Button
+                                    children="Confirmar"
+                                    contentStyle={{ paddingVertical: RFValue(6), backgroundColor: colors.green }}
+                                    labelStyle={{ fontSize: RFValue(14), color: colors.white }}
+                                    style={{
+                                        width: RFValue(145),
+                                        backgroundColor: colors.green,
+                                        borderRadius: RFValue(20)
+                                    }}
+                                    onPress={() => handleRegister()}
                                 />
                             </View>
                         </View>

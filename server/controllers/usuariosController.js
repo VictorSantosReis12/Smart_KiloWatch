@@ -172,19 +172,32 @@ exports.atualizarUsuario = (req, res) => {
 }
 
 exports.setNomeUsuario = (req, res) => {
-    const { nome, email } = req.body;
+    const { nome, email, senhaAtual } = req.body;
     const idUsuario = req.params.idUsuario;
     const query = 'UPDATE Usuarios SET nome = ? WHERE id_usuario = ?';
     const params = [nome, idUsuario];
 
-    connection.query(query, params, (err, results) => {
-        if (err || results.length == 0) {
-            return res.status(500).json({ success: false, message: 'Erro ao atualizar o nome do usuário.' });
-        }
+    const selectQuery = 'SELECT senha FROM Usuarios WHERE id_usuario = ?';
+    connection.query(selectQuery, [idUsuario], (err, results) => {
+        if (err) return res.status(500).json({ success: false, message: 'Erro ao buscar usuário.' });
+        if (results.length === 0) return res.status(404).json({ success: false, message: 'Usuário não encontrado.' });
 
-        const token = jwt.sign({ id_usuario: idUsuario, nome, email }, jwtSecret);
+        const senhaSalva = results[0].senha;
 
-        res.json({ success: true, message: 'Nome do usuário atualizado com sucesso!', token });
+        bcrypt.compare(senhaAtual, senhaSalva, (err, isMatch) => {
+            if (err) return res.status(500).json({ success: false, message: 'Erro ao verificar senha.' });
+            if (!isMatch) return res.status(200).json({ success: false, message: 'Senha incorreta.' });
+
+            connection.query(query, params, (err, results) => {
+                if (err || results.length == 0) {
+                    return res.status(500).json({ success: false, message: 'Erro ao atualizar o nome do usuário.' });
+                }
+
+                const token = jwt.sign({ id_usuario: idUsuario, nome, email }, jwtSecret);
+
+                res.json({ success: true, message: 'Nome do usuário atualizado com sucesso!', token });
+            });
+        });
     });
 }
 

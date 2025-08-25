@@ -28,6 +28,7 @@ type Props = {
     contentStyle?: StyleProp<TextStyle>
     secureTextEntry?: boolean
     disableLabel?: boolean
+    editable?: boolean
     style?: StyleProp<ViewStyle>
     helperStyle?: StyleProp<TextStyle>
     hasError?: boolean
@@ -50,6 +51,7 @@ export function Input({
     contentStyle,
     secureTextEntry = false,
     disableLabel = false,
+    editable = true,
     style,
     helperStyle,
     hasError = false,
@@ -76,6 +78,7 @@ export function Input({
                 onFocus={onFocus}
                 onBlur={onBlur}
                 placeholder={placeholder}
+                editable={editable}
                 label={
                     disableLabel ? undefined : (
                         <Text style={[{

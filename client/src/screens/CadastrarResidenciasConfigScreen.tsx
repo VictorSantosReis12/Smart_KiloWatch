@@ -150,8 +150,6 @@ export default function CadastrarResidenciasConfigScreen({ navigation }: any) {
                     <View style={styles.container}>
                         <StatusBar barStyle="light-content" backgroundColor={colors.blue[400]} />
 
-                        <Sidebar navigation={navigation} />
-
                         {isLandscape ?
                             <View style={{ height: RFValue(277), width: RFValue(640), alignItems: "center", justifyContent: "flex-start", position: "absolute", top: "10%", left: RFValue(40), backgroundColor: colors.blue[500], paddingHorizontal: RFValue(15), paddingVertical: RFValue(15) }}>
                                 <View style={{ width: "100%", flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingBottom: RFValue(10), borderBottomWidth: RFValue(3), borderColor: colors.yellow[300] }}>
@@ -528,18 +526,6 @@ export default function CadastrarResidenciasConfigScreen({ navigation }: any) {
                                             marginTop: RFValue(30)
                                         }}>
                                             <Button
-                                                children="Confirmar"
-                                                contentStyle={{ paddingVertical: RFValue(6), backgroundColor: colors.green }}
-                                                labelStyle={{ fontSize: RFValue(14), color: colors.white }}
-                                                style={{
-                                                    width: RFValue(145),
-                                                    backgroundColor: colors.green,
-                                                    borderRadius: RFValue(20)
-                                                }}
-                                                onPress={() => handleRegister()}
-                                            />
-
-                                            <Button
                                                 children="Cancelar"
                                                 compact
                                                 contentStyle={{ paddingVertical: RFValue(6), backgroundColor: colors.blue[500], borderColor: colors.white, borderWidth: RFValue(2), width: RFValue(145), borderRadius: RFValue(20) }}
@@ -550,11 +536,26 @@ export default function CadastrarResidenciasConfigScreen({ navigation }: any) {
                                                 }}
                                                 onPress={() => navigation.navigate('ResidenciasConfig')}
                                             />
+                                            
+                                            <Button
+                                                children="Confirmar"
+                                                contentStyle={{ paddingVertical: RFValue(6), backgroundColor: colors.green }}
+                                                labelStyle={{ fontSize: RFValue(14), color: colors.white }}
+                                                style={{
+                                                    width: RFValue(145),
+                                                    backgroundColor: colors.green,
+                                                    borderRadius: RFValue(20)
+                                                }}
+                                                onPress={() => handleRegister()}
+                                            />
                                         </View>
                                     </View>
                                 </View>
                             </View>
                         }
+
+                        <Sidebar navigation={navigation} />
+
                         <Snackbar
                             visible={snackbarVisible}
                             onDismiss={() => setSnackbarVisible(false)}
@@ -569,7 +570,7 @@ export default function CadastrarResidenciasConfigScreen({ navigation }: any) {
                                 width: isLandscape ? '50%' : '90%',
                                 borderRadius: 6,
                                 backgroundColor: colors.strongGray,
-                                marginBottom: isLandscape ? RFValue(0) : RFValue(85),
+                                marginBottom: isLandscape ? RFValue(0) : RFValue(50),
                                 zIndex: 5000,
                             }}
 

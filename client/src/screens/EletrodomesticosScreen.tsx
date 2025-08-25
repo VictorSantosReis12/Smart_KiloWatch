@@ -78,8 +78,6 @@ export default function EletrodomesticosScreen({ navigation }: any) {
                 <View style={styles.container}>
                     <StatusBar barStyle="light-content" backgroundColor={colors.blue[400]} />
 
-                    <Sidebar navigation={navigation} />
-
                     {isLandscape ?
                         <View style={{ height: RFValue(277), width: RFValue(640), alignItems: "center", justifyContent: "flex-start", position: "absolute", top: "10%", left: RFValue(40), backgroundColor: colors.blue[500], paddingHorizontal: RFValue(15), paddingVertical: RFValue(15) }}>
                             <View style={{ width: "100%", flexDirection: "row", justifyContent: "flex-start", alignItems: "center", paddingBottom: RFValue(10), borderBottomWidth: RFValue(3), borderColor: colors.yellow[300] }}>
@@ -96,6 +94,9 @@ export default function EletrodomesticosScreen({ navigation }: any) {
                             </View>
                         </View>
                     }
+
+                    <Sidebar navigation={navigation} />
+
                 </View>
             </SafeAreaView>
         </SafeAreaProvider>
