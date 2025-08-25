@@ -76,7 +76,7 @@ export default function EstimativaCustosScreen({ navigation }: any) {
         <SafeAreaProvider>
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.container}>
-                    <StatusBar barStyle="light-content" backgroundColor={colors.blue[400]} />
+                    <StatusBar barStyle="light-content" backgroundColor={colors.blue[500]} />
 
                     {isLandscape ?
                         <View style={{ height: RFValue(277), width: RFValue(640), alignItems: "center", justifyContent: "flex-start", position: "absolute", top: "10%", left: RFValue(40), backgroundColor: colors.blue[500], paddingHorizontal: RFValue(15), paddingVertical: RFValue(15) }}>

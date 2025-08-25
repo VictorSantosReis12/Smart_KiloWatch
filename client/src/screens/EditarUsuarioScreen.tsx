@@ -1,5 +1,5 @@
 // React Native
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, use } from 'react';
 import { Alert, Image, View, StyleSheet, StatusBar, ScrollView, useWindowDimensions, Text, TouchableOpacity } from "react-native";
 import { IconButton, ActivityIndicator, TextInput, Snackbar, Switch } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
@@ -97,11 +97,12 @@ export default function EditarUsuarioScreen({ navigation }: any) {
 
         handleRegister();
     }
+
     const [modalVisible, setModalVisible] = useState(false);
 
     const handleCloseModal = () => setModalVisible(false);
 
-    const handleRegister = async () => {
+    const handleRegister= async () => {
         const newErrors: { nome: string; email: string; senhaAtual: string; senhaNova: string } = { nome: '', email: '', senhaAtual: '', senhaNova: '' };
 
         if (checked) {
@@ -175,7 +176,7 @@ export default function EditarUsuarioScreen({ navigation }: any) {
         <SafeAreaProvider>
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.container}>
-                    <StatusBar barStyle="light-content" backgroundColor={colors.blue[400]} />
+                    <StatusBar barStyle="light-content" backgroundColor={colors.blue[500]} />
 
                     {isLandscape ?
                         <View style={{ height: RFValue(277), width: RFValue(640), alignItems: "center", justifyContent: "flex-start", position: "absolute", top: "10%", left: RFValue(40), backgroundColor: colors.blue[500], paddingHorizontal: RFValue(15), paddingVertical: RFValue(15) }}>
