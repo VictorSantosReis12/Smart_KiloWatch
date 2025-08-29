@@ -34,7 +34,10 @@ type Props = {
     hasError?: boolean
     errorText?: string
     autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters'
-    right?: React.ReactNode
+    right?: React.ReactNode,
+    multiline?: boolean,
+    numberOfLines?: number,
+    textAlignVertical?: 'auto' | 'top' | 'bottom' | 'center'
 }
 
 export function Input({
@@ -57,7 +60,10 @@ export function Input({
     hasError = false,
     errorText = '',
     right,
-    autoCapitalize
+    autoCapitalize,
+    multiline = false,
+    numberOfLines = 1,
+    textAlignVertical = 'auto'
 }: Props) {
     const [fontsLoaded] = useFonts({
         Inder_400Regular,
@@ -129,6 +135,9 @@ export function Input({
                     contentStyle
                 ]}
                 right={right}
+                multiline={multiline}
+                numberOfLines={numberOfLines}
+                textAlignVertical={textAlignVertical}
             />
 
             {hasError && errorText !== '' && (

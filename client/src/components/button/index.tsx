@@ -6,7 +6,7 @@ import { colors } from "@/styles/colors"
 import { fontFamily } from "@/styles/FontFamily"
 
 type Props = ButtonProps & {
-    children: string
+    children: React.ReactNode
     onPress: () => void
     style?: StyleProp<ViewStyle>
     contentStyle?: StyleProp<ViewStyle>

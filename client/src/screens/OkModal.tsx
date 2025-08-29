@@ -28,7 +28,7 @@ import { fontFamily } from "@/styles/FontFamily"
 // Cores
 import { colors } from "@/styles/colors"
 
-export default function ConfirmarModal({ visible, onDismiss, changeText, changeButtonCancelar, changeButtonConfirmar, handleConfirmar }: any) {
+export default function ConfirmarModal({ visible, onDismiss, changeText, handleOk }: any) {
 
     // Dimensões da janela
     const { width, height } = useWindowDimensions();
@@ -52,27 +52,15 @@ export default function ConfirmarModal({ visible, onDismiss, changeText, changeB
 
                     <View style={{ width: RFValue(250), gap: RFValue(15), flexDirection: "row", justifyContent: "center", marginTop: RFValue(20) }}>
                         <Button
-                            children={changeButtonCancelar}
+                            children={"OK"}
                             compact
-                            contentStyle={{ paddingVertical: RFValue(1), paddingHorizontal: RFValue(0), backgroundColor: colors.blue[400], borderColor: colors.white, borderWidth: RFValue(2), width: RFValue(90) }}
+                            contentStyle={{ paddingVertical: RFValue(1), paddingHorizontal: RFValue(0), backgroundColor: colors.green, borderColor: colors.green, borderWidth: RFValue(2), width: RFValue(90) }}
                             labelStyle={{ fontSize: RFValue(10), color: colors.white, fontFamily: fontFamily.inder }}
                             style={{
                                 alignSelf: "center",
                                 borderRadius: RFValue(5)
                             }}
-                            onPress={onDismiss}
-                        />
-
-                        <Button
-                            children={changeButtonConfirmar}
-                            compact
-                            contentStyle={{ paddingVertical: RFValue(1), paddingHorizontal: RFValue(0), backgroundColor: colors.red, borderColor: colors.red, borderWidth: RFValue(2), width: RFValue(90) }}
-                            labelStyle={{ fontSize: RFValue(10), color: colors.yellow[200], fontFamily: fontFamily.inder }}
-                            style={{
-                                alignSelf: "center",
-                                borderRadius: RFValue(5)
-                            }}
-                            onPress={handleConfirmar}
+                            onPress={handleOk}
                         />
                     </View>
                 </Modal>
@@ -93,27 +81,15 @@ export default function ConfirmarModal({ visible, onDismiss, changeText, changeB
 
                     <View style={{ width: RFValue(230), gap: RFValue(15), flexDirection: "row", justifyContent: "center", marginTop: RFValue(15) }}>
                         <Button
-                            children={changeButtonCancelar}
+                            children={"OK"}
                             compact
-                            contentStyle={{ paddingVertical: RFValue(1), paddingHorizontal: RFValue(0), backgroundColor: colors.blue[400], borderColor: colors.white, borderWidth: RFValue(2.5), width: RFValue(90), borderRadius: RFValue(15) }}
+                            contentStyle={{ paddingVertical: RFValue(1), paddingHorizontal: RFValue(0), backgroundColor: colors.green, borderColor: colors.green, borderWidth: RFValue(2.5), width: RFValue(90), borderRadius: RFValue(15) }}
                             labelStyle={{ fontSize: RFValue(14), color: colors.white, fontFamily: fontFamily.inder }}
                             style={{
                                 alignSelf: "center",
                                 borderRadius: RFValue(15)
                             }}
-                            onPress={onDismiss}
-                        />
-
-                        <Button
-                            children={changeButtonConfirmar}
-                            compact
-                            contentStyle={{ paddingVertical: RFValue(1), paddingHorizontal: RFValue(0), backgroundColor: colors.red, borderColor: colors.red, borderWidth: RFValue(2.5), width: RFValue(90), borderRadius: RFValue(15) }}
-                            labelStyle={{ fontSize: RFValue(14), color: colors.yellow[200], fontFamily: fontFamily.inder }}
-                            style={{
-                                alignSelf: "center",
-                                borderRadius: RFValue(15)
-                            }}
-                            onPress={handleConfirmar}
+                            onPress={handleOk}
                         />
                     </View>
                 </Modal>

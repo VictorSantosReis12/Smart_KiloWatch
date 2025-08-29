@@ -165,120 +165,118 @@ const Sidebar = ({ navigation }: any) => {
         <>
             {isLandscape ?
                 <>
-                    <View style={{ flex: 1, justifyContent: "flex-start", width: "100%", height: "100%", position: "absolute", top: 0, left: 0, zIndex: isOpen ? 2000 : 0 }}>
-                        <View style={{ backgroundColor: colors.blue[400], width: "100%", height: "10%", justifyContent: "center", alignItems: "center" }}>
-                            <Image
-                                style={{ width: RFValue(25), height: RFValue(30) }}
-                                source={require("@/assets/logo.png")}
-                            />
-                        </View>
-                        <DrawerArea
-                            style={{ width: isOpen ? RFValue(140) : RFValue(40), backgroundColor: colors.blue[400], height: RFValue(277), justifyContent: "flex-start", alignItems: "center", cursor: "default" } as any}
-                            onPress={() => setIsOpen(true)}
-                            activeOpacity={1}
-                        >
-                            <View
-                                pointerEvents="none"
-                                style={{
-                                    position: 'absolute',
-                                    top: 0,
-                                    left: 0,
-                                    height: RFValue(2.5),
-                                    width: '100%',
-                                    backgroundColor: 'rgba(0, 0, 0, 0.4)', // sombra leve
-                                    zIndex: 1,
-                                    borderBottomLeftRadius: RFValue(2),
-                                    borderBottomRightRadius: RFValue(2),
-                                    shadowColor: '#000',
-                                    shadowOffset: { width: 0, height: 1 },
-                                    shadowOpacity: 0.3,
-                                    shadowRadius: 2,
-                                }}
-                            />
-                            <ScrollView style={{ width: "100%", maxHeight: RFValue(277) }} contentContainerStyle={{ alignItems: "center", justifyContent: "flex-start" }} showsVerticalScrollIndicator={false}>
-                                <TouchableOpacity
-                                    style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: RFValue(5), paddingVertical: RFValue(6), backgroundColor: colors.blue[400], borderBottomWidth: 3, borderColor: colors.white, width: isOpen ? RFValue(120) : RFValue(21), borderRadius: RFValue(1) }}
-                                    onPress={() => {
-                                        setAtivo("home")
-                                        navigation.navigate("Home");
-                                    }}
-                                >
-                                    <Icon name="home" size={RFValue(21)} color={ativo === "home" ? colors.yellow[200] : colors.white} />
-                                    {isOpen && <Text style={{ color: ativo === "home" ? colors.yellow[200] : colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(8) }}>Home</Text>}
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: RFValue(5), paddingVertical: RFValue(6), backgroundColor: colors.blue[400], borderBottomWidth: 3, borderColor: colors.white, width: isOpen ? RFValue(120) : RFValue(21), borderRadius: RFValue(1) }}
-                                    onPress={() => {
-                                        setAtivo("metas")
-                                        navigation.navigate("Metas");
-                                    }}
-                                >
-                                    <Icon name="bullseye-arrow" size={RFValue(21)} color={ativo === "metas" ? colors.yellow[200] : colors.white} />
-                                    {isOpen && <Text style={{ color: ativo === "metas" ? colors.yellow[200] : colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(8) }}>Metas</Text>}
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: RFValue(5), paddingVertical: RFValue(6), backgroundColor: colors.blue[400], borderBottomWidth: 3, borderColor: colors.white, width: isOpen ? RFValue(120) : RFValue(21), borderRadius: RFValue(1) }}
-                                    onPress={() => {
-                                        setAtivo("graficos")
-                                        navigation.navigate("Graficos");
-                                    }}
-                                >
-                                    <Icon name="chart-box-outline" size={RFValue(21)} color={ativo === "graficos" ? colors.yellow[200] : colors.white} />
-                                    {isOpen && <Text style={{ color: ativo === "graficos" ? colors.yellow[200] : colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(8) }}>Gráficos</Text>}
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: RFValue(5), paddingVertical: RFValue(6), backgroundColor: colors.blue[400], borderBottomWidth: 3, borderColor: colors.white, width: isOpen ? RFValue(120) : RFValue(21), borderRadius: RFValue(1) }}
-                                    onPress={() => {
-                                        setAtivo("eletrodomesticos")
-                                        navigation.navigate("Eletrodomesticos");
-                                    }}
-                                >
-                                    <Icon name="lightning-bolt" size={RFValue(21)} color={ativo === "eletrodomesticos" ? colors.yellow[200] : colors.white} />
-                                    {isOpen && <Text style={{ color: ativo === "eletrodomesticos" ? colors.yellow[200] : colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(8) }}>Eletrodomésticos</Text>}
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: RFValue(5), paddingVertical: RFValue(6), backgroundColor: colors.blue[400], borderBottomWidth: 3, borderColor: colors.white, width: isOpen ? RFValue(120) : RFValue(21), borderRadius: RFValue(1) }}
-                                    onPress={() => {
-                                        setAtivo("atividades")
-                                        navigation.navigate("Atividades");
-                                    }}
-                                >
-                                    <Icon name="water" size={RFValue(21)} color={ativo === "atividades" ? colors.yellow[200] : colors.white} />
-                                    {isOpen && <Text style={{ color: ativo === "atividades" ? colors.yellow[200] : colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(8) }}>Atividades</Text>}
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: RFValue(5), paddingVertical: RFValue(6), backgroundColor: colors.blue[400], borderBottomWidth: 3, borderColor: colors.white, width: isOpen ? RFValue(120) : RFValue(21), borderRadius: RFValue(1) }}
-                                    onPress={() => {
-                                        setPerfilOpen(!perfilOpen);
-                                        setConfigOpen(false)
-                                    }}
-                                >
-                                    <Icon name="account-circle" size={RFValue(21)} color={perfilOpen ? colors.yellow[200] : colors.white} />
-                                    {isOpen && <Text style={{ color: perfilOpen ? colors.yellow[200] : colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(8) }}>Usuário</Text>}
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: RFValue(5), paddingVertical: RFValue(6), backgroundColor: colors.blue[400], borderBottomWidth: 3, borderColor: colors.white, width: isOpen ? RFValue(120) : RFValue(21), borderRadius: RFValue(1) }}
-                                    onPress={() => {
-                                        setConfigOpen(!configOpen)
-                                        setPerfilOpen(false)
-                                    }}
-                                >
-                                    <Icon name="cogs" size={RFValue(21)} color={configOpen ? colors.yellow[200] : colors.white} />
-                                    {isOpen && <Text style={{ color: configOpen ? colors.yellow[200] : colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(8) }}>Configurações</Text>}
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: RFValue(5), paddingVertical: RFValue(6), backgroundColor: colors.blue[400], width: isOpen ? RFValue(120) : RFValue(21), borderRadius: RFValue(1) }}
-                                    onPress={() => {
-                                        setAtivo("notificacao")
-                                        navigation.navigate("Notificacoes");
-                                    }}
-                                >
-                                    <Icon name="bell" size={RFValue(21)} color={ativo === "notificacao" ? colors.yellow[200] : colors.white} />
-                                    {isOpen && <Text style={{ color: ativo === "notificacao" ? colors.yellow[200] : colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(8) }}>Notificações</Text>}
-                                </TouchableOpacity>
-                            </ScrollView>
-                        </DrawerArea>
+                    <View style={{ backgroundColor: colors.blue[400], width: "100%", height: "10%", justifyContent: "center", alignItems: "center" }}>
+                        <Image
+                            style={{ width: RFValue(25), height: RFValue(30) }}
+                            source={require("@/assets/logo.png")}
+                        />
                     </View>
+                    <DrawerArea
+                        style={{ width: isOpen ? RFValue(140) : RFValue(40), backgroundColor: colors.blue[400], height: "90%", justifyContent: "flex-start", alignItems: "center", cursor: "default", alignSelf: "flex-start" } as any}
+                        onPress={() => setIsOpen(true)}
+                        activeOpacity={1}
+                    >
+                        <View
+                            pointerEvents="none"
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                height: RFValue(2.5),
+                                width: '100%',
+                                backgroundColor: 'rgba(0, 0, 0, 0.4)', // sombra leve
+                                zIndex: 1,
+                                borderBottomLeftRadius: RFValue(2),
+                                borderBottomRightRadius: RFValue(2),
+                                shadowColor: '#000',
+                                shadowOffset: { width: 0, height: 1 },
+                                shadowOpacity: 0.3,
+                                shadowRadius: 2,
+                            }}
+                        />
+                        <ScrollView style={{ width: "100%", maxHeight: RFValue(277) }} contentContainerStyle={{ alignItems: "center", justifyContent: "flex-start" }} showsVerticalScrollIndicator={false}>
+                            <TouchableOpacity
+                                style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: RFValue(5), paddingVertical: RFValue(6), backgroundColor: colors.blue[400], borderBottomWidth: 3, borderColor: colors.white, width: isOpen ? RFValue(120) : RFValue(21), borderRadius: RFValue(1) }}
+                                onPress={() => {
+                                    setAtivo("home")
+                                    navigation.navigate("Home");
+                                }}
+                            >
+                                <Icon name="home" size={RFValue(21)} color={ativo === "home" ? colors.yellow[200] : colors.white} />
+                                {isOpen && <Text style={{ color: ativo === "home" ? colors.yellow[200] : colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(8) }}>Home</Text>}
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: RFValue(5), paddingVertical: RFValue(6), backgroundColor: colors.blue[400], borderBottomWidth: 3, borderColor: colors.white, width: isOpen ? RFValue(120) : RFValue(21), borderRadius: RFValue(1) }}
+                                onPress={() => {
+                                    setAtivo("metas")
+                                    navigation.navigate("Metas");
+                                }}
+                            >
+                                <Icon name="bullseye-arrow" size={RFValue(21)} color={ativo === "metas" ? colors.yellow[200] : colors.white} />
+                                {isOpen && <Text style={{ color: ativo === "metas" ? colors.yellow[200] : colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(8) }}>Metas</Text>}
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: RFValue(5), paddingVertical: RFValue(6), backgroundColor: colors.blue[400], borderBottomWidth: 3, borderColor: colors.white, width: isOpen ? RFValue(120) : RFValue(21), borderRadius: RFValue(1) }}
+                                onPress={() => {
+                                    setAtivo("graficos")
+                                    navigation.navigate("Graficos");
+                                }}
+                            >
+                                <Icon name="chart-box-outline" size={RFValue(21)} color={ativo === "graficos" ? colors.yellow[200] : colors.white} />
+                                {isOpen && <Text style={{ color: ativo === "graficos" ? colors.yellow[200] : colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(8) }}>Gráficos</Text>}
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: RFValue(5), paddingVertical: RFValue(6), backgroundColor: colors.blue[400], borderBottomWidth: 3, borderColor: colors.white, width: isOpen ? RFValue(120) : RFValue(21), borderRadius: RFValue(1) }}
+                                onPress={() => {
+                                    setAtivo("eletrodomesticos")
+                                    navigation.navigate("Eletrodomesticos");
+                                }}
+                            >
+                                <Icon name="lightning-bolt" size={RFValue(21)} color={ativo === "eletrodomesticos" ? colors.yellow[200] : colors.white} />
+                                {isOpen && <Text style={{ color: ativo === "eletrodomesticos" ? colors.yellow[200] : colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(8) }}>Eletrodomésticos</Text>}
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: RFValue(5), paddingVertical: RFValue(6), backgroundColor: colors.blue[400], borderBottomWidth: 3, borderColor: colors.white, width: isOpen ? RFValue(120) : RFValue(21), borderRadius: RFValue(1) }}
+                                onPress={() => {
+                                    setAtivo("atividades")
+                                    navigation.navigate("Atividades");
+                                }}
+                            >
+                                <Icon name="water" size={RFValue(21)} color={ativo === "atividades" ? colors.yellow[200] : colors.white} />
+                                {isOpen && <Text style={{ color: ativo === "atividades" ? colors.yellow[200] : colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(8) }}>Atividades</Text>}
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: RFValue(5), paddingVertical: RFValue(6), backgroundColor: colors.blue[400], borderBottomWidth: 3, borderColor: colors.white, width: isOpen ? RFValue(120) : RFValue(21), borderRadius: RFValue(1) }}
+                                onPress={() => {
+                                    setPerfilOpen(!perfilOpen);
+                                    setConfigOpen(false)
+                                }}
+                            >
+                                <Icon name="account-circle" size={RFValue(21)} color={perfilOpen ? colors.yellow[200] : colors.white} />
+                                {isOpen && <Text style={{ color: perfilOpen ? colors.yellow[200] : colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(8) }}>Usuário</Text>}
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: RFValue(5), paddingVertical: RFValue(6), backgroundColor: colors.blue[400], borderBottomWidth: 3, borderColor: colors.white, width: isOpen ? RFValue(120) : RFValue(21), borderRadius: RFValue(1) }}
+                                onPress={() => {
+                                    setConfigOpen(!configOpen)
+                                    setPerfilOpen(false)
+                                }}
+                            >
+                                <Icon name="cogs" size={RFValue(21)} color={configOpen ? colors.yellow[200] : colors.white} />
+                                {isOpen && <Text style={{ color: configOpen ? colors.yellow[200] : colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(8) }}>Configurações</Text>}
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: RFValue(5), paddingVertical: RFValue(6), backgroundColor: colors.blue[400], width: isOpen ? RFValue(120) : RFValue(21), borderRadius: RFValue(1) }}
+                                onPress={() => {
+                                    setAtivo("notificacao")
+                                    navigation.navigate("Notificacoes");
+                                }}
+                            >
+                                <Icon name="bell" size={RFValue(21)} color={ativo === "notificacao" ? colors.yellow[200] : colors.white} />
+                                {isOpen && <Text style={{ color: ativo === "notificacao" ? colors.yellow[200] : colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(8) }}>Notificações</Text>}
+                            </TouchableOpacity>
+                        </ScrollView>
+                    </DrawerArea>
                     <ViewArea
                         onMouseEnter={() => setIsOpen(true)}
                         pointerEvents={isOpen ? 'none' : 'auto'}
