@@ -29,7 +29,7 @@ import { fontFamily } from "@/styles/FontFamily"
 // Cores
 import { colors } from "@/styles/colors"
 
-export default function InputModal({ visible, onDismiss, changeText, changeButtonCancelar, changeButtonConfirmar, handleConfirmar, input }: any) {
+export default function InputModal({ visible, onDismiss, changeText, changeButtonCancelar, changeButtonConfirmar, handleConfirmar, input, doubleInput }: any) {
 
     // Dimensões da janela
     const { width, height } = useWindowDimensions();
@@ -85,7 +85,7 @@ export default function InputModal({ visible, onDismiss, changeText, changeButto
                     <Modal
                         visible={visible}
                         onDismiss={onDismiss}
-                        contentContainerStyle={[styles.modalContainer, { borderRadius: RFValue(20), height: RFValue(185), width: RFValue(300) }]}
+                        contentContainerStyle={[styles.modalContainer, { borderRadius: RFValue(20), height: doubleInput ? RFValue(270) : RFValue(185), width: RFValue(300) }]}
                     >
                         <Text
                             variant="titleLarge"

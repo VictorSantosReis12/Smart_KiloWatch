@@ -78,7 +78,6 @@ export default function CadastrarResidenciaScreen({ navigation }: any) {
     }
 
     function onSelectEstado(estadoSelecionado: string) {
-        console.log('Estado selecionado:', estadoSelecionado);
         setEstado(estadoSelecionado);
         setFilteredEstados([]);
         setIsFocused(false);

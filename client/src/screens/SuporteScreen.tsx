@@ -1,5 +1,5 @@
 // React Native
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Alert, Image, View, StyleSheet, StatusBar, ScrollView, useWindowDimensions, Text, TouchableOpacity } from "react-native";
 import { IconButton, ActivityIndicator, Snackbar } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';

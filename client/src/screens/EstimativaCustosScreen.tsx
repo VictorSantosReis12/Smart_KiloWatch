@@ -86,8 +86,8 @@ export default function EstimativaCustosScreen({ navigation }: any) {
                         </View>
                         :
                         <View style={{ height: alturaCalculada, width: width, alignItems: "center", justifyContent: "flex-start", position: "absolute", top: "9%", left: RFValue(0), backgroundColor: colors.blue[500], paddingHorizontal: RFValue(15), paddingVertical: RFValue(15), zIndex: 3000 }}>
-                            <View style={{ width: "100%", flexDirection: "row", justifyContent: "flex-start", alignItems: "center", paddingBottom: RFValue(20), paddingTop: RFValue(10), borderBottomWidth: RFValue(3), borderColor: colors.yellow[300] }}>
-                                <Text style={{ color: colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(18) }}>Estimativa de Custos Mensais</Text>
+                            <View style={{ width: "100%", flexDirection: "row", justifyContent: "flex-start", alignItems: "center", paddingBottom: RFValue(23), paddingTop: RFValue(10), borderBottomWidth: RFValue(3), borderColor: colors.yellow[300] }}>
+                                <Text style={{ color: colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(15) }}>Estimativa de Custos Mensais</Text>
                             </View>
                             <View style={{ width: "100%", marginTop: RFValue(30), gap: RFValue(25) }}>
 

@@ -2,7 +2,7 @@
 // const BASE_URL = 'http://localhost:3000'
 
 // IP
-const BASE_URL = 'http://192.168.0.9:3000'
+const BASE_URL = 'http://192.168.0.202:3000'
 
 export async function cadastrarUsuario(nome, email, senha, ativarNotificacao) {
     const response = await fetch(`${BASE_URL}/usuario`, {
@@ -148,6 +148,41 @@ export async function enviarEmail(userToken, nome, email, assunto, mensagem) {
             'Authorization': `Bearer ${userToken}`,
         },
         body: JSON.stringify({ nome, email, assunto, mensagem })
+    });
+    return response.json();
+}
+
+export async function listarMetasPorUsuario(userToken, idUsuario) {
+    const response = await fetch(`${BASE_URL}/meta/listarPorUsuario/${idUsuario}`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userToken}`,
+        }
+    });
+    return response.json();
+}
+
+export async function cadastrarMeta(userToken, idUsuario, metaEnergia, metaAgua) {
+    const response = await fetch(`${BASE_URL}/meta`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userToken}`,
+        },
+        body: JSON.stringify({ idUsuario, metaEnergia, metaAgua })
+    });
+    return response.json();
+}
+
+export async function editarMeta(userToken, idMeta, idUsuario, metaEnergia, metaAgua, dataRegistro) {
+    const response = await fetch(`${BASE_URL}/meta/${idMeta}`, {
+        method: "PUT",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userToken}`,
+        },
+        body: JSON.stringify({ idUsuario, metaEnergia, metaAgua, dataRegistro })
     });
     return response.json();
 }

@@ -59,6 +59,21 @@ const GraficoDonutModel: React.FC<DoughnutChartProps> = ({
             },
         ];
 
+    let consumoExcedeu;
+    let consumoQuaseExcedendo
+
+    if (meta !== 0) {
+        consumoExcedeu = consumo > meta;
+
+        consumoQuaseExcedendo = false;
+
+        if (!consumoExcedeu) {
+            consumoQuaseExcedendo = consumo >= meta * 0.85;
+        } else {
+            consumoQuaseExcedendo = false;
+        }
+    }
+
     return (
         <View style={styles.container}>
             {isLandscape ?
@@ -75,17 +90,27 @@ const GraficoDonutModel: React.FC<DoughnutChartProps> = ({
                         accessor="population"
                         backgroundColor="transparent"
                         paddingLeft="0"
-                        center={[RFValue(16.5), RFValue(0)]}
+                        center={[tamanho === 'pequeno' ? RFValue(16.5) : RFValue(37.5), RFValue(0)]}
                         hasLegend={false}
                         absolute
                     />
-                    <View style={{ width: RFValue(35), height: RFValue(35), borderRadius: "50%", backgroundColor: colors.blue[300], justifyContent: 'center', alignItems: 'center', position: 'absolute' }}>
+                    <View style={{ width: tamanho === 'pequeno' ? RFValue(35) : RFValue(85), height: tamanho === 'pequeno' ? RFValue(35) : RFValue(85), borderRadius: "50%", backgroundColor: tamanho === 'pequeno' ? colors.blue[300] : colors.blue[400], justifyContent: 'center', alignItems: 'center', position: 'absolute' }}>
                         {tipo === 'agua' ? (
-                            <Icon name="water" size={RFValue(20)} color={colors.white} />
+                            <Icon name="water" size={tamanho === 'pequeno' ? RFValue(20) : RFValue(45)} color={colors.white} />
                         ) : (
-                            <Icon name="lightning-bolt" size={RFValue(20)} color={colors.white} />
+                            <Icon name="lightning-bolt" size={tamanho === 'pequeno' ? RFValue(20) : RFValue(45)} color={colors.white} />
                         )}
                     </View>
+                    {consumoExcedeu && (
+                        <View style={{ position: 'absolute', bottom: RFValue(10), right: RFValue(2) }}>
+                            <Icon name="alert-rhombus" size={tamanho === 'pequeno' ? RFValue(20) : RFValue(30)} color={colors.red} />
+                        </View>
+                    )}
+                    {consumoQuaseExcedendo && (
+                        <View style={{ position: 'absolute', bottom: RFValue(10), right: RFValue(2) }}>
+                            <Icon name="alert-rhombus" size={tamanho === 'pequeno' ? RFValue(20) : RFValue(30)} color={colors.yellow[300]} />
+                        </View>
+                    )}
                 </>
                 :
                 <>
@@ -101,17 +126,27 @@ const GraficoDonutModel: React.FC<DoughnutChartProps> = ({
                         accessor="population"
                         backgroundColor="transparent"
                         paddingLeft="0"
-                        center={[RFValue(27), RFValue(0)]}
+                        center={[tamanho === 'pequeno' ? RFValue(27) : RFValue(37.5), RFValue(0)]}
                         hasLegend={false}
                         absolute
                     />
-                    <View style={{ width: RFValue(60), height: RFValue(60), borderRadius: "50%", backgroundColor: colors.blue[300], justifyContent: 'center', alignItems: 'center', position: 'absolute' }}>
+                    <View style={{ width: tamanho === 'pequeno' ? RFValue(60) : RFValue(85), height: tamanho === 'pequeno' ? RFValue(60) : RFValue(85), borderRadius: "50%", backgroundColor: tamanho === 'pequeno' ? colors.blue[300] : colors.blue[400], justifyContent: 'center', alignItems: 'center', position: 'absolute' }}>
                         {tipo === 'agua' ? (
-                            <Icon name="water" size={RFValue(30)} color={colors.white} />
+                            <Icon name="water" size={tamanho === 'pequeno' ? RFValue(30) : RFValue(45)} color={colors.white} />
                         ) : (
-                            <Icon name="lightning-bolt" size={RFValue(30)} color={colors.white} />
+                            <Icon name="lightning-bolt" size={tamanho === 'pequeno' ? RFValue(30) : RFValue(45)} color={colors.white} />
                         )}
                     </View>
+                    {consumoExcedeu && (
+                        <View style={{ position: 'absolute', bottom: RFValue(10), right: RFValue(2) }}>
+                            <Icon name="alert-rhombus" size={tamanho === 'pequeno' ? RFValue(20) : RFValue(30)} color={colors.red} />
+                        </View>
+                    )}
+                    {consumoQuaseExcedendo && (
+                        <View style={{ position: 'absolute', bottom: RFValue(10), right: RFValue(2) }}>
+                            <Icon name="alert-rhombus" size={tamanho === 'pequeno' ? RFValue(20) : RFValue(30)} color={colors.yellow[300]} />
+                        </View>
+                    )}
                 </>
             }
         </View>

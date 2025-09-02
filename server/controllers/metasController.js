@@ -1,10 +1,10 @@
 const connection = require('../config/db');
 
 exports.criarMeta = (req, res) => {
-    const { idUsuario, metaEnergia, metaAgua, dataRegistro } = req.body;
+    const { idUsuario, metaEnergia, metaAgua } = req.body;
 
-    const query = 'INSERT INTO Metas (id_usuario, meta_energia, meta_agua, data_registro) VALUES (?, ?, ?, ?)';
-    const params = [idUsuario, metaEnergia, metaAgua, dataRegistro];
+    const query = 'INSERT INTO Metas (id_usuario, meta_energia, meta_agua) VALUES (?, ?, ?)';
+    const params = [idUsuario, metaEnergia, metaAgua];
 
     connection.query(query, params, (err, results) => {
         if (err) {
@@ -18,10 +18,10 @@ exports.listarMetas = (req, res) => {
     const query = 'SELECT * FROM Metas';
     connection.query(query, (err, results) => {
         if (err) {
-            return res.status(500).json({ success: false, message: 'Erro ao selecionar as metas.'});
+            return res.status(500).json({ success: false, message: 'Erro ao selecionar as metas.' });
         }
-        
-        res.json({ success: true, message: 'Metas selecionadas com sucesso!', data: results});
+
+        res.json({ success: true, message: 'Metas selecionadas com sucesso!', data: results });
     });
 }
 
@@ -31,7 +31,7 @@ exports.selecionarMetaPorId = (req, res) => {
 
     connection.query(query, params, (err, results) => {
         if (err) {
-            return res.status(500).json({ success: false, message: 'Erro ao selecionar a meta.'});
+            return res.status(500).json({ success: false, message: 'Erro ao selecionar a meta.' });
         }
 
         res.json({ success: true, message: 'Meta selecionada com sucesso!', data: results[0] });
@@ -56,13 +56,17 @@ exports.atualizarMeta = (req, res) => {
     const params = [idUsuario, metaEnergia, metaAgua, dataRegistro, idMeta];
 
     const query = 'UPDATE Metas SET id_usuario = ?, meta_energia = ?, meta_agua = ?, data_registro = ? WHERE id_meta = ?';
-    
+
     connection.query(query, params, (err, results) => {
-        if (err || results.length == 0) {
-            return res.status(500).json({ success: false, message: 'Erro ao atualizar a meta.'});
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Erro ao atualizar a meta.', error: err });
         }
 
-        res.json({ success: true, message: 'Meta atualizada com sucesso!'});
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ success: false, message: 'Meta não encontrada.' });
+        }
+
+        res.json({ success: true, message: 'Meta atualizada com sucesso!' });
     });
 }
 
@@ -74,9 +78,9 @@ exports.setUsuarioMeta = (req, res) => {
 
     connection.query(query, params, (err, results) => {
         if (err || results.length == 0) {
-            return res.status(500).json({ success: false, message: 'Erro ao atualizar o usuário da meta.'});
+            return res.status(500).json({ success: false, message: 'Erro ao atualizar o usuário da meta.' });
         }
-        res.json({ success: true, message: 'Usuário da meta atualizado com sucesso!'});
+        res.json({ success: true, message: 'Usuário da meta atualizado com sucesso!' });
     });
 }
 
@@ -88,9 +92,9 @@ exports.setEnergiaMeta = (req, res) => {
 
     connection.query(query, params, (err, results) => {
         if (err || results.length == 0) {
-            return res.status(500).json({ success: false, message: 'Erro ao atualizar o valor de energia da meta.'});
+            return res.status(500).json({ success: false, message: 'Erro ao atualizar o valor de energia da meta.' });
         }
-        res.json({ success: true, message: 'Valor de energia da meta atualizado com sucesso!'});
+        res.json({ success: true, message: 'Valor de energia da meta atualizado com sucesso!' });
     });
 }
 
@@ -102,9 +106,9 @@ exports.setAguaMeta = (req, res) => {
 
     connection.query(query, params, (err, results) => {
         if (err || results.length == 0) {
-            return res.status(500).json({ success: false, message: 'Erro ao atualizar o valor de água da meta.'});
+            return res.status(500).json({ success: false, message: 'Erro ao atualizar o valor de água da meta.' });
         }
-        res.json({ success: true, message: 'Valor de água da meta atualizado com sucesso!'});
+        res.json({ success: true, message: 'Valor de água da meta atualizado com sucesso!' });
     });
 }
 
@@ -116,9 +120,9 @@ exports.setDataMeta = (req, res) => {
 
     connection.query(query, params, (err, results) => {
         if (err || results.length == 0) {
-            return res.status(500).json({ success: false, message: 'Erro ao atualizar a data de registro da meta.'});
+            return res.status(500).json({ success: false, message: 'Erro ao atualizar a data de registro da meta.' });
         }
-        res.json({ success: true, message: 'Data de registro da meta atualizado com sucesso!'});
+        res.json({ success: true, message: 'Data de registro da meta atualizado com sucesso!' });
     });
 }
 
@@ -128,8 +132,8 @@ exports.deletarMeta = (req, res) => {
 
     connection.query(query, params, (err, results) => {
         if (err) {
-            return res.status(500).json({ success: false, message: 'Erro ao deletar a meta.'});
+            return res.status(500).json({ success: false, message: 'Erro ao deletar a meta.' });
         }
-        res.json({ success: true, message: 'Meta deletada com sucesso!'});
+        res.json({ success: true, message: 'Meta deletada com sucesso!' });
     });
 }
