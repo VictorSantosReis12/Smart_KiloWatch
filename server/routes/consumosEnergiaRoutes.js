@@ -12,6 +12,7 @@ router.get('/consumoEnergia/listarPorData', consumosEnergiaController.listarCons
 router.put('/consumoEnergia/:idConsumoEnergia', consumosEnergiaController.atualizarConsumoEnergia);
 router.put('/consumoEnergia/setEletrodomestico/:idConsumoEnergia', consumosEnergiaController.setEletrodomesticoConsumoEnergia);
 router.put('/consumoEnergia/setTempo/:idConsumoEnergia', consumosEnergiaController.setTempoConsumoEnergia);
+router.put('/consumoEnergia/setTipo/:idConsumoEnergia', consumosEnergiaController.setTipoConsumoEnergia);
 router.put('/consumoEnergia/setData/:idConsumoEnergia', consumosEnergiaController.setDataConsumoEnergia);
 router.delete('/consumoEnergia/:idConsumoEnergia', consumosEnergiaController.deletarConsumoEnergia);
 

@@ -51,11 +51,11 @@ exports.listarAtividadesPorUsuario = (req, res) => {
 }
 
 exports.atualizarAtividade = (req, res) => {
-    const { idUsuario, nome, imagem, litrosMinuto, isTempoUso, manterTempoUso } = req.body;
+    const { idUsuario, nome, imagem, litrosMinuto, manterTempoUso } = req.body;
     const idAtividade = req.params.idAtividade;
-    const params = [idUsuario, nome, imagem, litrosMinuto, isTempoUso, manterTempoUso, idAtividade];
+    const params = [idUsuario, nome, imagem, litrosMinuto, manterTempoUso, idAtividade];
 
-    const query = 'UPDATE Atividades SET id_usuario = ?, nome = ?, imagem = ?, litros_minuto = ?, is_tempo_uso = ?, manter_tempo_uso = ? WHERE id_atividade = ?';
+    const query = 'UPDATE Atividades SET id_usuario = ?, nome = ?, imagem = ?, litros_minuto = ?, manter_tempo_uso = ? WHERE id_atividade = ?';
     
     connection.query(query, params, (err, results) => {
         if (err || results.length == 0) {

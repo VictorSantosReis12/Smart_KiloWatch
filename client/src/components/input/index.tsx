@@ -17,7 +17,7 @@ import { fontFamily } from "@/styles/FontFamily"
 type Props = {
     value: string
     border: string
-    onChangeText: (text: string) => void
+    onChangeText?: (text: string) => void
     onFocus?: () => void
     onBlur?: () => void
     placeholder?: string
@@ -103,9 +103,9 @@ export function Input({
                         borderRadius: RFValue(20),
                         shadowColor: colors.black,
                         shadowOffset: { width: RFValue(0), height: RFValue(3) },
-                        shadowOpacity: RFValue(0.8),
+                        shadowOpacity: 0.2,
                         shadowRadius: RFValue(4.65),
-                        elevation: RFValue(4)
+                        elevation: RFValue(2)
                     },
                     style
                 ]}

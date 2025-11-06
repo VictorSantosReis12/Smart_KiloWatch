@@ -1,10 +1,10 @@
 const connection = require('../config/db');
 
 exports.criarConsumoEnergia = (req, res) => {
-    const { idEletrodomestico, tempo, dataRegistro } = req.body;
+    const { idEletrodomestico, tempo, tipo, dataRegistro } = req.body;
 
-    const query = 'INSERT INTO ConsumoEnergia (id_eletrodomestico, tempo, data_registro) VALUES (?, ?, ?)';
-    const params = [idEletrodomestico, tempo, dataRegistro];
+    const query = 'INSERT INTO ConsumoEnergia (id_eletrodomestico, tempo, tipo) VALUES (?, ?, ?)';
+    const params = [idEletrodomestico, tempo, tipo, dataRegistro];
 
     connection.query(query, params, (err, results) => {
         if (err) {
@@ -63,11 +63,11 @@ exports.listarConsumosEnergiaPorData = (req, res) => {
 }
 
 exports.atualizarConsumoEnergia = (req, res) => {
-    const { idEletrodomestico, tempo, dataRegistro } = req.body;
+    const { idEletrodomestico, tempo, tipo, dataRegistro } = req.body;
     const idConsumoEnergia = req.params.idConsumoEnergia;
-    const params = [idEletrodomestico, tempo, dataRegistro, idConsumoEnergia];
+    const params = [idEletrodomestico, tempo, tipo, dataRegistro, idConsumoEnergia];
 
-    const query = 'UPDATE ConsumoEnergia SET id_eletrodomestico = ?, tempo = ?, data_registro = ? WHERE id_consumo_energia = ?';
+    const query = 'UPDATE ConsumoEnergia SET id_eletrodomestico = ?, tempo = ?, tipo = ?, data_registro = ? WHERE id_consumo_energia = ?';
     
     connection.query(query, params, (err, results) => {
         if (err || results.length == 0) {
@@ -101,6 +101,20 @@ exports.setTempoConsumoEnergia = (req, res) => {
     connection.query(query, params, (err, results) => {
         if (err || results.length == 0) {
             return res.status(500).json({ success: false, message: 'Erro ao atualizar o tempo do consumo de energia.'});
+        }
+        res.json({ success: true, message: 'Tempo do consumo de energia atualizado com sucesso!'});
+    });
+}
+
+exports.setTipoConsumoEnergia = (req, res) => {
+    const tipo = req.body.tipo;
+    const idConsumoEnergia = req.params.idConsumoEnergia;
+    const query = 'UPDATE ConsumoEnergia SET tipo = ? WHERE id_consumo_energia = ?';
+    const params = [tipo, idConsumoEnergia];
+
+    connection.query(query, params, (err, results) => {
+        if (err || results.length == 0) {
+            return res.status(500).json({ success: false, message: 'Erro ao atualizar o tipo do consumo de energia.'});
         }
         res.json({ success: true, message: 'Tempo do consumo de energia atualizado com sucesso!'});
     });

@@ -19,14 +19,14 @@ export function Button({ children, onPress, style, contentStyle, labelStyle, dis
             {...rest}
             mode="contained"
             onPress={onPress}
-            elevation={4}
+            elevation={2}
             contentStyle={[
                 {
                     paddingVertical: RFValue(6),
                     backgroundColor: colors.blue[300],
                     shadowColor: colors.black,
                     shadowOffset: { width: RFValue(0), height: RFValue(3) },
-                    shadowOpacity: RFValue(0.8),
+                    shadowOpacity: 0.2,
                     shadowRadius: RFValue(4.65)
                 },
                 contentStyle
@@ -44,7 +44,7 @@ export function Button({ children, onPress, style, contentStyle, labelStyle, dis
                 {
                     shadowColor: colors.black,
                     shadowOffset: { width: RFValue(0), height: RFValue(3) },
-                    shadowOpacity: RFValue(0.8),
+                    shadowOpacity: 0.2,
                     shadowRadius: RFValue(4.65)
                 },
                 style

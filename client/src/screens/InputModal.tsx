@@ -29,7 +29,7 @@ import { fontFamily } from "@/styles/FontFamily"
 // Cores
 import { colors } from "@/styles/colors"
 
-export default function InputModal({ visible, onDismiss, changeText, changeButtonCancelar, changeButtonConfirmar, handleConfirmar, input, doubleInput }: any) {
+export default function InputModal({ visible, onDismiss, changeText, changeButtonCancelar, changeButtonConfirmar, handleConfirmar, input, doubleInput, modalMaior }: any) {
 
     // Dimensões da janela
     const { width, height } = useWindowDimensions();
@@ -42,7 +42,7 @@ export default function InputModal({ visible, onDismiss, changeText, changeButto
                     <Modal
                         visible={visible}
                         onDismiss={onDismiss}
-                        contentContainerStyle={styles.modalContainer}
+                        contentContainerStyle={[styles.modalContainer, { height: modalMaior ? RFValue(160) : RFValue(120) }]}
                     >
                         <Text
                             variant="titleLarge"
@@ -53,7 +53,7 @@ export default function InputModal({ visible, onDismiss, changeText, changeButto
 
                         {input}
 
-                        <View style={{ width: RFValue(250), gap: RFValue(15), flexDirection: "row", justifyContent: "center", marginTop: RFValue(20) }}>
+                        <View style={{ width: RFValue(250), gap: RFValue(15), flexDirection: "row", justifyContent: "center", marginTop: modalMaior ? RFValue(10) : RFValue(20) }}>
                             <Button
                                 children={changeButtonCancelar}
                                 compact
@@ -85,7 +85,7 @@ export default function InputModal({ visible, onDismiss, changeText, changeButto
                     <Modal
                         visible={visible}
                         onDismiss={onDismiss}
-                        contentContainerStyle={[styles.modalContainer, { borderRadius: RFValue(20), height: doubleInput ? RFValue(270) : RFValue(185), width: RFValue(300) }]}
+                        contentContainerStyle={[styles.modalContainer, { borderRadius: RFValue(20), height: doubleInput ? RFValue(270) : modalMaior ? RFValue(210) : RFValue(185), width: RFValue(300), paddingHorizontal: RFValue(5) }]}
                     >
                         <Text
                             variant="titleLarge"
@@ -131,7 +131,6 @@ export default function InputModal({ visible, onDismiss, changeText, changeButto
 const styles = StyleSheet.create({
     modalContainer: {
         backgroundColor: colors.blue[400],
-        height: RFValue(120),
         width: RFValue(250),
         borderRadius: RFValue(5),
         elevation: 20,

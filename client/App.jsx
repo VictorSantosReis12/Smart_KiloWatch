@@ -15,7 +15,10 @@ import EditarResidenciasScreen from './src/screens/EditarResidenciasScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import EditarUsuarioScreen from './src/screens/EditarUsuarioScreen';
 import EletrodomesticosScreen from './src/screens/EletrodomesticosScreen';
+import CadastrarEletrodomesticosScreen from './src/screens/CadastrarEletrodomesticosScreen';
+import EditarEletrodomesticosScreen from './src/screens/EditarEletrodomesticosScreen';
 import AtividadesScreen from './src/screens/AtividadesScreen';
+import CadastrarAtividadesScreen from './src/screens/CadastrarAtividadesScreen';
 import GraficosScreen from './src/screens/GraficosScreen';
 import MetasScreen from './src/screens/MetasScreen';
 import NotificacoesScreen from './src/screens/NotificacoesScreen';
@@ -24,9 +27,11 @@ import ResidenciasConfigScreen from './src/screens/ResidenciasConfigScreen';
 import EstimativaCustosScreen from './src/screens/EstimativaCustosScreen';
 import CadastrarResidenciasConfigScreen from './src/screens/CadastrarResidenciasConfigScreen';
 import EditarResidenciasConfigScreen from './src/screens/EditarResidenciasConfigScreen';
+import EditarAtividadesScreen from './src/screens/EditarAtividadesScreen';
 import ConfiguracoesScreen from './src/screens/ConfiguracoesScreen';
 import UsuarioScreen from './src/screens/UsuarioScreen';
 import ListasScreen from './src/screens/ListasScreen';
+import SelecionarIconeScreen from './src/screens/SelecionarIconeScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -63,7 +68,10 @@ function AppContent() {
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="EditarUsuario" component={EditarUsuarioScreen} />
             <Stack.Screen name="Eletrodomesticos" component={EletrodomesticosScreen} />
+            <Stack.Screen name="CadastrarEletrodomesticos" component={CadastrarEletrodomesticosScreen} />
+            <Stack.Screen name="EditarEletrodomesticos" component={EditarEletrodomesticosScreen} />
             <Stack.Screen name="Atividades" component={AtividadesScreen} />
+            <Stack.Screen name="CadastrarAtividades" component={CadastrarAtividadesScreen} />
             <Stack.Screen name="Graficos" component={GraficosScreen} />
             <Stack.Screen name="Metas" component={MetasScreen} />
             <Stack.Screen name="Notificacoes" component={NotificacoesScreen} />
@@ -72,9 +80,11 @@ function AppContent() {
             <Stack.Screen name="EstimativaCustos" component={EstimativaCustosScreen} />
             <Stack.Screen name="CadastrarResidenciasConfig" component={CadastrarResidenciasConfigScreen} />
             <Stack.Screen name="EditarResidenciasConfig" component={EditarResidenciasConfigScreen} />
+            <Stack.Screen name="EditarAtividades" component={EditarAtividadesScreen} />
             <Stack.Screen name="Configuracoes" component={ConfiguracoesScreen} />
             <Stack.Screen name="Usuario" component={UsuarioScreen} />
             <Stack.Screen name="Listas" component={ListasScreen} />
+            <Stack.Screen name="SelecionarIcone" component={SelecionarIconeScreen} />
           </>
         ) : (
           <Stack.Screen name="Auth" component={AuthStack} />

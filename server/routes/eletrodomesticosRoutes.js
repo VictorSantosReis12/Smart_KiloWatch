@@ -15,7 +15,7 @@ router.put('/eletrodomestico/setMarca/:idEletrodomestico', eletrodomesticosContr
 router.put('/eletrodomestico/setModelo/:idEletrodomestico', eletrodomesticosController.setModeloEletrodomestico);
 router.put('/eletrodomestico/setImagem/:idEletrodomestico', eletrodomesticosController.setImagemEletrodomestico);
 router.put('/eletrodomestico/setConsumoMensal/:idEletrodomestico', eletrodomesticosController.setConsumoMensalEletrodomestico);
-router.put('/eletrodomestico/setConsumoDiario/:idEletrodomestico', eletrodomesticosController.setConsumoDiarioEletrodomestico);
+router.put('/eletrodomestico/setConsumoPorHora/:idEletrodomestico', eletrodomesticosController.setConsumoPorHoraEletrodomestico);
 router.put('/eletrodomestico/setManterTempo/:idEletrodomestico', eletrodomesticosController.setManterTempoEletrodomestico);
 router.delete('/eletrodomestico/:idEletrodomestico', eletrodomesticosController.deletarEletrodomestico);
 

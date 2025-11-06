@@ -1,10 +1,10 @@
 const connection = require('../config/db');
 
 exports.criarConsumoAgua = (req, res) => {
-    const { idAtividade, tempoUso, dataRegistro } = req.body;
+    const { idAtividade, tempoUso, tipo, dataRegistro } = req.body;
 
-    const query = 'INSERT INTO ConsumoAgua (id_atividade, tempo_uso, data_registro) VALUES (?, ?, ?)';
-    const params = [idAtividade, tempoUso, dataRegistro];
+    const query = 'INSERT INTO ConsumoAgua (id_atividade, tempo_uso, tipo) VALUES (?, ?, ?)';
+    const params = [idAtividade, tempoUso, tipo, dataRegistro];
 
     connection.query(query, params, (err, results) => {
         if (err) {
@@ -63,11 +63,11 @@ exports.listarConsumosAguaPorData = (req, res) => {
 }
 
 exports.atualizarConsumoAgua = (req, res) => {
-    const { idAtividade, tempoUso, dataRegistro } = req.body;
+    const { idAtividade, tempoUso, tipo, dataRegistro } = req.body;
     const idConsumoAgua = req.params.idConsumoAgua;
-    const params = [idAtividade, tempoUso, dataRegistro, idConsumoAgua];
+    const params = [idAtividade, tempoUso, tipo, dataRegistro, idConsumoAgua];
 
-    const query = 'UPDATE ConsumoAgua SET id_atividade = ?, tempo_uso = ?, data_registro = ? WHERE id_consumo_agua = ?';
+    const query = 'UPDATE ConsumoAgua SET id_atividade = ?, tempo_uso = ?, tipo = ?, data_registro = ? WHERE id_consumo_agua = ?';
     
     connection.query(query, params, (err, results) => {
         if (err || results.length == 0) {
@@ -101,6 +101,20 @@ exports.setTempoConsumoAgua = (req, res) => {
     connection.query(query, params, (err, results) => {
         if (err || results.length == 0) {
             return res.status(500).json({ success: false, message: 'Erro ao atualizar o tempo ou uso do consumo de água.'});
+        }
+        res.json({ success: true, message: 'Tempo ou uso do consumo de água atualizado com sucesso!'});
+    });
+}
+
+exports.setTipoConsumoAgua = (req, res) => {
+    const tipo = req.body.tipo;
+    const idConsumoAgua = req.params.idConsumoAgua;
+    const query = 'UPDATE ConsumoAgua SET tipo = ? WHERE id_consumo_agua = ?';
+    const params = [tipo, idConsumoAgua];
+
+    connection.query(query, params, (err, results) => {
+        if (err || results.length == 0) {
+            return res.status(500).json({ success: false, message: 'Erro ao atualizar o tipo do consumo de água.'});
         }
         res.json({ success: true, message: 'Tempo ou uso do consumo de água atualizado com sucesso!'});
     });

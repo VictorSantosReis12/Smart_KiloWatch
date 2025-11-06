@@ -30,7 +30,7 @@ import { fontFamily } from "@/styles/FontFamily"
 import { colors } from "@/styles/colors"
 
 // API
-import { buscarUsuarioPorEmail, listarMetasPorUsuario, cadastrarMeta, editarMeta } from "@/services/api";
+import { buscarUsuarioPorEmail, listarMetasPorUsuario, cadastrarMeta, editarMeta, listarConsumoEnergiaPorUsuario } from "@/services/api";
 
 export default function MetasScreen({ navigation }: any) {
     const [fontsLoaded] = useFonts({
@@ -75,7 +75,7 @@ export default function MetasScreen({ navigation }: any) {
         fetchMetas();
     }, [idUsuario]);
 
-    const [consumoEnergia, setConsumoEnergia] = useState('90');
+    const [consumoEnergia, setConsumoEnergia] = useState('0');
     const [metaEnergia, setMetaEnergia] = useState('0');
     const [consumoAgua, setConsumoAgua] = useState('120');
     const [metaAgua, setMetaAgua] = useState('0');
@@ -299,6 +299,42 @@ export default function MetasScreen({ navigation }: any) {
         }
     }, [modalVisible, mesSelecionado, anoSelecionado, metas]);
 
+    useEffect(() => {
+        const fetchConsumo = async () => {
+            if (!idUsuario) return;
+
+            try {
+                const result = await listarConsumoEnergiaPorUsuario(userToken, idUsuario);
+
+                if (result.success && result.data.length > 0) {
+                    const mesIndex = meses.findIndex(m => m.toLowerCase() === mesSelecionado.toLowerCase());
+                    const anoNum = anoSelecionado;
+
+                    const registrosFiltrados = result.data.filter((c: any) => {
+                        const data = new Date(c.data_registro);
+                        return data.getMonth() === mesIndex && data.getFullYear() === anoNum;
+                    });
+                    console.log(registrosFiltrados)
+
+                    const somaConsumo = registrosFiltrados.reduce((acc: number, c: any) => {
+                        const tempo = Number(c.tempo) || 0;
+                        const consumo = Number(c.consumo_kwh_hora) || 0;
+                        return acc + (tempo / 60) * consumo;
+                    }, 0);
+
+                    setConsumoEnergia(String(Number(somaConsumo.toFixed(3))));
+                } else {
+                    setConsumoEnergia("0");
+                }
+            } catch (error) {
+                console.error(error);
+                setConsumoEnergia("0");
+            }
+        };
+
+        fetchConsumo();
+    }, [mesSelecionado, anoSelecionado, idUsuario]);
+
     if (!fontsLoaded) {
         return null
     }
@@ -412,9 +448,9 @@ export default function MetasScreen({ navigation }: any) {
 
                                         {consumoEnergiaExcedeu && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(8), color: colors.red, position: "absolute", width: "100%", bottom: RFValue(10), textAlign: "center", paddingHorizontal: RFValue(10) }}>Você excedeu {consumoEnergiaExcedeuValor} kWh da sua meta!</Text>)}
 
-                                        {consumoEnergiaQuaseExcedendo && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(8), color: colors.yellow[300], position: "absolute", width: "100%", bottom: RFValue(10), textAlign: "center", paddingHorizontal: RFValue(10) }}>Falta {consumoEnergiaQuaseExcedendoValor} kWh para atingir sua meta!</Text>)}
+                                        {consumoEnergiaQuaseExcedendo && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(8), color: colors.yellow[300], position: "absolute", width: "100%", bottom: RFValue(10), textAlign: "center", paddingHorizontal: RFValue(10) }}> {Number(consumoEnergia) - Number(metaEnergia) === 0 ? 'Você atingiu seu limite!' : `Falta ${consumoEnergiaQuaseExcedendoValor} kWh para atingir sua meta!`} </Text>)}
 
-                                        <Text style={{ fontFamily: fontFamily.krona, fontSize: RFValue(10), color: colors.white }}>{consumoEnergia} kWh / {metaEnergia} kWh</Text>
+                                        <Text style={{ fontFamily: fontFamily.krona, fontSize: RFValue(10), color: colors.white }}>{consumoEnergia.replace(".", ",")} kWh / {metaEnergia} kWh</Text>
                                     </View>
                                 </View>
                                 <View style={{ width: "35%", height: "100%", backgroundColor: colors.blue[500], justifyContent: "center", alignItems: "center" }}>
@@ -423,7 +459,7 @@ export default function MetasScreen({ navigation }: any) {
 
                                         {consumoAguaExcedeu && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(8), color: colors.red, position: "absolute", width: "100%", bottom: RFValue(10), textAlign: "center", paddingHorizontal: RFValue(10) }}>Você excedeu {consumoAguaExcedeuValor} L da sua meta!</Text>)}
 
-                                        {consumoAguaQuaseExcedendo && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(8), color: colors.yellow[300], position: "absolute", width: "100%", bottom: RFValue(10), textAlign: "center", paddingHorizontal: RFValue(10) }}>Falta {consumoAguaQuaseExcedendoValor} L para atingir sua meta!</Text>)}
+                                        {consumoAguaQuaseExcedendo && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(8), color: colors.yellow[300], position: "absolute", width: "100%", bottom: RFValue(10), textAlign: "center", paddingHorizontal: RFValue(10) }}> {Number(consumoAgua) - Number(metaAgua) === 0 ? 'Você atingiu seu limite!' : `Falta ${consumoAguaQuaseExcedendoValor} L para atingir sua meta!`} </Text>)}
 
                                         <Text style={{ fontFamily: fontFamily.krona, fontSize: RFValue(10), color: colors.white }}>{consumoAgua} Litros / {metaAgua} Litros</Text>
                                     </View>

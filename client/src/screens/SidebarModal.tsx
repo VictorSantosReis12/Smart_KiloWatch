@@ -285,7 +285,7 @@ const Sidebar = ({ navigation }: any) => {
                             top: "10%",
                             left: 0,
                             width: RFValue(40),
-                            height: RFValue(277),
+                            height: isOpen ? RFValue(0) : RFValue(277),
                             zIndex: 1000,
                             backgroundColor: "transparent",
                         }}

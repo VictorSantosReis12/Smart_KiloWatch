@@ -28,7 +28,7 @@ import { fontFamily } from "@/styles/FontFamily"
 // Cores
 import { colors } from "@/styles/colors"
 
-export default function ConfirmarModal({ visible, onDismiss, changeText, handleOk }: any) {
+export default function OkModal({ visible, onDismiss, changeText, handleOk }: any) {
 
     // Dimensões da janela
     const { width, height } = useWindowDimensions();

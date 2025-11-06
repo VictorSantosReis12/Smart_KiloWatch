@@ -1,10 +1,10 @@
 const connection = require('../config/db');
 
 exports.criarEletrodomestico = (req, res) => {
-    const { idUsuario, tipo, marca, modelo, imagem, consumoKwhMes, consumoKwhDia, manterTempo } = req.body;
+    const { idUsuario, tipo, marca, modelo, imagem, consumoKwhMes, consumoKwhHora, manterTempo } = req.body;
 
-    const query = 'INSERT INTO Eletrodomesticos (id_usuario, tipo, marca, modelo, imagem, consumo_kwh_mes, consumo_kwh_dia, manter_tempo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    const params = [idUsuario, tipo, marca, modelo, imagem, consumoKwhMes, consumoKwhDia, manterTempo];
+    const query = 'INSERT INTO Eletrodomesticos (id_usuario, tipo, marca, modelo, imagem, consumo_kwh_mes, consumo_kwh_hora, manter_tempo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    const params = [idUsuario, tipo, marca, modelo, imagem, consumoKwhMes, consumoKwhHora, manterTempo];
 
     connection.query(query, params, (err, results) => {
         if (err) {
@@ -51,12 +51,12 @@ exports.listarEletrodomesticosPorUsuario = (req, res) => {
 }
 
 exports.atualizarEletrodomestico = (req, res) => {
-    const { idUsuario, tipo, marca, modelo, imagem, consumoKwhMes, consumoKwhDia, manterTempo } = req.body;
+    const { idUsuario, tipo, marca, modelo, imagem, consumoKwhMes, consumoKwhHora, manterTempo } = req.body;
     const idEletrodomestico = req.params.idEletrodomestico;
-    const params = [idUsuario, tipo, marca, modelo, imagem, consumoKwhMes, consumoKwhDia, manterTempo, idEletrodomestico];
+    const params = [idUsuario, tipo, marca, modelo, imagem, consumoKwhMes, consumoKwhHora, manterTempo, idEletrodomestico];
 
-    const query = 'UPDATE Eletrodomesticos SET id_usuario = ?, tipo = ?, marca = ?, modelo = ?, imagem = ?, consumo_kwh_mes = ?, consumo_kwh_dia = ?, manter_tempo = ? WHERE id_eletrodomestico = ?';
-    
+    const query = 'UPDATE Eletrodomesticos SET id_usuario = ?, tipo = ?, marca = ?, modelo = ?, imagem = ?, consumo_kwh_mes = ?, consumo_kwh_hora = ?, manter_tempo = ? WHERE id_eletrodomestico = ?';
+
     connection.query(query, params, (err, results) => {
         if (err || results.length == 0) {
             return res.status(500).json({ success: false, message: 'Erro ao atualizar o eletrodoméstico.'});
@@ -150,11 +150,11 @@ exports.setConsumoMensalEletrodomestico = (req, res) => {
     });
 }
 
-exports.setConsumoDiarioEletrodomestico = (req, res) => {
-    const consumoKwhDia = req.body.consumoKwhDia;
+exports.setConsumoPorHoraEletrodomestico = (req, res) => {
+    const consumoKwhHora = req.body.consumoKwhHora;
     const idEletrodomestico = req.params.idEletrodomestico;
-    const query = 'UPDATE Eletrodomesticos SET consumo_kwh_dia = ? WHERE id_eletrodomestico = ?';
-    const params = [consumoKwhDia, idEletrodomestico];
+    const query = 'UPDATE Eletrodomesticos SET consumo_kwh_hora = ? WHERE id_eletrodomestico = ?';
+    const params = [consumoKwhHora, idEletrodomestico];
 
     connection.query(query, params, (err, results) => {
         if (err || results.length == 0) {
@@ -167,7 +167,7 @@ exports.setConsumoDiarioEletrodomestico = (req, res) => {
 exports.setManterTempoEletrodomestico = (req, res) => {
     const manterTempo = req.body.manterTempo;
     const idEletrodomestico = req.params.idEletrodomestico;
-    const query = 'UPDATE Eletrodomesticos SET manter_tempo_uso = ? WHERE id_eletrodomestico = ?';
+    const query = 'UPDATE Eletrodomesticos SET manter_tempo = ? WHERE id_eletrodomestico = ?';
     const params = [manterTempo, idEletrodomestico];
 
     connection.query(query, params, (err, results) => {

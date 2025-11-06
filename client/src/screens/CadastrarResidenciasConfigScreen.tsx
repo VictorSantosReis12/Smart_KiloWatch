@@ -151,10 +151,10 @@ export default function CadastrarResidenciasConfigScreen({ navigation }: any) {
                         <StatusBar barStyle="light-content" backgroundColor={colors.blue[400]} />
 
                         {isLandscape ?
-                            <View style={{ height: RFValue(277), width: RFValue(640), alignItems: "center", justifyContent: "flex-start", position: "absolute", top: "10%", left: RFValue(40), backgroundColor: colors.blue[500], paddingHorizontal: RFValue(15), paddingVertical: RFValue(15) }}>
-                                <View style={{ width: "100%", flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingBottom: RFValue(10), borderBottomWidth: RFValue(3), borderColor: colors.yellow[300] }}>
+                            <View style={{ height: RFValue(285), width: RFValue(640), alignItems: "center", justifyContent: "flex-start", position: "absolute", top: "10%", left: RFValue(40), backgroundColor: colors.blue[500], paddingHorizontal: RFValue(15), paddingVertical: RFValue(15) }}>
+                                <View style={{ width: "100%", flexDirection: "row", justifyContent: "flex-start", alignItems: "center", paddingBottom: RFValue(10), borderBottomWidth: RFValue(3), borderColor: colors.yellow[300], position: "relative" }}>
                                     <Text style={{ color: colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(12) }}>Cadastrar Residência</Text>
-                                    <Icon name="close-circle" color={colors.white} size={RFValue(23)} onPress={() => navigation.navigate("ResidenciasConfig")} />
+                                    <Icon name="close-circle" color={colors.white} size={RFValue(23)} onPress={() => navigation.navigate("ResidenciasConfig")} style={{ position: "absolute", right: 0 }} />
                                 </View>
                                 <ScrollView
                                     style={{ width: RFValue(610), marginTop: RFValue(10), maxHeight: RFValue(530) }}
