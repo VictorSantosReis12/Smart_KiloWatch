@@ -457,7 +457,8 @@ export default function EletrodomesticosScreen({ navigation }: any) {
                                                         setTipoEletrodomestico(item.tipos)
                                                     }}
                                                 >
-                                                    <View style={{ width: "20%", justifyContent: "center", alignItems: "center", borderBottomWidth: isLast ? 0 : RFValue(1), borderRightWidth: RFValue(1), borderColor: colors.white, paddingVertical: RFValue(5) }}>
+                                                    <View style={{ width: "20%", justifyContent: "center", alignItems: "center", borderBottomWidth: isLast ? 0 : RFValue(1), borderRightWidth: RFValue(1), borderColor: colors.white, paddingVertical: RFValue(5), position: "relative" }}>
+                                                        <Icon name={"pencil"} size={RFValue(10)} color={colors.white} style={{position: "absolute", left: RFValue(5), top: RFValue(5)}} />
                                                         <Icon name={item.tipo ? item.tipo as any : "progress-question"} size={RFValue(30)} color={colors.white} />
                                                     </View>
                                                     <View style={{ width: "20%", justifyContent: "center", alignItems: "center", borderBottomWidth: isLast ? 0 : RFValue(1), borderRightWidth: RFValue(1), borderColor: colors.white, paddingVertical: RFValue(5) }}>
@@ -565,7 +566,8 @@ export default function EletrodomesticosScreen({ navigation }: any) {
                                                         setTipoEletrodomestico(item.tipos)
                                                     }}
                                                 >
-                                                    <View style={{ width: "15%", justifyContent: "center", alignItems: "center", borderBottomWidth: isLast ? 0 : RFValue(1), borderRightWidth: RFValue(1), borderColor: colors.white, paddingVertical: RFValue(5) }}>
+                                                    <View style={{ width: "15%", justifyContent: "center", alignItems: "center", borderBottomWidth: isLast ? 0 : RFValue(1), borderRightWidth: RFValue(1), borderColor: colors.white, paddingVertical: RFValue(5), position: "relative" }}>
+                                                        <Icon name={"pencil"} size={RFValue(10)} color={colors.white} style={{position: "absolute", left: RFValue(0), top: RFValue(3)}} />
                                                         <Icon name={item.tipo ? item.tipo as any : "progress-question"} size={RFValue(30)} color={colors.white} />
                                                     </View>
                                                     <View style={{ width: "21.25%", justifyContent: "center", alignItems: "center", borderBottomWidth: isLast ? 0 : RFValue(1), borderRightWidth: RFValue(1), borderColor: colors.white, paddingVertical: RFValue(5), paddingHorizontal: RFValue(1) }}>

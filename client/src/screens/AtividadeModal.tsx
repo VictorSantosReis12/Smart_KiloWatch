@@ -92,7 +92,6 @@ export default function AtividadeModal({ visible, onDismiss, idAtividade, userTo
                 const consumoHoje = tempoConsumoHojeHoras * dados.data.litros_minuto;
                 const consumoHojeFormatado = consumoHoje.toString();
                 setConsumoHoje(consumoHojeFormatado);
-                console.log(registrosMes)
                 const somaMes = registrosMes.reduce((acc: number, r: any) => {
                     const tempoEmHoras = r.tipo === "hora" ? dados.data.is_tempo_uso === 1 ? r.tempo_uso / dados.data.litros_minuto : r.tempo_uso / 60 : r.tempo_uso / 60;
                     return acc + tempoEmHoras * dados.data.litros_minuto;

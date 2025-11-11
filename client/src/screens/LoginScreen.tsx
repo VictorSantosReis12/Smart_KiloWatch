@@ -493,35 +493,3 @@ const styles = StyleSheet.create({
         fontFamily: fontFamily.inder
     }
 })
-
-{/* <View>
-                <Input
-                    placeholder="Confirmar Senha"
-                    value={confirmarSenha}
-                    onChangeText={setConfirmarSenha}
-                    style={styles.input}
-                    placeholderTextColor={colors.gray}
-                    secureTextEntry={!confirmarSenhaVisivel}
-                />
-
-                <Ionicons
-                    name={confirmarSenhaVisivel ? "eye-off" : "eye"}
-                    size={29}
-                    color={colors.white}
-                    style={{ position: "absolute", right: 12, top: 12, zIndex: 10 }}
-                    onPress={() => setConfirmarSenhaVisivel(!confirmarSenhaVisivel)}
-                />
-            </View> */}
-
-{/* <TouchableOpacity
-                style={styles.caixa}
-                onPress={() => setChecked(!checked)}
-                activeOpacity={1}
-            >
-                {checked ? (
-                    <Ionicons name="checkbox" size={35} color={colors.white} />
-                ) : (
-                    <Ionicons name="square-outline" size={35} color={colors.white} />
-                )}
-                <Text style={styles.label}>Receber notificações</Text>
-            </TouchableOpacity> */}

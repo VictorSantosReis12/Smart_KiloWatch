@@ -450,7 +450,8 @@ export default function AtividadesScreen({ navigation }: any) {
                                                         setNomeAtividade(item.nome)
                                                     }}
                                                 >
-                                                    <View style={{ width: "25%", justifyContent: "center", alignItems: "center", borderBottomWidth: isLast ? 0 : RFValue(1), borderRightWidth: RFValue(1), borderColor: colors.white, paddingVertical: RFValue(5) }}>
+                                                    <View style={{ width: "25%", justifyContent: "center", alignItems: "center", borderBottomWidth: isLast ? 0 : RFValue(1), borderRightWidth: RFValue(1), borderColor: colors.white, paddingVertical: RFValue(5), position: "relative" }}>
+                                                        <Icon name={"pencil"} size={RFValue(10)} color={colors.white} style={{position: "absolute", left: RFValue(5), top: RFValue(5)}} />
                                                         <Icon name={item.imagem ? item.imagem as any : "progress-question"} size={RFValue(30)} color={colors.white} />
                                                     </View>
                                                     <View style={{ width: "25%", justifyContent: "center", alignItems: "center", borderBottomWidth: isLast ? 0 : RFValue(1), borderRightWidth: RFValue(1), borderColor: colors.white, paddingVertical: RFValue(5) }}>
@@ -548,7 +549,8 @@ export default function AtividadesScreen({ navigation }: any) {
                                                         setNomeAtividade(item.nome)
                                                     }}
                                                 >
-                                                    <View style={{ width: "19%", justifyContent: "center", alignItems: "center", borderBottomWidth: isLast ? 0 : RFValue(1), borderRightWidth: RFValue(1), borderColor: colors.white, paddingVertical: RFValue(5) }}>
+                                                    <View style={{ width: "19%", justifyContent: "center", alignItems: "center", borderBottomWidth: isLast ? 0 : RFValue(1), borderRightWidth: RFValue(1), borderColor: colors.white, paddingVertical: RFValue(5), position: "relative" }}>
+                                                        <Icon name={"pencil"} size={RFValue(10)} color={colors.white} style={{position: "absolute", left: RFValue(0), top: RFValue(3)}} />
                                                         <Icon name={item.imagem ? item.imagem as any : "progress-question"} size={RFValue(30)} color={colors.white} />
                                                     </View>
                                                     <View style={{ width: "27%", justifyContent: "center", alignItems: "center", borderBottomWidth: isLast ? 0 : RFValue(1), borderRightWidth: RFValue(1), borderColor: colors.white, paddingVertical: RFValue(5), paddingHorizontal: RFValue(1) }}>

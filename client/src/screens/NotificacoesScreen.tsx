@@ -83,6 +83,12 @@ export default function NotificacoesScreen({ navigation }: any) {
                             <View style={{ width: "100%", flexDirection: "row", justifyContent: "flex-start", alignItems: "center", paddingBottom: RFValue(10), borderBottomWidth: RFValue(3), borderColor: colors.yellow[300] }}>
                                 <Text style={{ color: colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(12) }}>Notificações</Text>
                             </View>
+                            <View style={{ width: "100%", marginTop: RFValue(15) }}>
+                                <View style={{ width: "40%", justifyContent: "center", alignItems: "center", backgroundColor: colors.blue[400], padding: RFValue(10), borderRadius: RFValue(10), alignSelf: "center", flexDirection: "column", gap: RFValue(5) }}>
+                                    <Icon name={"alert-circle-outline"} size={RFValue(25)} color={colors.white} />
+                                    <Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(12), color: colors.white, textAlign: "center" }}>Funcionalidade disponível em breve!</Text>
+                                </View>
+                            </View>
                         </View>
                         :
                         <View style={{ height: alturaCalculada, width: width, alignItems: "center", justifyContent: "flex-start", position: "absolute", top: "9%", left: RFValue(0), backgroundColor: colors.blue[500], paddingHorizontal: RFValue(15), paddingVertical: RFValue(15), zIndex: 3000 }}>
@@ -90,7 +96,10 @@ export default function NotificacoesScreen({ navigation }: any) {
                                 <Text style={{ color: colors.white, fontFamily: fontFamily.krona, fontSize: RFValue(18) }}>Notificações</Text>
                             </View>
                             <View style={{ width: "100%", marginTop: RFValue(30), gap: RFValue(25) }}>
-
+                                <View style={{ width: "80%", justifyContent: "center", alignItems: "center", backgroundColor: colors.blue[400], padding: RFValue(10), borderRadius: RFValue(10), alignSelf: "center", flexDirection: "column", gap: RFValue(5) }}>
+                                    <Icon name={"alert-circle-outline"} size={RFValue(40)} color={colors.white} />
+                                    <Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(16), color: colors.white, textAlign: "center" }}>Funcionalidade disponível em breve!</Text>
+                                </View>
                             </View>
                         </View>
                     }

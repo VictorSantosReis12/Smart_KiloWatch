@@ -118,7 +118,6 @@ export default function CadastrarEletrodomesticosScreen({ navigation, route }: a
 
         setErrors({ icone: '', tipo: '', marca: '', modelo: '', consumo: '' });
 
-        console.log(Number(consumo) / 30)
         const valorConsumoHora = Number(consumo) / 30;
         const consumoHoraFormatado = valorConsumoHora.toFixed(3);
 

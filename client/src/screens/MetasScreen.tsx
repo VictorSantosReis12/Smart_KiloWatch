@@ -30,7 +30,7 @@ import { fontFamily } from "@/styles/FontFamily"
 import { colors } from "@/styles/colors"
 
 // API
-import { buscarUsuarioPorEmail, listarMetasPorUsuario, cadastrarMeta, editarMeta, listarConsumoEnergiaPorUsuario } from "@/services/api";
+import { buscarUsuarioPorEmail, listarMetasPorUsuario, cadastrarMeta, editarMeta, listarConsumoEnergiaPorUsuario, listarConsumoAguaPorUsuario } from "@/services/api";
 
 export default function MetasScreen({ navigation }: any) {
     const [fontsLoaded] = useFonts({
@@ -77,8 +77,10 @@ export default function MetasScreen({ navigation }: any) {
 
     const [consumoEnergia, setConsumoEnergia] = useState('0');
     const [metaEnergia, setMetaEnergia] = useState('0');
+    const [loadingEnergia, setLoadingEnergia] = useState(false);
     const [consumoAgua, setConsumoAgua] = useState('120');
     const [metaAgua, setMetaAgua] = useState('0');
+    const [loadingAgua, setLoadingAgua] = useState(false);
     const [inputEnergia, setInputEnergia] = useState('0');
     const [inputAgua, setInputAgua] = useState('0');
     const [errorMessages, setErrorMessages] = useState({ inputEnergia: '', inputAgua: '' });
@@ -86,6 +88,9 @@ export default function MetasScreen({ navigation }: any) {
 
     const [snackbarVisible, setSnackbarVisible] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
+
+    const [isMultilineEnergia, setIsMultilineEnergia] = useState(false);
+    const [isMultilineAgua, setIsMultilineAgua] = useState(false);
 
     // Modal
     const [textModal, setTextModal] = useState('Inserir metas de energia/água');
@@ -303,6 +308,7 @@ export default function MetasScreen({ navigation }: any) {
         const fetchConsumo = async () => {
             if (!idUsuario) return;
 
+            setLoadingEnergia(true);
             try {
                 const result = await listarConsumoEnergiaPorUsuario(userToken, idUsuario);
 
@@ -314,7 +320,6 @@ export default function MetasScreen({ navigation }: any) {
                         const data = new Date(c.data_registro);
                         return data.getMonth() === mesIndex && data.getFullYear() === anoNum;
                     });
-                    console.log(registrosFiltrados)
 
                     const somaConsumo = registrosFiltrados.reduce((acc: number, c: any) => {
                         const tempo = Number(c.tempo) || 0;
@@ -329,6 +334,46 @@ export default function MetasScreen({ navigation }: any) {
             } catch (error) {
                 console.error(error);
                 setConsumoEnergia("0");
+            } finally {
+                setLoadingEnergia(false);
+            }
+        };
+
+        fetchConsumo();
+    }, [mesSelecionado, anoSelecionado, idUsuario]);
+
+    useEffect(() => {
+        const fetchConsumo = async () => {
+            if (!idUsuario) return;
+
+            setLoadingAgua(true);
+            try {
+                const result = await listarConsumoAguaPorUsuario(userToken, idUsuario);
+
+                if (result.success && result.data.length > 0) {
+                    const mesIndex = meses.findIndex(m => m.toLowerCase() === mesSelecionado.toLowerCase());
+                    const anoNum = anoSelecionado;
+
+                    const registrosFiltrados = result.data.filter((c: any) => {
+                        const data = new Date(c.data_registro);
+                        return data.getMonth() === mesIndex && data.getFullYear() === anoNum;
+                    });
+
+                    const somaConsumo = registrosFiltrados.reduce((acc: number, c: any) => {
+                        const tempo = Number(c.tempo_uso) || 0;
+                        const consumo = Number(c.consumo_litros_minuto) || 0;
+                        return acc + (tempo / 60) * consumo;
+                    }, 0);
+
+                    setConsumoAgua(String(Number(somaConsumo.toFixed(3))));
+                } else {
+                    setConsumoAgua("0");
+                }
+            } catch (error) {
+                console.error(error);
+                setConsumoAgua("0");
+            } finally {
+                setLoadingAgua(false);
             }
         };
 
@@ -446,22 +491,30 @@ export default function MetasScreen({ navigation }: any) {
                                     <View style={{ height: "100%", width: "80%", justifyContent: "flex-start", alignItems: "center", gap: RFValue(10), backgroundColor: colors.blue[400], borderRadius: RFValue(10), paddingTop: RFValue(10), position: "relative" }}>
                                         <GraficoDonutModel consumo={Number(consumoEnergia)} meta={Number(metaEnergia)} cor={colors.yellow[300]} tipo={"energia"} tamanho={"grande"} />
 
-                                        {consumoEnergiaExcedeu && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(8), color: colors.red, position: "absolute", width: "100%", bottom: RFValue(10), textAlign: "center", paddingHorizontal: RFValue(10) }}>Você excedeu {consumoEnergiaExcedeuValor} kWh da sua meta!</Text>)}
+                                        {consumoEnergiaExcedeu && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(7.5), color: colors.red, position: "absolute", width: "100%", bottom: RFValue(10), textAlign: "center", paddingHorizontal: RFValue(10) }}>Você excedeu {consumoEnergiaExcedeuValor.toFixed(3)} kWh da sua meta!</Text>)}
 
-                                        {consumoEnergiaQuaseExcedendo && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(8), color: colors.yellow[300], position: "absolute", width: "100%", bottom: RFValue(10), textAlign: "center", paddingHorizontal: RFValue(10) }}> {Number(consumoEnergia) - Number(metaEnergia) === 0 ? 'Você atingiu seu limite!' : `Falta ${consumoEnergiaQuaseExcedendoValor} kWh para atingir sua meta!`} </Text>)}
+                                        {consumoEnergiaQuaseExcedendo && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(7.5), color: colors.yellow[300], position: "absolute", width: "100%", bottom: RFValue(10), textAlign: "center", paddingHorizontal: RFValue(10) }}> {Number(consumoEnergia) - Number(metaEnergia) === 0 ? 'Você atingiu seu limite!' : `Falta ${consumoEnergiaQuaseExcedendoValor.toFixed(3)} kWh para atingir sua meta!`} </Text>)}
 
-                                        <Text style={{ fontFamily: fontFamily.krona, fontSize: RFValue(10), color: colors.white }}>{consumoEnergia.replace(".", ",")} kWh / {metaEnergia} kWh</Text>
+                                        {loadingEnergia ? (
+                                            <ActivityIndicator animating={true} size="large" color={colors.white} />
+                                        ) : (
+                                            <Text style={{ fontFamily: fontFamily.krona, fontSize: RFValue(10), color: colors.white }}>{consumoEnergia.replace(".", ",")} kWh / {metaEnergia} kWh</Text>
+                                        )}
                                     </View>
                                 </View>
                                 <View style={{ width: "35%", height: "100%", backgroundColor: colors.blue[500], justifyContent: "center", alignItems: "center" }}>
                                     <View style={{ height: "100%", width: "80%", justifyContent: "flex-start", alignItems: "center", gap: RFValue(10), backgroundColor: colors.blue[400], borderRadius: RFValue(10), paddingTop: RFValue(10), position: "relative" }}>
                                         <GraficoDonutModel consumo={Number(consumoAgua)} meta={Number(metaAgua)} cor={colors.blue[200]} tipo={"agua"} tamanho={"grande"} />
 
-                                        {consumoAguaExcedeu && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(8), color: colors.red, position: "absolute", width: "100%", bottom: RFValue(10), textAlign: "center", paddingHorizontal: RFValue(10) }}>Você excedeu {consumoAguaExcedeuValor} L da sua meta!</Text>)}
+                                        {consumoAguaExcedeu && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(7.5), color: colors.red, position: "absolute", width: "100%", bottom: RFValue(10), textAlign: "center", paddingHorizontal: RFValue(10) }}>Você excedeu {consumoAguaExcedeuValor} L da sua meta!</Text>)}
 
-                                        {consumoAguaQuaseExcedendo && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(8), color: colors.yellow[300], position: "absolute", width: "100%", bottom: RFValue(10), textAlign: "center", paddingHorizontal: RFValue(10) }}> {Number(consumoAgua) - Number(metaAgua) === 0 ? 'Você atingiu seu limite!' : `Falta ${consumoAguaQuaseExcedendoValor} L para atingir sua meta!`} </Text>)}
+                                        {consumoAguaQuaseExcedendo && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(7.5), color: colors.yellow[300], position: "absolute", width: "100%", bottom: RFValue(10), textAlign: "center", paddingHorizontal: RFValue(10) }}> {Number(consumoAgua) - Number(metaAgua) === 0 ? 'Você atingiu seu limite!' : `Falta ${consumoAguaQuaseExcedendoValor} L para atingir sua meta!`} </Text>)}
 
-                                        <Text style={{ fontFamily: fontFamily.krona, fontSize: RFValue(10), color: colors.white }}>{consumoAgua} Litros / {metaAgua} Litros</Text>
+                                        {loadingAgua ? (
+                                            <ActivityIndicator animating={true} size="large" color={colors.white} />
+                                        ) : (
+                                            <Text style={{ fontFamily: fontFamily.krona, fontSize: RFValue(10), color: colors.white }}>{consumoAgua} Litros / {metaAgua} Litros</Text>
+                                        )}
                                     </View>
                                 </View>
                             </View>
@@ -530,23 +583,38 @@ export default function MetasScreen({ navigation }: any) {
                                     </Text>
                                 </View>
                                 <View style={{ width: "100%", justifyContent: "space-between", flexDirection: "row" }}>
-                                    <View style={{ height: RFValue(220), width: "48%", justifyContent: "flex-start", alignItems: "center", gap: RFValue(15), backgroundColor: colors.blue[400], borderRadius: RFValue(10), position: "relative" }}>
+                                    <View style={{
+                                        height: isMultilineEnergia && (consumoEnergiaExcedeu || consumoEnergiaQuaseExcedendo) ? RFValue(240) : RFValue(220), width: "48%", justifyContent: "flex-start", alignItems: "center", gap: RFValue(15), backgroundColor: colors.blue[400], borderRadius: RFValue(10), position: "relative"
+                                    }}>
                                         <GraficoDonutModel consumo={Number(consumoEnergia)} meta={Number(metaEnergia)} cor={colors.yellow[300]} tipo={"energia"} tamanho={"grande"} />
 
-                                        {consumoEnergiaExcedeu && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(10), color: colors.red, position: "absolute", width: "100%", bottom: RFValue(11), textAlign: "center", paddingHorizontal: RFValue(10) }}>Você excedeu {consumoEnergiaExcedeuValor} kWh da sua meta!</Text>)}
+                                        {consumoEnergiaExcedeu && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(10), color: colors.red, position: "absolute", width: "100%", bottom: RFValue(11), textAlign: "center", paddingHorizontal: RFValue(10) }}>Você excedeu {consumoEnergiaExcedeuValor.toFixed(3)} kWh da sua meta!</Text>)}
 
-                                        {consumoEnergiaQuaseExcedendo && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(10), color: colors.yellow[300], position: "absolute", width: "100%", bottom: RFValue(11), textAlign: "center", paddingHorizontal: RFValue(10) }}>Falta {consumoEnergiaQuaseExcedendoValor} kWh para atingir sua meta!</Text>)}
+                                        {consumoEnergiaQuaseExcedendo && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(10), color: colors.yellow[300], position: "absolute", width: "100%", bottom: RFValue(11), textAlign: "center", paddingHorizontal: RFValue(10) }}>Falta {consumoEnergiaQuaseExcedendoValor.toFixed(3)} kWh para atingir sua meta!</Text>)}
 
-                                        <Text style={{ fontFamily: fontFamily.krona, fontSize: RFValue(12), color: colors.white }}>{consumoEnergia} kWh / {metaEnergia} kWh</Text>
+                                        {loadingEnergia ? (
+                                            <ActivityIndicator animating={true} size="large" color={colors.white} />
+                                        ) : (
+                                            <Text onTextLayout={(e) => {
+                                                const lines = e.nativeEvent.lines.length;
+                                                setIsMultilineEnergia(lines > 1);
+                                            }}
+                                                style={{ fontFamily: fontFamily.krona, fontSize: RFValue(12), color: colors.white, textAlign: "center" }}>{consumoEnergia} kWh / {metaEnergia} kWh</Text>
+                                        )}
                                     </View>
-                                    <View style={{ height: RFValue(220), width: "48%", justifyContent: "flex-start", alignItems: "center", gap: RFValue(15), backgroundColor: colors.blue[400], borderRadius: RFValue(10), position: "relative" }}>
+                                    <View style={{ height: isMultilineEnergia && (consumoEnergiaExcedeu || consumoEnergiaQuaseExcedendo) ? RFValue(240) : RFValue(220), width: "48%", justifyContent: "flex-start", alignItems: "center", gap: RFValue(15), backgroundColor: colors.blue[400], borderRadius: RFValue(10), position: "relative" }}>
                                         <GraficoDonutModel consumo={Number(consumoAgua)} meta={Number(metaAgua)} cor={colors.blue[200]} tipo={"agua"} tamanho={"grande"} />
 
-                                        {consumoAguaExcedeu && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(10), color: colors.red, position: "absolute", width: "100%", bottom: RFValue(11), textAlign: "center", paddingHorizontal: RFValue(10) }}>Você excedeu {consumoAguaExcedeuValor} L da sua meta!</Text>)}
+                                        {consumoAguaExcedeu && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(10), color: colors.red, position: "absolute", width: "100%", bottom: isMultilineAgua ? RFValue(30) : RFValue(11), textAlign: "center", paddingHorizontal: RFValue(10) }}>Você excedeu {consumoAguaExcedeuValor} L da sua meta!</Text>)}
 
-                                        {consumoAguaQuaseExcedendo && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(10), color: colors.yellow[300], position: "absolute", width: "100%", bottom: RFValue(11), textAlign: "center", paddingHorizontal: RFValue(10) }}>Falta {consumoAguaQuaseExcedendoValor} L para atingir sua meta!</Text>)}
+                                        {consumoAguaQuaseExcedendo && (<Text style={{ fontFamily: fontFamily.inder, fontSize: RFValue(10), color: colors.yellow[300], position: "absolute", width: "100%", bottom: isMultilineAgua ? RFValue(30) : RFValue(11), textAlign: "center", paddingHorizontal: RFValue(10) }}>Falta {consumoAguaQuaseExcedendoValor} L para atingir sua meta!</Text>)}
 
-                                        <Text style={{ fontFamily: fontFamily.krona, fontSize: RFValue(12), color: colors.white }}>{consumoAgua} L / {metaAgua} L</Text>
+
+                                        {loadingAgua ? (
+                                            <ActivityIndicator animating={true} size="large" color={colors.white} />
+                                        ) : (
+                                            <Text style={{ fontFamily: fontFamily.krona, fontSize: RFValue(12), color: colors.white, textAlign: "center" }}>{consumoAgua} L / {metaAgua} L</Text>
+                                        )}
                                     </View>
                                 </View>
                                 <View style={{ position: "relative", width: "60%", marginTop: RFValue(25) }}>
@@ -570,10 +638,10 @@ export default function MetasScreen({ navigation }: any) {
                                     {(mesSelecionado !== mesFormatado || anoSelecionado !== ano) && (
                                         <View style={{
                                             position: "absolute",
-                                            top: "37%",
+                                            top: "26%",
                                             left: 0,
                                             width: "100%",
-                                            height: "63%",
+                                            height: "74%",
                                             borderRadius: RFValue(20),
                                             backgroundColor: colors.black,
                                             opacity: 0.5,

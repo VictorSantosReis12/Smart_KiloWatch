@@ -134,7 +134,6 @@ export default function EditarAtividadesScreen({ navigation, route }: any) {
             const registroHoje = listaConsumo.data.find((c: any) => c.data_registro.startsWith(hoje));
             if (registroHoje) {
                 await excluirConsumoAgua(userToken, registroHoje.id_consumo_agua);
-                console.log("Registro de consumo de hoje removido com sucesso.");
             }
 
             navigation.navigate("Atividades");

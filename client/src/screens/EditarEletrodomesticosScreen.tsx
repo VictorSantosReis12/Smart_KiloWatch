@@ -165,7 +165,6 @@ export default function EditarEletrodomesticosScreen({ navigation, route }: any)
                 const registroHoje = listaConsumo.data.find((c: any) => c.data_registro.startsWith(hoje));
                 if (registroHoje) {
                     await excluirConsumoEnergia(userToken, registroHoje.id_consumo_energia);
-                    console.log("Registro de consumo de hoje removido porque o valor foi alterado.");
                 }
             }
 

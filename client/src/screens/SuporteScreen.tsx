@@ -108,7 +108,6 @@ export default function SuporteScreen({ navigation }: any) {
 
         try {
             const suporteResponse = await enviarEmail(userToken, nomeUsuario, emailUsuario, assunto, mensagem);
-            console.log("Resposta do back:", suporteResponse);
 
             if (!suporteResponse.success) {
                 setSnackbarVisible(true);
