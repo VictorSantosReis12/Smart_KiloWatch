@@ -71,7 +71,7 @@ exports.atualizarCusto = (req, res) => {
     const query = 'UPDATE Custos SET id_usuario = ?, valor_energia_sem_impostos = ?, valor_energia_com_impostos = ?, valor_agua_sem_impostos = ?, valor_agua_com_impostos = ?, data_registro = ? WHERE id_custo = ?';
     
     connection.query(query, params, (err, results) => {
-        if (err || results.length == 0) {
+        if (err || results.affectedRows === 0) {
             return res.status(500).json({ success: false, message: 'Erro ao atualizar o custo.'});
         }
 

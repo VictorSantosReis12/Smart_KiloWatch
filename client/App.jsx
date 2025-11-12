@@ -32,6 +32,8 @@ import ConfiguracoesScreen from './src/screens/ConfiguracoesScreen';
 import UsuarioScreen from './src/screens/UsuarioScreen';
 import ListasScreen from './src/screens/ListasScreen';
 import SelecionarIconeScreen from './src/screens/SelecionarIconeScreen';
+import GraficosDiariosScreen from './src/screens/GraficosDiariosScreen';
+import GraficosMensaisScreen from './src/screens/GraficosMensaisScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -85,6 +87,8 @@ function AppContent() {
             <Stack.Screen name="Usuario" component={UsuarioScreen} />
             <Stack.Screen name="Listas" component={ListasScreen} />
             <Stack.Screen name="SelecionarIcone" component={SelecionarIconeScreen} />
+            <Stack.Screen name="GraficosDiarios" component={GraficosDiariosScreen} />
+            <Stack.Screen name="GraficosMensais" component={GraficosMensaisScreen} />
           </>
         ) : (
           <Stack.Screen name="Auth" component={AuthStack} />

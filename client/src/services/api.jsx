@@ -2,7 +2,7 @@
 // const BASE_URL = 'http://localhost:3000'
 
 // IP
-const BASE_URL = 'http://192.168.0.10:3000'
+const BASE_URL = 'http://192.168.0.09:3000'
 
 export async function cadastrarUsuario(nome, email, senha, ativarNotificacao) {
     const response = await fetch(`${BASE_URL}/usuario`, {
@@ -531,4 +531,34 @@ export async function listarConsumoAguaPorUsuario(userToken, idUsuario) {
         console.error("Erro em listarConsumoAguaPorUsuario:", err);
         return { success: false, message: "Erro interno ao listar consumos de água por usuário", data: [] };
     }
+}
+
+export async function listarCustosPorUsuario(userToken, idUsuario) {
+    const response = await fetch(`${BASE_URL}/custo/listarPorUsuario/${idUsuario}`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userToken}`,
+        }
+    });
+    return response.json();
+}
+
+export async function editarCusto(userToken, idCusto, idUsuario, valorEnergiaSemImposto, valorEnergiaComImposto, valorAguaSemImposto, valorAguaComImposto, dataRegistro) {
+    const response = await fetch(`${BASE_URL}/custo/${idCusto}`, {
+        method: "PUT",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userToken}`,
+        },
+        body: JSON.stringify({
+            idUsuario,
+            valorEnergiaSemImpostos: valorEnergiaSemImposto,
+            valorEnergiaComImpostos: valorEnergiaComImposto,
+            valorAguaSemImpostos: valorAguaSemImposto,
+            valorAguaComImpostos: valorAguaComImposto,
+            dataRegistro
+        })
+    });
+    return response.json();
 }

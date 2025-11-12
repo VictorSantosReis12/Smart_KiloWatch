@@ -28,7 +28,7 @@ import { colors } from "@/styles/colors"
 // API
 import { buscarUsuarioPorEmail } from "@/services/api";
 
-export default function GraficosScreen({ navigation }: any) {
+export default function GraficosDiariosScreen({ navigation }: any) {
     const [fontsLoaded] = useFonts({
         Inder_400Regular,
         KronaOne_400Regular
