@@ -40,45 +40,45 @@ React Native, Node.js e MySQL.
 - [x] Criar rotas, páginas e componentes principais
 - [x] Consumir dados da API
 - [ ] Comunicar com a API do INMETRO
-- [ ] Exibir dados dinamicamente (GET)
-- [ ] Criar formulários de cadastro/edição
+- [x] Exibir dados dinamicamente (GET)
+- [x] Criar formulários de cadastro/edição
 - [x] Aplicar estilos e responsividade
 
 ---
 
 ## 🗓️ AGOSTO – Testes e Melhorias
 
-- [ ] Testar todos os fluxos do sistema
-- [ ] Corrigir bugs e falhas visuais
-- [ ] Tratar erros de login e formulários
-- [ ] Otimizar interface (usabilidade e acessibilidade)
-- [ ] Entregar primeira versão funcional
+- [x] Testar todos os fluxos do sistema
+- [x] Corrigir bugs e falhas visuais
+- [x] Tratar erros de login e formulários
+- [x] Otimizar interface (usabilidade e acessibilidade)
+- [x] Entregar primeira versão funcional
 
 ---
 
 ## 🗓️ SETEMBRO – Documentação e Revisão
 
-- [ ] Atualizar o artigo com prints da aplicação
+- [x] Atualizar o artigo com prints da aplicação
 - [ ] Criar vídeo ou GIF demonstrativo (opcional)
-- [ ] Escrever documentação técnica do código
-- [ ] Fazer checklist completo do projeto
+- [x] Escrever documentação técnica do código
+- [x] Fazer checklist completo do projeto
 
 ---
 
 ## 🗓️ OUTUBRO – Apresentação Final
 
-- [ ] Criar roteiro da apresentação (slide ou pitch)
-- [ ] Ensaiar apresentação (tempo estimado: 10 min)
-- [ ] Apresentar para banca simulada (se houver)
+- [x] Criar roteiro da apresentação (slide ou pitch)
+- [x] Ensaiar apresentação (tempo estimado: 10 min)
+- [x] Apresentar para banca simulada (se houver)
 - [ ] Apresentação final
 
 ---
 
 ## 🗓️ NOVEMBRO – Finalização e Entrega
 
-- [ ] Revisar e entregar artigo final
-- [ ] Entregar links finais (GitHub + documentação)
-- [ ] Fazer backup da aplicação e banco
+- [x] Revisar e entregar artigo final
+- [x] Entregar links finais (GitHub + documentação)
+- [x] Fazer backup da aplicação e banco
 - [ ] Receber avaliação final
 
 ---
