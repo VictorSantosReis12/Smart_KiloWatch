@@ -103,12 +103,12 @@ const GraficoDonutModel: React.FC<DoughnutChartProps> = ({
                     </View>
                     {consumoExcedeu && (
                         <View style={{ position: 'absolute', bottom: RFValue(10), right: RFValue(2) }}>
-                            <Icon name="alert-rhombus" size={tamanho === 'pequeno' ? RFValue(20) : RFValue(30)} color={colors.red} />
+                            <Icon name="alert-rhombus" size={tamanho === 'pequeno' ? RFValue(10) : RFValue(30)} color={colors.red} />
                         </View>
                     )}
                     {consumoQuaseExcedendo && (
                         <View style={{ position: 'absolute', bottom: RFValue(10), right: RFValue(2) }}>
-                            <Icon name="alert-rhombus" size={tamanho === 'pequeno' ? RFValue(20) : RFValue(30)} color={colors.yellow[300]} />
+                            <Icon name="alert-rhombus" size={tamanho === 'pequeno' ? RFValue(10) : RFValue(30)} color={colors.yellow[300]} />
                         </View>
                     )}
                 </>

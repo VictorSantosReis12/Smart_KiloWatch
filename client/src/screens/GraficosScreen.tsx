@@ -138,21 +138,18 @@ export default function GraficosScreen({ navigation }: any) {
     useEffect(() => {
         const hoje = new Date();
 
-        // 🔹 Últimos 6 dias
         const dias = Array.from({ length: 6 }).map((_, i) => {
             const d = new Date(hoje);
             d.setDate(hoje.getDate() - (5 - i));
             return d;
         });
 
-        // 🔹 Últimos 6 meses
         const meses = Array.from({ length: 6 }).map((_, i) => {
             const d = new Date(hoje);
             d.setMonth(hoje.getMonth() - (5 - i));
             return d;
         });
 
-        // 🔸 Função genérica pra somar consumo
         function somarConsumoPorPeriodo(consumos: any[], periodos: Date[], tipo: "dia" | "mes") {
             return periodos.map((dataPeriodo) => {
                 const mesmoDia = tipo === "dia";
@@ -169,11 +166,9 @@ export default function GraficosScreen({ navigation }: any) {
                     const tempo = c.tempo ?? c.tempo_uso ?? 0;
                     const tipoTempo = c.tipoTempo ?? c.tipo ?? "min";
                     if (c.consumo_kwh_hora) {
-                        // energia → converter hora pra minutos
                         const tempoHora = tempo / 60;
                         total += tempoHora * (c.consumo_kwh_hora ?? 0);
                     } else if (c.consumo_litros_minuto) {
-                        // água → direto em minutos
                         const tempoMin = tempo / 60;
                         total += tempoMin * (c.consumo_litros_minuto ?? 0);
                     }
@@ -183,13 +178,11 @@ export default function GraficosScreen({ navigation }: any) {
             });
         }
 
-        // 🔹 Calcula valores
         const energiaDias = somarConsumoPorPeriodo(consumosEnergia, dias, "dia");
         const aguaDias = somarConsumoPorPeriodo(consumosAgua, dias, "dia");
         const energiaMeses = somarConsumoPorPeriodo(consumosEnergia, meses, "mes");
         const aguaMeses = somarConsumoPorPeriodo(consumosAgua, meses, "mes");
 
-        // 🔹 Define estados
         setUltimos6Dias(
             dias.map((d) => d.getDate().toString().padStart(2, "0") + "/" + (d.getMonth() + 1))
         );
@@ -201,9 +194,6 @@ export default function GraficosScreen({ navigation }: any) {
         setValoresEnergiaMeses(energiaMeses);
         setValoresAguaMeses(aguaMeses);
     }, [consumosEnergia, consumosAgua]);
-
-    console.log("Últimos 6 Dias:", ultimos6Dias);
-    console.log("Valores Energia Dias:", valoresEnergiaDias);
 
     if (!fontsLoaded) {
         return null

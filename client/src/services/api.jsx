@@ -2,7 +2,7 @@
 // const BASE_URL = 'http://localhost:3000'
 
 // IP
-const BASE_URL = 'http://192.168.0.10:3000'
+const BASE_URL = 'http://192.168.0.9:3000'
 
 export async function cadastrarUsuario(nome, email, senha, ativarNotificacao) {
     const response = await fetch(`${BASE_URL}/usuario`, {
@@ -108,6 +108,17 @@ export async function cadastrarResidencia(userToken, idUsuario, estado, cidade, 
 
 export async function listarResidenciasPorUsuario(userToken, idUsuario) {
     const response = await fetch(`${BASE_URL}/residencia/listarPorUsuario/${idUsuario}`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userToken}`,
+        }
+    });
+    return response.json();
+}
+
+export async function selecionarResidenciaPorId(userToken, idResidencia) {
+    const response = await fetch(`${BASE_URL}/residencia/selecionarPorId/${idResidencia}`, {
         method: "GET",
         headers: {
             'Content-Type': 'application/json',
@@ -544,7 +555,7 @@ export async function listarCustosPorUsuario(userToken, idUsuario) {
     return response.json();
 }
 
-export async function editarCusto(userToken, idCusto, idUsuario, valorEnergiaSemImposto, valorEnergiaComImposto, valorAguaSemImposto, valorAguaComImposto, dataRegistro) {
+export async function editarCusto(userToken, idCusto, idUsuario, valorEnergiaSemImposto, valorEnergiaComImposto, valorAguaSemImposto, valorAguaComImposto) {
     const response = await fetch(`${BASE_URL}/custo/${idCusto}`, {
         method: "PUT",
         headers: {
@@ -556,9 +567,30 @@ export async function editarCusto(userToken, idCusto, idUsuario, valorEnergiaSem
             valorEnergiaSemImpostos: valorEnergiaSemImposto,
             valorEnergiaComImpostos: valorEnergiaComImposto,
             valorAguaSemImpostos: valorAguaSemImposto,
-            valorAguaComImpostos: valorAguaComImposto,
-            dataRegistro
+            valorAguaComImpostos: valorAguaComImposto
         })
+    });
+    return response.json();
+}
+
+export async function cadastrarCusto(userToken, idUsuario, valorEnergiaSemImpostos, valorEnergiaComImpostos, valorAguaSemImpostos, valorAguaComImpostos) {
+    const response = await fetch(`${BASE_URL}/custo`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userToken}`,
+        },
+        body: JSON.stringify({ idUsuario, valorEnergiaSemImpostos, valorEnergiaComImpostos, valorAguaSemImpostos, valorAguaComImpostos })
+    });
+    return response.json();
+}
+
+export async function selecionarTarifaPorEstado(userToken, estado) {
+    const response = await fetch(`${BASE_URL}/tarifa/selecionarPorEstado?estado=${encodeURIComponent(estado)}`, {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${userToken}`,
+        }
     });
     return response.json();
 }

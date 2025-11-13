@@ -40,7 +40,7 @@ exports.selecionarTarifaPorId = (req, res) => {
 
 exports.selecionarTarifaPorEstado = (req, res) => {
     const query = 'SELECT * FROM Tarifas WHERE estado = ?';
-    const params = [req.body.estado];
+    const params = [req.query.estado];
 
     connection.query(query, params, (err, results) => {
         if (err) {

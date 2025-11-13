@@ -1,10 +1,10 @@
 const connection = require('../config/db');
 
 exports.criarCusto = (req, res) => {
-    const { idUsuario, valorEnergiaSemImpostos, valorEnergiaComImpostos, valorAguaSemImpostos, valorAguaComImpostos, dataRegistro } = req.body;
+    const { idUsuario, valorEnergiaSemImpostos, valorEnergiaComImpostos, valorAguaSemImpostos, valorAguaComImpostos } = req.body;
 
-    const query = 'INSERT INTO Custos (id_usuario, valor_energia_sem_impostos, valor_energia_com_impostos, valor_agua_sem_impostos, valor_agua_com_impostos, data_registro) VALUES (?, ?, ?, ?, ?, ?)';
-    const params = [idUsuario, valorEnergiaSemImpostos, valorEnergiaComImpostos, valorAguaSemImpostos, valorAguaComImpostos, dataRegistro];
+    const query = 'INSERT INTO Custos (id_usuario, valor_energia_sem_impostos, valor_energia_com_impostos, valor_agua_sem_impostos, valor_agua_com_impostos) VALUES (?, ?, ?, ?, ?)';
+    const params = [idUsuario, valorEnergiaSemImpostos, valorEnergiaComImpostos, valorAguaSemImpostos, valorAguaComImpostos];
 
     connection.query(query, params, (err, results) => {
         if (err) {
@@ -64,11 +64,11 @@ exports.selecionarCustoPorData = (req, res) => {
 }
 
 exports.atualizarCusto = (req, res) => {
-    const { idUsuario, valorEnergiaSemImpostos, valorEnergiaComImpostos, valorAguaSemImpostos, valorAguaComImpostos, dataRegistro } = req.body;
+    const { idUsuario, valorEnergiaSemImpostos, valorEnergiaComImpostos, valorAguaSemImpostos, valorAguaComImpostos } = req.body;
     const idCusto = req.params.idCusto;
-    const params = [idUsuario, valorEnergiaSemImpostos, valorEnergiaComImpostos, valorAguaSemImpostos, valorAguaComImpostos, dataRegistro, idCusto];
+    const params = [idUsuario, valorEnergiaSemImpostos, valorEnergiaComImpostos, valorAguaSemImpostos, valorAguaComImpostos, idCusto];
 
-    const query = 'UPDATE Custos SET id_usuario = ?, valor_energia_sem_impostos = ?, valor_energia_com_impostos = ?, valor_agua_sem_impostos = ?, valor_agua_com_impostos = ?, data_registro = ? WHERE id_custo = ?';
+    const query = 'UPDATE Custos SET id_usuario = ?, valor_energia_sem_impostos = ?, valor_energia_com_impostos = ?, valor_agua_sem_impostos = ?, valor_agua_com_impostos = ? WHERE id_custo = ?';
     
     connection.query(query, params, (err, results) => {
         if (err || results.affectedRows === 0) {
