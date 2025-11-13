@@ -2,7 +2,7 @@
 // const BASE_URL = 'http://localhost:3000'
 
 // IP
-const BASE_URL = 'http://192.168.0.09:3000'
+const BASE_URL = 'http://192.168.0.10:3000'
 
 export async function cadastrarUsuario(nome, email, senha, ativarNotificacao) {
     const response = await fetch(`${BASE_URL}/usuario`, {
@@ -510,7 +510,7 @@ export async function listarConsumoAguaPorUsuario(userToken, idUsuario) {
 
                 return consumoResp.success
                     ? consumoResp.data.map(consumo => ({
-                        id_atividade: item.id_eletrodomestico,
+                        id_atividade: item.id_atividade,
                         nome: item.nome,
                         imagem: item.imagem,
                         consumo_litros_minuto: item.litros_minuto,

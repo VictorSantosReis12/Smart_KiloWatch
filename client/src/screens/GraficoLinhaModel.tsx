@@ -22,6 +22,8 @@ interface LineChartProps {
     cor: string;
     corSecundaria: string;
     tamanho: 'pequeno' | 'grande';
+    tamanhoMedio?: boolean;
+    tamanhoMedioGrande?: boolean;
 }
 
 const GraficoLinhaModel: React.FC<LineChartProps> = ({
@@ -29,7 +31,9 @@ const GraficoLinhaModel: React.FC<LineChartProps> = ({
     valores,
     cor,
     corSecundaria,
-    tamanho
+    tamanho,
+    tamanhoMedio = false,
+    tamanhoMedioGrande = false,
 }) => {
     // Dimensões da janela
     const { width, height } = useWindowDimensions();
@@ -50,8 +54,8 @@ const GraficoLinhaModel: React.FC<LineChartProps> = ({
                             },
                         ],
                     }}
-                    width={tamanho === 'pequeno' ? RFValue(100) : RFValue(200)}
-                    height={tamanho === 'pequeno' ? RFValue(50) : RFValue(100)}
+                    width={tamanho === 'pequeno' ? tamanhoMedioGrande ? RFValue(125) : RFValue(100) : RFValue(200)}
+                    height={tamanho === 'pequeno' ? tamanhoMedioGrande ? RFValue(80) : RFValue(50) : RFValue(100)}
                     yAxisSuffix=""
                     yAxisInterval={1}
                     fromZero={false}
@@ -110,8 +114,8 @@ const GraficoLinhaModel: React.FC<LineChartProps> = ({
                             },
                         ],
                     }}
-                    width={tamanho === 'pequeno' ? RFValue(145) : RFValue(200)}
-                    height={tamanho === 'pequeno' ? RFValue(80) : RFValue(100)}
+                    width={tamanho === 'pequeno' ? tamanhoMedio ? RFValue(170) : RFValue(145) : RFValue(300)}
+                    height={tamanho === 'pequeno' ? RFValue(80) : RFValue(140)}
                     yAxisSuffix=""
                     yAxisInterval={1}
                     fromZero={false}
@@ -145,7 +149,7 @@ const GraficoLinhaModel: React.FC<LineChartProps> = ({
                         },
                         propsForLabels: {
                             fontFamily: fontFamily.inder,
-                            fontSize: RFValue(8)
+                            fontSize: tamanho === "pequeno" ? tamanhoMedio ? RFValue(7) : RFValue(8) : RFValue(10)
                         },
                     }}
                     style={{
