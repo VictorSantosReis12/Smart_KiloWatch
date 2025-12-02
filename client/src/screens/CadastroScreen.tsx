@@ -476,6 +476,7 @@ export default function CadastroScreen({ route, navigation }: any) {
                             width: isLandscape ? '50%' : '90%',
                             borderRadius: 6,
                             backgroundColor: colors.strongGray,
+                            marginBottom: isLandscape ? RFValue(5) : RFValue(10),
                         }}
 
                     >

@@ -41,16 +41,6 @@ const Stack = createNativeStackNavigator();
 function AppContent() {
   const { userToken, isLoading } = useContext(AuthContext);
 
-  // Verificar Token
-  // useEffect(() => {
-  //   const checkToken = async () => {
-  //     const token = await AsyncStorage.getItem('userToken');
-  //     console.log('Token salvo:', token);
-  //   };
-
-  //   checkToken();
-  // }, []);
-
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -98,7 +88,6 @@ function AppContent() {
   );
 }
 
-// Componente principal
 export default function App() {
   return (
     <PaperProvider>

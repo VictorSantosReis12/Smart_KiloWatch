@@ -841,7 +841,7 @@ export default function EletrodomesticosScreen({ navigation }: any) {
                             width: isLandscape ? '50%' : '90%',
                             borderRadius: 6,
                             backgroundColor: colors.strongGray,
-                            marginBottom: isLandscape ? RFValue(0) : RFValue(90),
+                            marginBottom: isLandscape ? RFValue(5) : RFValue(90),
                             zIndex: 10000
                         }}
 

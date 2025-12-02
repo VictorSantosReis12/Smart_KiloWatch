@@ -76,24 +76,6 @@ export default function LoginScreen({ navigation }: any) {
         };
     }, []);
 
-    // function mostrarAlert() {
-    //     if (!nome || !email) {
-    //         Alert.alert(
-    //             "Atenção!",
-    //             "Por favor, preencha todos os campos.",
-    //             [
-    //                 { text: "OK" }
-    //             ],
-    //             { cancelable: true }
-    //         );
-    //     } else {
-    //         navigation.navigate("CadastroSenha", {
-    //             nome: nome,
-    //             email: email
-    //         });
-    //     }
-    // }
-
     const handleLogin = async () => {
         let hasError = false;
         const newErrors: { email: string; senha: string } = { email: '', senha: '' };
@@ -436,6 +418,7 @@ export default function LoginScreen({ navigation }: any) {
                             width: isLandscape ? '50%' : '90%',
                             borderRadius: 6,
                             backgroundColor: colors.strongGray,
+                            marginBottom: isLandscape ? RFValue(5) : RFValue(10),
                         }}
 
                     >

@@ -57,7 +57,6 @@ export default function GraficosMensaisScreen({ navigation }: any) {
     const [anoSelecionado, setAnoSelecionado] = useState(hoje.getFullYear());
     const [dadosSemestres, setDadosSemestres] = useState<any>(null);
 
-    // 🔹 Buscar dados do usuário
     useEffect(() => {
         const fetchConsumos = async () => {
             if (!idUsuario) return;
@@ -86,10 +85,8 @@ export default function GraficosMensaisScreen({ navigation }: any) {
 
     const dataFormatada = `${dia} de ${mesFormatado} de ${ano}`;
 
-    // 🔹 Estado para controlar o dropdown e o ano selecionado
     const [dropdownAberto, setDropdownAberto] = useState(false);
 
-    // 🔹 Função que retorna apenas os anos em que há consumo (energia ou água)
     const anosDisponiveis = () => {
         const registros = [...consumosEnergia, ...consumosAgua];
         let anos = registros.reduce((acc: number[], item) => {
@@ -101,28 +98,24 @@ export default function GraficosMensaisScreen({ navigation }: any) {
         const anoAtual = hoje.getFullYear();
         if (!anos.includes(anoAtual)) anos.push(anoAtual);
 
-        return anos.sort((a, b) => b - a); // ordena decrescente
+        return anos.sort((a, b) => b - a);
     };
 
-    // 🔹 Alternar o estado de aberto/fechado do dropdown
     const toggleDropdown = () => {
         setDropdownAberto(!dropdownAberto);
     };
 
-    // 🔹 Função chamada ao selecionar um ano
     const selecionarAno = (ano: number) => {
         setAnoSelecionado(ano);
         setDropdownAberto(false);
     };
 
 
-    // 🔹 Converter tempo de uso para minutos/horas
     const converterTempo = (tempo: number, tipo: string) => {
         if (tipo?.toLowerCase() === "hora") return tempo / 60;
         return tempo;
     };
 
-    // 🔹 Somar consumo mensal
     function somarConsumoPorMes(consumos: any[], anoSelecionado: number) {
         const mesesDoAno = Array(12).fill(0);
 
@@ -151,7 +144,6 @@ export default function GraficosMensaisScreen({ navigation }: any) {
         return mesesDoAno.map(v => parseFloat(v.toFixed(3)));
     }
 
-    // 🔹 Gerar dados por semestre
     const gerarSemestres = (anoSelecionado: number) => {
         const energiaPorMes = somarConsumoPorMes(consumosEnergia, anoSelecionado);
         const aguaPorMes = somarConsumoPorMes(consumosAgua, anoSelecionado);
@@ -176,7 +168,6 @@ export default function GraficosMensaisScreen({ navigation }: any) {
         };
     };
 
-    // 🔹 Atualiza os gráficos sempre que o ano ou os dados mudarem
     useEffect(() => {
         if (consumosEnergia.length || consumosAgua.length) {
             const semestres = gerarSemestres(anoSelecionado);

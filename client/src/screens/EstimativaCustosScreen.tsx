@@ -160,17 +160,7 @@ export default function EstimativaCustosScreen({ navigation }: any) {
             const totalAgua = Number(inputAgua) + impostoAgua;
             const inputAguaImposto = totalAgua.toFixed(2).replace('.', ',');
 
-            console.log('Valores enviados:', {
-                id_custo: custoExistente.id_custo,
-                id_usuario: idUsuario,
-                energia: inputEnergia,
-                energia_imposto: inputEnergiaImposto,
-                agua: inputAgua,
-                agua_imposto: inputAguaImposto,
-                data: mysqlDate
-            });
             const edicaoResponse = await editarCusto(userToken, custoExistente.id_custo, idUsuario, formatarNumeroParaMySQL(inputEnergia), formatarNumeroParaMySQL(inputEnergiaImposto), formatarNumeroParaMySQL(inputAgua), formatarNumeroParaMySQL(inputAguaImposto), mysqlDate);
-            console.log('Resposta da edição:', edicaoResponse);
             setSnackbarVisible(true);
             setSnackbarMessage(edicaoResponse.message || 'Custo atualizado com sucesso!');
 
@@ -579,7 +569,7 @@ export default function EstimativaCustosScreen({ navigation }: any) {
                             width: isLandscape ? '50%' : '90%',
                             borderRadius: 6,
                             backgroundColor: colors.strongGray,
-                            marginBottom: isLandscape ? RFValue(5) : RFValue(50),
+                            marginBottom: isLandscape ? RFValue(5) : RFValue(90),
                             zIndex: 5000,
                         }}
 
